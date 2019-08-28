@@ -36,6 +36,10 @@ namespace GoogleARCore.Examples.HelloAR
     /// </summary>
     public class HelloARController : MonoBehaviour
     {
+        public static HelloARController instance;
+
+
+
         /// <summary>
         /// The first-person camera being used to render the passthrough camera image (i.e. AR
         /// background).
@@ -55,7 +59,7 @@ namespace GoogleARCore.Examples.HelloAR
         /// <summary>
         /// A model to place when a raycast from a user touch hits a horizontal plane.
         /// </summary>
-        public GameObject AndyHorizontalPlanePrefab;
+        private GameObject horizontalPlanePrefab;
 
         /// <summary>
         /// A model to place when a raycast from a user touch hits a feature point.
@@ -73,11 +77,25 @@ namespace GoogleARCore.Examples.HelloAR
         /// </summary>
         private bool m_IsQuitting = false;
 
+        public GameObject HorizontalPlanePrefab { get => horizontalPlanePrefab; set => horizontalPlanePrefab = value; }
+
         /// <summary>
         /// The Unity Awake() method.
         /// </summary>
         public void Awake()
         {
+            //Check if instance already exists
+            if (instance == null)
+
+                //if not, set instance to this
+                instance = this;
+
+            //If instance already exists and it's not this:
+            else if (instance != this)
+
+                //Then destroy this. This enforces our singleton pattern, meaning there can only ever be one instance of a GameManager.
+                Destroy(gameObject);
+
             // Enable ARCore to target 60fps camera capture frame rate on supported devices.
             // Note, Application.targetFrameRate is ignored when QualitySettings.vSyncCount != 0.
             Application.targetFrameRate = 60;
@@ -135,12 +153,12 @@ namespace GoogleARCore.Examples.HelloAR
                         }
                         else
                         {
-                            prefab = AndyHorizontalPlanePrefab;
+                            prefab = horizontalPlanePrefab;
                         }
                     }
                     else
                     {
-                        prefab = AndyHorizontalPlanePrefab;
+                        prefab = horizontalPlanePrefab;
                     }
 
                     // Instantiate Andy model at the hit pose.
