@@ -10,10 +10,11 @@ public class BuildingUI : MonoBehaviour
 
     public GameObject EnvironmentPanel;
 
+    public GameObject buildingSlot;
     // Start is called before the first frame update
     void Start()
     {
-        
+        InstantiateBuildingSlot();
     }
 
     // Update is called once per frame
@@ -22,9 +23,32 @@ public class BuildingUI : MonoBehaviour
         
     }
 
+    /// <summary>
+    /// BuildingSlot object 를 생성한다.
+    /// 
+    /// </summary>
+    public void InstantiateBuildingSlot()
+    {
+        Canvas canvas = FindObjectOfType<Canvas>();
+
+        if (canvas == null)
+            return;
+
+        //slot 생성
+        GameObject slot = Instantiate(buildingSlot, canvas.transform.Find("BottomUI/EnvironmentPanel"));
+
+        //slot buildingsystem 변수에 this 연결
+        //slot.GetComponent<PreparationBlockSlotDragHandler>().BuildingSystem = transform.GetComponent<BuildingSystem>();
+
+        print("slot : " + slot);
+    }
+
+
     public void SetBuildingInfo(BuildingInfo buildingInfo)
     {
     }
+
+
 
     public void temp(GameObject buildingInfo)
     {
