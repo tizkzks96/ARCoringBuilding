@@ -86,9 +86,13 @@ namespace GoogleARCore.Examples.HelloAR
         {
             //Check if instance already exists
             if (instance == null)
-
+            {
                 //if not, set instance to this
                 instance = this;
+
+                DontDestroyOnLoad(gameObject);
+            }
+
 
             //If instance already exists and it's not this:
             else if (instance != this)
