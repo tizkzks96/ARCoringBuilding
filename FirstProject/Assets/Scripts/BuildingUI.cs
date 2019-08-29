@@ -25,6 +25,7 @@ public class BuildingUI : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        #region UIState 이동 버튼
         //HomePanel 버튼 연결
         HomePanel.transform.Find("EnvironmentBtn").GetComponent<Button>().onClick.AddListener(() => { ChangeState(UIState.ENVIRONMENT); });
         HomePanel.transform.Find("BuildingsBtn").GetComponent<Button>().onClick.AddListener(() => { ChangeState(UIState.BUILDING); });
@@ -34,14 +35,12 @@ public class BuildingUI : MonoBehaviour
 
         //BuildingPanel 버튼 연결
         BuildingPanel.transform.Find("Home").GetComponent<Button>().onClick.AddListener(() => { ChangeState(UIState.HOME); });
+        #endregion
 
-
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
+        //기본 빌딩슬롯 생성
+        InstantiateBuildingSlot(0);
+        InstantiateBuildingSlot(1);
+        InstantiateBuildingSlot(2);
 
     }
 
@@ -80,9 +79,9 @@ public class BuildingUI : MonoBehaviour
 
     /// <summary>
     /// BuildingSlot object 를 생성한다.
-    /// 
     /// </summary>
-    public void InstantiateBuildingSlot()
+    /// <param name="index">BuildingDatabase에 저장된 index</param>
+    public void InstantiateBuildingSlot(int index)
     {
         Canvas canvas = FindObjectOfType<Canvas>();
 
@@ -92,6 +91,15 @@ public class BuildingUI : MonoBehaviour
         //slot 생성
         GameObject slot = Instantiate(buildingSlot, canvas.transform.Find("BottomUI/EnvironmentPanel"));
 
+        BuildingInfo slotInfo = BuildingDatabase.Instance.GetByID(index);
+        
+        slotInfo.BuildingPrefab.transform.localScale = new Vector3(0.01f, 0.01f, 0.01f);
+
+        slot.GetComponent<SlotInfo>().Slotinfo = slotInfo;
+
+        slot.transform.GetChild(0).GetComponent<Text>().text = slotInfo.Name;
+
+
         //slot buildingsystem 변수에 this 연결
         //slot.GetComponent<PreparationBlockSlotDragHandler>().BuildingSystem = transform.GetComponent<BuildingSystem>();
 
@@ -99,9 +107,7 @@ public class BuildingUI : MonoBehaviour
     }
 
 
-    public void SetBuildingInfo(BuildingInfo buildingInfo)
-    {
-    }
+
 
 
 

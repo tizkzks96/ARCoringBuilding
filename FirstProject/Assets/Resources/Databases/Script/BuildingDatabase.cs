@@ -12,7 +12,7 @@ namespace UnityEngine
         {
             get {
                 if (m_Instance == null)
-                    m_Instance = Resources.Load("Databases/WallDatabase") as BuildingDatabase;
+                    m_Instance = Resources.Load("Databases/BuildingDatabase") as BuildingDatabase;
 
                 return m_Instance;
             }

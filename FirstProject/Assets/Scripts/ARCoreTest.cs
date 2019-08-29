@@ -68,6 +68,7 @@ public class ARCoreTest : MonoBehaviour
 
     }
 
+
     public void ARCoreCameraConfigFilterTest()
     {
         ARCoreCameraConfigFilter aRCoreCameraConfigFilter = new ARCoreCameraConfigFilter();
