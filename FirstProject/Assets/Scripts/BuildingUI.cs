@@ -14,7 +14,7 @@ public class BuildingUI : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        InstantiateBuildingSlot();
+        
     }
 
     // Update is called once per frame

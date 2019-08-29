@@ -157,12 +157,12 @@ namespace GoogleARCore.Examples.HelloAR
                         }
                         else
                         {
-                            prefab = horizontalPlanePrefab;
+                            prefab = AndyVerticalPlanePrefab;
                         }
                     }
                     else
                     {
-                        prefab = horizontalPlanePrefab;
+                        prefab = AndyVerticalPlanePrefab;
                     }
 
                     // Instantiate Andy model at the hit pose.

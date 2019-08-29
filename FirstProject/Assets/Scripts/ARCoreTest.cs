@@ -56,17 +56,25 @@ public class ARCoreTest : MonoBehaviour
             }
             btn3.transform.GetChild(0).GetComponent<Text>().text = "현재 : " + flag3;
         });
-        Test();
+
+        //Test();
     }
 
     public void Test()
     {
 
         //TARCoreBackgroundRenderer();
-        ARCoreCameraConfigFilter aRCoreCameraConfigFilter = new ARCoreCameraConfigFilter();
-        aRCoreCameraConfigFilter.DepthSensorUsage.DoNotUse = true;
-        aRCoreCameraConfigFilter.DepthSensorUsage.RequireAndUse = true;
+        
 
+    }
+
+    public void ARCoreCameraConfigFilterTest()
+    {
+        ARCoreCameraConfigFilter aRCoreCameraConfigFilter = new ARCoreCameraConfigFilter();
+        if (flag1)
+            aRCoreCameraConfigFilter.DepthSensorUsage.DoNotUse = true;
+        if (flag2)
+            aRCoreCameraConfigFilter.DepthSensorUsage.RequireAndUse = true;
     }
 
     public void TARCoreBackgroundRenderer()
