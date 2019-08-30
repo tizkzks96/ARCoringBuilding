@@ -21,7 +21,7 @@ public class BuildingUI : MonoBehaviour
     public GameObject buildingSlot;
 
     public UIState UIState { get; set; } = UIState.HOME;
-
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -35,7 +35,11 @@ public class BuildingUI : MonoBehaviour
 
         //BuildingPanel 버튼 연결
         BuildingPanel.transform.Find("Home").GetComponent<Button>().onClick.AddListener(() => { ChangeState(UIState.HOME); });
+
+        BuildingPanel.transform.Find("Add").GetComponent<Button>().onClick.AddListener(() => { SceanContorller.instance.ChangeScean(SceanState.AUGMENTEDIMAGE); });
         #endregion
+
+
 
         //기본 빌딩슬롯 생성
         InstantiateBuildingSlot(0);

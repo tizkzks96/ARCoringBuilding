@@ -90,7 +90,6 @@ namespace GoogleARCore.Examples.HelloAR
                 //if not, set instance to this
                 instance = this;
 
-                DontDestroyOnLoad(gameObject);
             }
 
 
