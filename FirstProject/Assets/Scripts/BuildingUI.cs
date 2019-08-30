@@ -10,8 +10,16 @@ public enum UIState{
     BUILDING
 }
 
+/// <summary>
+/// 
+/// 
+/// 
+/// 나중에 여기에 BuildingSlot 추가할 때 디비에서 가져온걸 for문 돌려서 추가해야함
+/// </summary>
 public class BuildingUI : MonoBehaviour
 {
+    public static BuildingUI instance;
+
     public GameObject HomePanel;
 
     public GameObject EnvironmentPanel;
@@ -21,10 +29,29 @@ public class BuildingUI : MonoBehaviour
     public GameObject buildingSlot;
 
     public UIState UIState { get; set; } = UIState.HOME;
-    
+
+    public void Awake()
+    {
+        //Check if instance already exists
+        if (instance == null)
+        {
+            //if not, set instance to this
+            instance = this;
+        }
+
+
+        //If instance already exists and it's not this:
+        else if (instance != this)
+
+            //Then destroy this. This enforces our singleton pattern, meaning there can only ever be one instance of a GameManager.
+            Destroy(gameObject);
+    }
+
     // Start is called before the first frame update
     void Start()
     {
+
+
         #region UIState 이동 버튼
         //HomePanel 버튼 연결
         HomePanel.transform.Find("EnvironmentBtn").GetComponent<Button>().onClick.AddListener(() => { ChangeState(UIState.ENVIRONMENT); });

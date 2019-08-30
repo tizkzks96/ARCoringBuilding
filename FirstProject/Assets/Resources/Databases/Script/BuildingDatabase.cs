@@ -33,6 +33,16 @@ namespace UnityEngine
             }
             return null;
         }
+
+        public BuildingInfo GetByName(string name)
+        {
+            for (int i = 0; i < this.buildings.Length; i++)
+            {
+                if (buildings[i].Name.Equals(name))
+                    return this.buildings[i];
+            }
+            return null;
+        }
     }
 }
     

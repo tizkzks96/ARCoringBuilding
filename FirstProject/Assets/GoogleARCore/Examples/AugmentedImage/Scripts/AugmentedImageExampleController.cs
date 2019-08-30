@@ -98,12 +98,26 @@ namespace GoogleARCore.Examples.AugmentedImage
                 m_Visualizers.TryGetValue(image.DatabaseIndex, out visualizer);
                 if (image.TrackingState == TrackingState.Tracking && visualizer == null)
                 {
+                    
+
+
+                    // Scean Home 으로 변경
+                    SceanContorller.instance.ChangeScean(SceanState.MAIN);
                     // Create an anchor to ensure that ARCore keeps tracking this augmented image.
                     Anchor anchor = image.CreateAnchor(image.CenterPose);
                     visualizer = (AugmentedImageVisualizer)Instantiate(
                         AugmentedImageVisualizerPrefab, anchor.transform);
                     visualizer.Image = image;
                     m_Visualizers.Add(image.DatabaseIndex, visualizer);
+
+                    BuildingUI.instance.InstantiateBuildingSlot(BuildingDatabase.Instance.GetByName(image.Name).ID);
+                    //로그체크
+                    print("\" Unity AugmentedImage \" " + "image : " + image);
+                    print("\" Unity AugmentedImage \" " + "m_TempAugmentedImages : " + m_TempAugmentedImages);
+                    print("\" Unity AugmentedImage \" " + "image.Name : " + image.Name);
+                    print("\" Unity AugmentedImage \" " + "visualizer : " + visualizer);
+                    print("\" Unity AugmentedImage \" " + "m_Visualizers.TryGetValue(image.DatabaseIndex, out visualizer); : " + m_Visualizers.TryGetValue(image.DatabaseIndex, out visualizer));
+                    print("\" Unity AugmentedImage \" " + "anchor : " + anchor);
                 }
                 else if (image.TrackingState == TrackingState.Stopped && visualizer != null)
                 {
