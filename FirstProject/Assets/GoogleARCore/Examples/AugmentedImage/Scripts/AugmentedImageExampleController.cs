@@ -65,6 +65,10 @@ namespace GoogleARCore.Examples.AugmentedImage
             Application.targetFrameRate = 60;
         }
 
+
+
+
+
         /// <summary>
         /// The Unity Update method.
         /// </summary>
@@ -111,6 +115,7 @@ namespace GoogleARCore.Examples.AugmentedImage
                     m_Visualizers.Add(image.DatabaseIndex, visualizer);
 
                     BuildingUI.instance.InstantiateBuildingSlot(BuildingDatabase.Instance.GetByName(image.Name).ID);
+
                     //로그체크
                     print("\" Unity AugmentedImage \" " + "image : " + image);
                     print("\" Unity AugmentedImage \" " + "m_TempAugmentedImages : " + m_TempAugmentedImages);
