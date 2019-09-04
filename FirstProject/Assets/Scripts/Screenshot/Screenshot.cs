@@ -4,7 +4,7 @@ using UnityEngine;
 using System.IO;
 using UnityEngine.UI;
 
-public class testscreenshot : MonoBehaviour
+public class Screenshot : MonoBehaviour
 {
     // The "m_Display" is the GameObject whose Texture will be set to the captured image.
     public Image m_Display;
