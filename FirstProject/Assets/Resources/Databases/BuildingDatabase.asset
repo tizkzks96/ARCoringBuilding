@@ -16,9 +16,9 @@ MonoBehaviour:
   - Name: Building_ApartmentSmall_Orange
     ID: 0
     BuildingPrefab: {fileID: 100000, guid: 4da0d0ffaf9076f40a1d00fc7552f70c, type: 3}
-  - Name: Building_Garage_01
+  - Name: Building_ApartmentLarge_Brown
     ID: 1
-    BuildingPrefab: {fileID: 100000, guid: dce40da241e705b4c88a201ac6f01535, type: 3}
+    BuildingPrefab: {fileID: 100000, guid: 74978b6b36516b04b92f6ec6b3b0898d, type: 3}
   - Name: Building_House_02
     ID: 2
     BuildingPrefab: {fileID: 100000, guid: c2bc3c07e48b6234b8f21751ead01420, type: 3}

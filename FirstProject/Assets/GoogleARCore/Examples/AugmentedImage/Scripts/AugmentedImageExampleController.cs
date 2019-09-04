@@ -102,7 +102,9 @@ namespace GoogleARCore.Examples.AugmentedImage
                 m_Visualizers.TryGetValue(image.DatabaseIndex, out visualizer);
                 if (image.TrackingState == TrackingState.Tracking && visualizer == null)
                 {
-                    
+                    //스크린샷
+                    Screenshot.instance.CaptureScreen();
+
 
 
                     // Scean Home 으로 변경
@@ -113,6 +115,7 @@ namespace GoogleARCore.Examples.AugmentedImage
                         AugmentedImageVisualizerPrefab, anchor.transform);
                     visualizer.Image = image;
                     m_Visualizers.Add(image.DatabaseIndex, visualizer);
+
 
                     BuildingUI.instance.InstantiateBuildingSlot(BuildingDatabase.Instance.GetByName(image.Name).ID);
 
