@@ -6,12 +6,32 @@ using UnityEngine.UI;
 
 public class Screenshot : MonoBehaviour
 {
+    public static Screenshot instance;
     // The "m_Display" is the GameObject whose Texture will be set to the captured image.
     public Image m_Display;
 
     public Sprite e;
 
     public RawImage image;
+
+    /// <summary>
+    /// The Unity Awake() method.
+    /// </summary>
+    public void Awake()
+    {
+        //Check if instance already exists
+        if (instance == null)
+        {
+            //if not, set instance to this
+            instance = this;
+        }
+
+        //If instance already exists and it's not this:
+        else if (instance != this)
+
+            //Then destroy this. This enforces our singleton pattern, meaning there can only ever be one instance of a GameManager.
+            Destroy(gameObject);
+    }
 
     public void CaptureScreen()
     {
