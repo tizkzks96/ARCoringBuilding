@@ -11,14 +11,14 @@ public class testscreenshot : MonoBehaviour
 
     public Sprite e;
 
+    public RawImage image;
+
     public void CaptureScreen()
     {
         //StartCoroutine(RecordFrame());
         Photo();
         Invoke("GetPhoto", 1f);
     }
-
-    
 
     IEnumerator RecordFrame()
     {
@@ -37,25 +37,31 @@ public class testscreenshot : MonoBehaviour
         yield return null;
     }
 
-    public RawImage image;
-    void Start()
-    {
-        
-    }
 
     public void Photo()
     {
-        ScreenCapture.CaptureScreenshot("a");
+        #if UNITY_EDITOR
+            ScreenCapture.CaptureScreenshot("./Assets/temp.png");
+        #endif
+
+        #if !UNITY_EDITOR
+            ScreenCapture.CaptureScreenshot("temp.png");
+        #endif
     }
 
     public void GetPhoto()
     {
-         string url = Application.persistentDataPath +"/"+"a";
-         var bytes = File.ReadAllBytes( url );
-         Texture2D texture = new Texture2D( 73, 73 );
-         texture.LoadImage( bytes );
-         image.texture= texture ;
+        print("Application.persistentDataPath : " + "./" + Application.dataPath);
+        #if UNITY_EDITOR
+            string url = Application.dataPath + "/"+"temp.png";
+        #endif
+        #if !UNITY_EDITOR
+            string url = Application.persistentDataPath +"/"+"temp.png";
+        #endif
+
+        var bytes = File.ReadAllBytes(url);
+        Texture2D texture = new Texture2D(73, 73);
+        texture.LoadImage(bytes);
+        image.texture = texture;
     }
-
-
 }
