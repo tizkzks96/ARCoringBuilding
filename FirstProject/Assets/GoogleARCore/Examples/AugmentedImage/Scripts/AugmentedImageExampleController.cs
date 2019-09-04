@@ -103,8 +103,7 @@ namespace GoogleARCore.Examples.AugmentedImage
                 if (image.TrackingState == TrackingState.Tracking && visualizer == null)
                 {
                     //스크린샷
-                    Screenshot.instance.CaptureScreen();
-
+                    Screenshot.instance.CaptureScreen(image);
 
 
                     // Scean Home 으로 변경

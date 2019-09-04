@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 using UnityEngine.UI;
+using GoogleARCore;
 
 public class Screenshot : MonoBehaviour
 {
@@ -33,11 +34,13 @@ public class Screenshot : MonoBehaviour
             Destroy(gameObject);
     }
 
-    public void CaptureScreen()
+    public void CaptureScreen(AugmentedImage image)
     {
+
         //StartCoroutine(RecordFrame());
         Photo();
-        Invoke("GetPhoto", 1f);
+        StartCoroutine(GetPhoto(image));
+        
     }
 
     IEnumerator RecordFrame()
@@ -69,8 +72,9 @@ public class Screenshot : MonoBehaviour
         #endif
     }
 
-    public void GetPhoto()
+    IEnumerator GetPhoto(AugmentedImage aImage)
     {
+        yield return new WaitForSeconds(1.0f);
         print("Application.persistentDataPath : " + "./" + Application.dataPath);
         #if UNITY_EDITOR
             string url = Application.dataPath + "/"+"temp.png";
@@ -79,9 +83,15 @@ public class Screenshot : MonoBehaviour
             string url = Application.persistentDataPath +"/"+"temp.png";
         #endif
 
+
+
         var bytes = File.ReadAllBytes(url);
         Texture2D texture = new Texture2D(73, 73);
         texture.LoadImage(bytes);
+
+        //AugmentedImageController.instance.CaptureArea = texture;
+        AugmentedImageController.instance.Capture((int)aImage.ExtentX, (int)aImage.ExtentZ);
+
         image.texture = texture;
     }
 }

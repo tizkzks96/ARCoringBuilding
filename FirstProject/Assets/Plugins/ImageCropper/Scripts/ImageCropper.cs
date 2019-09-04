@@ -104,7 +104,7 @@ public class ImageCropper : MonoBehaviour
 
 	[SerializeField]
 	private RectTransform m_selection;
-	public RectTransform Selection { get { return m_selection; } }
+	public RectTransform Selection { set { m_selection = value; }  get { return m_selection; } }
 
 	[SerializeField]
 	private RectTransform m_selectionGraphics;
@@ -418,12 +418,12 @@ public class ImageCropper : MonoBehaviour
 			cropCallback( result != null, m_orientedImage.texture, result );
 		}
 
-		Hide();
+		//Hide();
 	}
 
 	public Texture2D CropSelection()
 	{
-		Vector2 selectionSize = m_selection.sizeDelta;
+        Vector2 selectionSize = m_selection.sizeDelta;
 		int width = Mathf.Clamp( (int) selectionSize.x, 1, (int) m_orientedImageSize.x );
 		int height = Mathf.Clamp( (int) selectionSize.y, 1, (int) m_orientedImageSize.y );
 		if( imageResizePolicy != null )
