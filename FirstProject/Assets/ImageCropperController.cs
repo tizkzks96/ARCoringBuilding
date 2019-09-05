@@ -104,8 +104,11 @@ namespace ImageCropperNamespace
 #if UNITY_EDITOR
             ImageCropper.Instance.FlipVertical();
 
-            ImageCropper.Instance.Selection.sizeDelta = new Vector2(365, 365);
-            ImageCropper.Instance.Selection.anchoredPosition = new Vector2(0 - ImageCropper.Instance.Selection.sizeDelta.x/2, 0 - ImageCropper.Instance.Selection.sizeDelta.y/2);
+            ImageCropper.Instance.CaptureImageSize = new Vector2(365, 365);
+            ImageCropper.Instance.CaptureImagePosition = new Vector2(0 + ImageCropper.Instance.CaptureImageSize.x/2, 0 + ImageCropper.Instance.CaptureImageSize.y/2);
+
+            print("m_originalImageSize: " + ImageCropper.Instance.OrientedImageSize);
+
 #endif
 
 #if !UNITY_EDITOR
@@ -118,22 +121,20 @@ namespace ImageCropperNamespace
                 Debug.Log("Unity Image + " + "image.CenterPose.position.x : " + image.CenterPose.position.x);
 
                 //ImageCropper.Instance.FlipVertical();
-                ImageCropper.Instance.Selection.sizeDelta = new Vector2(image.ExtentX, image.ExtentZ);
+                            ImageCropper.Instance.Selection.sizeDelta = new Vector2(ImageCropper.Instance.OrientedImageSize.x * image.ExtentX, ImageCropper.Instance.OrientedImageSize.y * image.ExtentZ);
+
                 ImageCropper.Instance.Selection.anchoredPosition = new Vector2(image.CenterPose.position.x - image.ExtentX / 2, image.CenterPose.position.z - image.ExtentZ / 2);
             }
             else
             {
-                Debug.Log("Unity Image + " + "image : " + image);
-                Debug.Log("Unity Image + " + "image.ExtentX : " + image.ExtentX);
-                Debug.Log("Unity Image + " + "ImageCropper.Instance.Selection.sizeDelta : " + ImageCropper.Instance.Selection.sizeDelta);
-                Debug.Log("Unity Image + " + "ImageCropper.Instance.Selection.anchoredPosition : " + ImageCropper.Instance.Selection.anchoredPosition);
-                Debug.Log("Unity Image + " + "image.CenterPose.position.x : " + image.CenterPose.position.x);
+                //Debug.Log("Unity Image + " + "image : " + image);
+                //Debug.Log("Unity Image + " + "image.ExtentX : " + image.ExtentX);
+                //Debug.Log("Unity Image + " + "ImageCropper.Instance.Selection.sizeDelta : " + ImageCropper.Instance.Selection.sizeDelta);
+                //Debug.Log("Unity Image + " + "ImageCropper.Instance.Selection.anchoredPosition : " + ImageCropper.Instance.Selection.anchoredPosition);
+                //Debug.Log("Unity Image + " + "image.CenterPose.position.x : " + image.CenterPose.position.x);
 
-                ImageCropper.Instance.FlipVertical();
-                ImageCropper.Instance.SelectionGraphics.sizeDelta = new Vector2(365, 365);
-                ImageCropper.Instance.SelectionGraphics.anchoredPosition = new Vector2(0 - ImageCropper.Instance.Selection.sizeDelta.x / 2, 0 - ImageCropper.Instance.Selection.sizeDelta.y / 2);
-                ImageCropper.Instance.Selection.sizeDelta = new Vector2(365, 365);
-                ImageCropper.Instance.Selection.anchoredPosition = new Vector2(0 - ImageCropper.Instance.Selection.sizeDelta.x / 2, 0 - ImageCropper.Instance.Selection.sizeDelta.y / 2);
+                ImageCropper.Instance.CaptureImageSize = new Vector2(365, 365);
+                ImageCropper.Instance.CaptureImagePosition = new Vector2(0 + ImageCropper.Instance.CaptureImageSize.x/2, 0 + ImageCropper.Instance.CaptureImageSize.y/2);
             }
 #endif
 

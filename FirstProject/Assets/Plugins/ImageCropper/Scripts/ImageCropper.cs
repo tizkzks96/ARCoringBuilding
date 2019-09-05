@@ -228,7 +228,8 @@ public class ImageCropper : MonoBehaviour
 
 	public Vector2 SelectionSize { get { return m_selection.sizeDelta; } }
 
-	private RectTransform orientedImageTransform;
+
+    private RectTransform orientedImageTransform;
 
 	private IEnumerator autoZoomCoroutine;
 	private ISelectionHandler currentSelectionHandler;
@@ -246,7 +247,13 @@ public class ImageCropper : MonoBehaviour
 	private float minAspectRatio, maxAspectRatio;
 	private float minImageScale;
 
-	private void Awake()
+    private Vector2 captureImageSize;
+    public Vector2 CaptureImageSize { get => captureImageSize; set => captureImageSize = value; }
+
+    private Vector2 captureImagePosition;
+    public Vector2 CaptureImagePosition { get => captureImagePosition; set => captureImagePosition = value; }
+
+    private void Awake()
 	{
 		if( m_instance == null )
 			m_instance = this;
@@ -468,20 +475,27 @@ public class ImageCropper : MonoBehaviour
 			width = preferredWidth;
 			height = preferredHeight;
 		}
+        //width = 1800;
+        //height = 1800;
 
-		RectTransform cropRenderCanvasTR = (RectTransform) cropRenderCanvas.transform;
+        RectTransform cropRenderCanvasTR = (RectTransform) cropRenderCanvas.transform;
 		RectTransform cropRenderImageTR = (RectTransform) cropRenderImage.transform;
 		Transform cropRenderCameraTR = cropRenderCamera.transform;
 
+        
+
 		cropRenderImage.texture = m_orientedImage.texture;
 
-		Vector2 selectionSize = m_selection.sizeDelta;
-		Vector2 selectionCenter = m_selection.anchoredPosition + selectionSize * 0.5f;
+        Vector2 selectionSize = new Vector2(captureImageSize.x, captureImageSize.y);//m_selection.sizeDelta;
+        Vector2 selectionCenter = new Vector2(captureImagePosition.x, captureImagePosition.y);//m_selection.anchoredPosition + selectionSize * 0.5f;
 
-		cropRenderCanvasTR.sizeDelta = m_orientedImageSize;
+        print("selectionSize : " + selectionSize);
+        print("selectionCenter : " + selectionCenter);
 
-		cropRenderSelection.anchoredPosition = m_selection.anchoredPosition;
-		cropRenderSelection.sizeDelta = selectionSize;
+        cropRenderCanvasTR.sizeDelta = m_orientedImageSize;
+
+		//cropRenderSelection.anchoredPosition = m_selection.anchoredPosition;
+		//cropRenderSelection.sizeDelta = selectionSize;
 
 		cropRenderImageTR.position = cropRenderCanvasTR.position;
 		cropRenderImageTR.sizeDelta = m_originalImageSize;
