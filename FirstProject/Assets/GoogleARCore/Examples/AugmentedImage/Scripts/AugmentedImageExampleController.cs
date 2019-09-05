@@ -40,6 +40,8 @@ namespace GoogleARCore.Examples.AugmentedImage
     /// </remarks>
     public class AugmentedImageExampleController : MonoBehaviour
     {
+        public static AugmentedImageExampleController instance;
+
         /// <summary>
         /// A prefab for visualizing an AugmentedImage.
         /// </summary>
@@ -60,6 +62,20 @@ namespace GoogleARCore.Examples.AugmentedImage
         /// </summary>
         public void Awake()
         {
+            //Check if instance already exists
+            if (instance == null)
+            {
+                //if not, set instance to this
+                instance = this;
+
+            }
+
+            //If instance already exists and it's not this:
+            else if (instance != this)
+
+                //Then destroy this. This enforces our singleton pattern, meaning there can only ever be one instance of a GameManager.
+                Destroy(gameObject);
+
             // Enable ARCore to target 60fps camera capture frame rate on supported devices.
             // Note, Application.targetFrameRate is ignored when QualitySettings.vSyncCount != 0.
             Application.targetFrameRate = 60;
@@ -103,7 +119,7 @@ namespace GoogleARCore.Examples.AugmentedImage
                 if (image.TrackingState == TrackingState.Tracking && visualizer == null)
                 {
 
-                    ImageCropperNamespace.ImageCropperController.instance.Crop();
+                    ImageCropperNamespace.ImageCropperController.instance.Crop(image);
 
                     //ImageCropper.Instance.Crop();
 

@@ -108,7 +108,7 @@ public class ImageCropper : MonoBehaviour
 
 	[SerializeField]
 	private RectTransform m_selectionGraphics;
-	public RectTransform SelectionGraphics { get { return m_selectionGraphics; } }
+	public RectTransform SelectionGraphics { set { m_selectionGraphics = value; } get { return m_selectionGraphics; } }
 
 	[SerializeField]
 	private SizeChangeListener viewportSizeChangeListener;
@@ -170,8 +170,8 @@ public class ImageCropper : MonoBehaviour
 		set
 		{
 			m_autoZoomEnabled = value;
-			if( m_autoZoomEnabled )
-				StartAutoZoom( false );
+			//if( m_autoZoomEnabled )
+				//StartAutoZoom( false );
 		}
 	}
 
@@ -267,33 +267,28 @@ public class ImageCropper : MonoBehaviour
 		gameObject.SetActive( false );
 	}
 
-    private void Start()
-    {
-        
-    }
-
-    private void OnDisable()
+	private void OnDisable()
 	{
 		autoZoomCoroutine = null;
 	}
 
 	private void LateUpdate()
 	{
-		//if( gameObject.activeInHierarchy )
-		//{
-		//	if( currentSelectionHandler != null && m_imageHolder.localScale.z > minImageScale + 0.01f )
-		//		currentSelectionHandler.OnUpdate();
+		if( gameObject.activeInHierarchy )
+		{
+			if( currentSelectionHandler != null && m_imageHolder.localScale.z > minImageScale + 0.01f )
+				currentSelectionHandler.OnUpdate();
 
-		//	if( shouldRefreshViewport )
-		//	{
-		//		textsSynchronizer.Synchronize();
-		//		ResetView( true );
+			if( shouldRefreshViewport )
+			{
+				textsSynchronizer.Synchronize();
+				ResetView( true );
 
-		//		shouldRefreshViewport = false;
-		//	}
+				shouldRefreshViewport = false;
+			}
 
-		//	selectionGraphicsSynchronizer.Synchronize();
-		//}
+			selectionGraphicsSynchronizer.Synchronize();
+		}
 	}
 
 	private void OnViewportDimensionsChange( Vector2 size )
@@ -403,8 +398,8 @@ public class ImageCropper : MonoBehaviour
 		m_imageHolder.anchoredPosition = RestrictImageToViewport( m_imageHolder.anchoredPosition, minImageScale );
 		m_imageHolder.localScale = new Vector3( minImageScale, minImageScale, minImageScale );
 
-		if( frameSelection && m_autoZoomEnabled )
-			StartAutoZoom( true );
+		//if( frameSelection && m_autoZoomEnabled )
+			//StartAutoZoom( true );
 	}
 
 	public void Cancel()
@@ -417,7 +412,6 @@ public class ImageCropper : MonoBehaviour
 
 	public void Crop()
 	{
-        print("AAaaa");
 		if( cropCallback != null )
 		{
 			Texture2D result = CropSelection();
@@ -911,8 +905,8 @@ public class ImageCropper : MonoBehaviour
 			if( m_pixelPerfectSelection )
 				MakePixelPerfectSelection();
 
-			if( m_autoZoomEnabled )
-				StartAutoZoom( false );
+			//if( m_autoZoomEnabled )
+				//StartAutoZoom( false );
 		}
 	}
 
