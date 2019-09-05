@@ -102,9 +102,10 @@ namespace GoogleARCore.Examples.AugmentedImage
                 m_Visualizers.TryGetValue(image.DatabaseIndex, out visualizer);
                 if (image.TrackingState == TrackingState.Tracking && visualizer == null)
                 {
-                    //스크린샷
-                    Screenshot.instance.CaptureScreen(image);
 
+                    ImageCropperNamespace.ImageCropperController.instance.Crop();
+
+                    //ImageCropper.Instance.Crop();
 
                     // Scean Home 으로 변경
                     SceanContorller.instance.ChangeScean(SceanState.MAIN);

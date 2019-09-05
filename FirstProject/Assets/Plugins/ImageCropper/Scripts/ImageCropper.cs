@@ -104,7 +104,7 @@ public class ImageCropper : MonoBehaviour
 
 	[SerializeField]
 	private RectTransform m_selection;
-	public RectTransform Selection { set { m_selection = value; }  get { return m_selection; } }
+	public RectTransform Selection { set { m_selection = value; } get { return m_selection; } }
 
 	[SerializeField]
 	private RectTransform m_selectionGraphics;
@@ -267,28 +267,33 @@ public class ImageCropper : MonoBehaviour
 		gameObject.SetActive( false );
 	}
 
-	private void OnDisable()
+    private void Start()
+    {
+        
+    }
+
+    private void OnDisable()
 	{
 		autoZoomCoroutine = null;
 	}
 
 	private void LateUpdate()
 	{
-		if( gameObject.activeInHierarchy )
-		{
-			if( currentSelectionHandler != null && m_imageHolder.localScale.z > minImageScale + 0.01f )
-				currentSelectionHandler.OnUpdate();
+		//if( gameObject.activeInHierarchy )
+		//{
+		//	if( currentSelectionHandler != null && m_imageHolder.localScale.z > minImageScale + 0.01f )
+		//		currentSelectionHandler.OnUpdate();
 
-			if( shouldRefreshViewport )
-			{
-				textsSynchronizer.Synchronize();
-				ResetView( true );
+		//	if( shouldRefreshViewport )
+		//	{
+		//		textsSynchronizer.Synchronize();
+		//		ResetView( true );
 
-				shouldRefreshViewport = false;
-			}
+		//		shouldRefreshViewport = false;
+		//	}
 
-			selectionGraphicsSynchronizer.Synchronize();
-		}
+		//	selectionGraphicsSynchronizer.Synchronize();
+		//}
 	}
 
 	private void OnViewportDimensionsChange( Vector2 size )
@@ -412,18 +417,19 @@ public class ImageCropper : MonoBehaviour
 
 	public void Crop()
 	{
+        print("AAaaa");
 		if( cropCallback != null )
 		{
 			Texture2D result = CropSelection();
 			cropCallback( result != null, m_orientedImage.texture, result );
 		}
 
-		//Hide();
+		Hide();
 	}
 
 	public Texture2D CropSelection()
 	{
-        Vector2 selectionSize = m_selection.sizeDelta;
+		Vector2 selectionSize = m_selection.sizeDelta;
 		int width = Mathf.Clamp( (int) selectionSize.x, 1, (int) m_orientedImageSize.x );
 		int height = Mathf.Clamp( (int) selectionSize.y, 1, (int) m_orientedImageSize.y );
 		if( imageResizePolicy != null )
