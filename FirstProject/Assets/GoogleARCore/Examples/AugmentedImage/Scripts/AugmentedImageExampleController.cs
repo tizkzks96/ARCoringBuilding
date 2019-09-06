@@ -130,7 +130,7 @@ namespace GoogleARCore.Examples.AugmentedImage
                     //Anchor anchor = image.CreateAnchor(image.CenterPose);
                     //visualizer = (AugmentedImageVisualizer)Instantiate(AugmentedImageVisualizerPrefab, anchor.transform);
                     //visualizer.Image = image;
-                    image.TrackingState = TrackingState.Stopped;
+                    image = null;
 
 
                     //m_Visualizers.Add(image.DatabaseIndex, visualizer);
