@@ -120,7 +120,6 @@ namespace GoogleARCore.Examples.AugmentedImage
                 m_Visualizers.TryGetValue(image.DatabaseIndex, out visualizer);
                 if (image.TrackingState == TrackingState.Tracking && visualizer == null)
                 {
-                    
                     ImageCropperNamespace.ImageCropperController.instance.Crop(image);
 
                     //ImageCropper.Instance.Crop();
@@ -131,12 +130,12 @@ namespace GoogleARCore.Examples.AugmentedImage
                     //Anchor anchor = image.CreateAnchor(image.CenterPose);
                     //visualizer = (AugmentedImageVisualizer)Instantiate(AugmentedImageVisualizerPrefab, anchor.transform);
                     //visualizer.Image = image;
-
+                    image.TrackingState = TrackingState.Stopped;
 
 
                     //m_Visualizers.Add(image.DatabaseIndex, visualizer);
 
-                    
+
 
                     //로그체크
                     print("\" Unity AugmentedImage \" " + "image : " + image);

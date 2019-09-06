@@ -127,15 +127,17 @@ public class BuildingUI : MonoBehaviour
 
         BuildingInfo slotInfo = BuildingDatabase.Instance.GetByID(index);
 
-        if(texture != null)
-            slotInfo.BuildingPrefab.GetComponent<MeshRenderer>().material.mainTexture = texture;
+        if (texture != null)
+        {
+            slotInfo.BuildingPrefab.GetComponent<Renderer>().sharedMaterial.mainTexture = texture;
 
+        }
 
         slotInfo.BuildingPrefab.transform.localScale = new Vector3(0.01f, 0.01f, 0.01f);
 
         slot.GetComponent<SlotInfo>().Slotinfo = slotInfo;
 
-        slot.transform.GetChild(0).GetComponent<Text>().text = slotInfo.Name;
+        slot.transform.GetChild(0).GetComponent<Text>().text = "made : " + slotInfo.Name ;
 
 
         //slot buildingsystem 변수에 this 연결

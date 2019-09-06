@@ -104,11 +104,11 @@ namespace ImageCropperNamespace
             croppedImageHolder.texture = screenshot;
 
             //슬롯 생성 및 프리펩에 텍스쳐 저장
-            BuildingInfo createObject = BuildingDatabase.Instance.GetByName(image.Name);
+            BuildingInfo createObject = BuildingDatabase.Instance.GetByName("Building_ApartmentLarge_Brown");
             BuildingUI.instance.InstantiateBuildingSlot(createObject.ID, screenshot);
 
 
-
+            cube.GetComponent<MeshRenderer>().material.mainTexture = screenshot;
 
 
 
