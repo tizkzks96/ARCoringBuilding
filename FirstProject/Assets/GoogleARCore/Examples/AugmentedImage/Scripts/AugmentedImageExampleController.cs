@@ -47,6 +47,8 @@ namespace GoogleARCore.Examples.AugmentedImage
         /// </summary>
         public AugmentedImageVisualizer AugmentedImageVisualizerPrefab;
 
+        public GameObject CropRenderCanvasPrefab;
+
         /// <summary>
         /// The overlay containing the fit to scan user guide.
         /// </summary>
@@ -118,7 +120,7 @@ namespace GoogleARCore.Examples.AugmentedImage
                 m_Visualizers.TryGetValue(image.DatabaseIndex, out visualizer);
                 if (image.TrackingState == TrackingState.Tracking && visualizer == null)
                 {
-
+                    
                     ImageCropperNamespace.ImageCropperController.instance.Crop(image);
 
                     //ImageCropper.Instance.Crop();
@@ -126,14 +128,15 @@ namespace GoogleARCore.Examples.AugmentedImage
                     // Scean Home 으로 변경
                     SceanContorller.instance.ChangeScean(SceanState.MAIN);
                     // Create an anchor to ensure that ARCore keeps tracking this augmented image.
-                    Anchor anchor = image.CreateAnchor(image.CenterPose);
-                    visualizer = (AugmentedImageVisualizer)Instantiate(
-                        AugmentedImageVisualizerPrefab, anchor.transform);
-                    visualizer.Image = image;
-                    m_Visualizers.Add(image.DatabaseIndex, visualizer);
+                    //Anchor anchor = image.CreateAnchor(image.CenterPose);
+                    //visualizer = (AugmentedImageVisualizer)Instantiate(AugmentedImageVisualizerPrefab, anchor.transform);
+                    //visualizer.Image = image;
 
 
-                    BuildingUI.instance.InstantiateBuildingSlot(BuildingDatabase.Instance.GetByName(image.Name).ID);
+
+                    //m_Visualizers.Add(image.DatabaseIndex, visualizer);
+
+                    
 
                     //로그체크
                     print("\" Unity AugmentedImage \" " + "image : " + image);
@@ -141,7 +144,7 @@ namespace GoogleARCore.Examples.AugmentedImage
                     print("\" Unity AugmentedImage \" " + "image.Name : " + image.Name);
                     print("\" Unity AugmentedImage \" " + "visualizer : " + visualizer);
                     print("\" Unity AugmentedImage \" " + "m_Visualizers.TryGetValue(image.DatabaseIndex, out visualizer); : " + m_Visualizers.TryGetValue(image.DatabaseIndex, out visualizer));
-                    print("\" Unity AugmentedImage \" " + "anchor : " + anchor);
+                    //print("\" Unity AugmentedImage \" " + "anchor : " + anchor);
                 }
                 else if (image.TrackingState == TrackingState.Stopped && visualizer != null)
                 {

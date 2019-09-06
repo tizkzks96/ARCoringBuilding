@@ -71,6 +71,8 @@ namespace GoogleARCore.Examples.AugmentedImage
                 return;
             }
 
+            
+
             float halfWidth = Image.ExtentX / 2;
             float halfHeight = Image.ExtentZ / 2;
             FrameLowerLeft.transform.localPosition =
@@ -79,9 +81,20 @@ namespace GoogleARCore.Examples.AugmentedImage
                 (halfWidth * Vector3.right) + (halfHeight * Vector3.back);
             FrameUpperLeft.transform.localPosition =
                 (halfWidth * Vector3.left) + (halfHeight * Vector3.forward);
-            FrameUpperRight.transform.localPosition =
-                (halfWidth * Vector3.right) + (halfHeight * Vector3.forward);
+            //FrameUpperRight.transform.localPosition =
+            //    (halfWidth * Vector3.right) + (halfHeight * Vector3.forward);
 
+            //FrameLowerLeft.transform.parent.parent = FrameLowerLeft.transform;
+
+            //FrameLowerRight.transform.localScale = new Vector3(1, 1, 1);
+
+            Debug.Log("Unity AugmentedImageVisualizer - " + "Image.ExtentX" + Image.ExtentX);
+            Debug.Log("Unity AugmentedImageVisualizer - " + "Image.ExtentZ" + Image.ExtentZ);
+            Debug.Log("Unity AugmentedImageVisualizer - " + "FrameLowerLeft.transform.localPosition" + FrameLowerLeft.transform.localPosition);
+
+            Debug.Log("Unity AugmentedImageVisualizer - " + "Image.ExtentX" + Image.ExtentX);
+            Debug.Log("Unity AugmentedImageVisualizer - " + "Image.ExtentZ" + Image.ExtentZ);
+            Debug.Log("Unity AugmentedImageVisualizer - " + "FrameLowerLeft.transform.localPosition" + FrameLowerLeft.transform.localPosition);
             FrameLowerLeft.SetActive(true);
             FrameLowerRight.SetActive(true);
             FrameUpperLeft.SetActive(true);

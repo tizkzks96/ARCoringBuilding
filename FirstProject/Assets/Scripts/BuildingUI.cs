@@ -115,7 +115,7 @@ public class BuildingUI : MonoBehaviour
     /// BuildingSlot object 를 생성한다.
     /// </summary>
     /// <param name="index">BuildingDatabase에 저장된 index</param>
-    public void InstantiateBuildingSlot(int index)
+    public void InstantiateBuildingSlot(int index, Texture2D texture = null)
     {
         Canvas canvas = FindObjectOfType<Canvas>();
 
@@ -126,7 +126,11 @@ public class BuildingUI : MonoBehaviour
         GameObject slot = Instantiate(buildingSlot, canvas.transform.Find("BottomUI/EnvironmentPanel"));
 
         BuildingInfo slotInfo = BuildingDatabase.Instance.GetByID(index);
-        
+
+        if(texture != null)
+            slotInfo.BuildingPrefab.GetComponent<MeshRenderer>().material.mainTexture = texture;
+
+
         slotInfo.BuildingPrefab.transform.localScale = new Vector3(0.01f, 0.01f, 0.01f);
 
         slot.GetComponent<SlotInfo>().Slotinfo = slotInfo;
