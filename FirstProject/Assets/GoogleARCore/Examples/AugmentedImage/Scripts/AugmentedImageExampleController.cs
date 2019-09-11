@@ -108,6 +108,12 @@ namespace GoogleARCore.Examples.AugmentedImage
                 Screen.sleepTimeout = SleepTimeout.NeverSleep;
             }
 
+            //if (m_TempAugmentedImages == null)
+            //{
+            //    m_TempAugmentedImages = new List<AugmentedImage>();
+            //    Debug.Log("Unity Image - " + "m_TempAugmentedImages null check: " + m_TempAugmentedImages);
+            //}
+
             // Get updated augmented images for this frame.
             Session.GetTrackables<AugmentedImage>(
                 m_TempAugmentedImages, TrackableQueryFilter.Updated);
@@ -117,6 +123,13 @@ namespace GoogleARCore.Examples.AugmentedImage
             foreach (var image in m_TempAugmentedImages)
             {
                 AugmentedImageVisualizer visualizer = null;
+                Debug.Log("Unity Image - " + "m_TempAugmentedImages null check: " + m_TempAugmentedImages);
+                Debug.Log("Unity Image - " + "Image : " + image.Name);
+
+                m_TempAugmentedImages.Clear();
+                Debug.Log("Unity Image - " + "★m_TempAugmentedImages null check: " + m_TempAugmentedImages);
+                Debug.Log("Unity Image - " + "★Image : " + image);
+
                 m_Visualizers.TryGetValue(image.DatabaseIndex, out visualizer);
                 if (image.TrackingState == TrackingState.Tracking && visualizer == null)
                 {
@@ -127,22 +140,17 @@ namespace GoogleARCore.Examples.AugmentedImage
                     // Scean Home 으로 변경
                     SceanContorller.instance.ChangeScean(SceanState.MAIN);
                     // Create an anchor to ensure that ARCore keeps tracking this augmented image.
-                    //Anchor anchor = image.CreateAnchor(image.CenterPose);
-                    //visualizer = (AugmentedImageVisualizer)Instantiate(AugmentedImageVisualizerPrefab, anchor.transform);
-                    //visualizer.Image = image;
-                    image = null;
-
+                    Anchor anchor = image.CreateAnchor(image.CenterPose);
+                    visualizer = (AugmentedImageVisualizer)Instantiate(AugmentedImageVisualizerPrefab, anchor.transform);
+                    visualizer.Image = image;
+                    m_TempAugmentedImages.Clear();
+                    Debug.Log("Unity Image - " + "★m_TempAugmentedImages null check: " + m_TempAugmentedImages);
 
                     //m_Visualizers.Add(image.DatabaseIndex, visualizer);
 
 
 
-                    //로그체크
-                    print("\" Unity AugmentedImage \" " + "image : " + image);
-                    print("\" Unity AugmentedImage \" " + "m_TempAugmentedImages : " + m_TempAugmentedImages);
-                    print("\" Unity AugmentedImage \" " + "image.Name : " + image.Name);
-                    print("\" Unity AugmentedImage \" " + "visualizer : " + visualizer);
-                    print("\" Unity AugmentedImage \" " + "m_Visualizers.TryGetValue(image.DatabaseIndex, out visualizer); : " + m_Visualizers.TryGetValue(image.DatabaseIndex, out visualizer));
+
                     //print("\" Unity AugmentedImage \" " + "anchor : " + anchor);
                 }
                 else if (image.TrackingState == TrackingState.Stopped && visualizer != null)
