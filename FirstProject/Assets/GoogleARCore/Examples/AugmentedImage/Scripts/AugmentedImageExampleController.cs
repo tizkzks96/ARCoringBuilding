@@ -54,8 +54,8 @@ namespace GoogleARCore.Examples.AugmentedImage
         /// </summary>
         public GameObject FitToScanOverlay;
 
-        private Dictionary<int, AugmentedImageVisualizer> m_Visualizers
-            = new Dictionary<int, AugmentedImageVisualizer>();
+        private Dictionary<int, bool> m_Visualizers
+            = new Dictionary<int, bool>();
 
         private List<AugmentedImage> m_TempAugmentedImages = new List<AugmentedImage>();
 
@@ -82,10 +82,6 @@ namespace GoogleARCore.Examples.AugmentedImage
             // Note, Application.targetFrameRate is ignored when QualitySettings.vSyncCount != 0.
             Application.targetFrameRate = 60;
         }
-
-
-
-
 
         /// <summary>
         /// The Unity Update method.
@@ -122,53 +118,41 @@ namespace GoogleARCore.Examples.AugmentedImage
             // not previously have a visualizer. Remove visualizers for stopped images.
             foreach (var image in m_TempAugmentedImages)
             {
-                AugmentedImageVisualizer visualizer = null;
-                Debug.Log("Unity Image - " + "m_TempAugmentedImages null check: " + m_TempAugmentedImages);
-                Debug.Log("Unity Image - " + "Image : " + image.Name);
-
-                m_TempAugmentedImages.Clear();
-                Debug.Log("Unity Image - " + "★m_TempAugmentedImages null check: " + m_TempAugmentedImages);
-                Debug.Log("Unity Image - " + "★Image : " + image);
+                bool visualizer = false;
 
                 m_Visualizers.TryGetValue(image.DatabaseIndex, out visualizer);
-                if (image.TrackingState == TrackingState.Tracking && visualizer == null)
+                if (image.TrackingState == TrackingState.Tracking && visualizer == false)
                 {
+                    //StartCoroutine(ImageCropperNamespace.ImageCropperController.instance.SnapShot(image));
                     ImageCropperNamespace.ImageCropperController.instance.Crop(image);
 
-                    //ImageCropper.Instance.Crop();
 
-                    // Scean Home 으로 변경
-                    SceanContorller.instance.ChangeScean(SceanState.MAIN);
                     // Create an anchor to ensure that ARCore keeps tracking this augmented image.
                     Anchor anchor = image.CreateAnchor(image.CenterPose);
-                    visualizer = (AugmentedImageVisualizer)Instantiate(AugmentedImageVisualizerPrefab, anchor.transform);
-                    visualizer.Image = image;
                     m_TempAugmentedImages.Clear();
                     Debug.Log("Unity Image - " + "★m_TempAugmentedImages null check: " + m_TempAugmentedImages);
 
-                    //m_Visualizers.Add(image.DatabaseIndex, visualizer);
+                    m_Visualizers.Add(image.DatabaseIndex, true);
 
 
 
 
-                    //print("\" Unity AugmentedImage \" " + "anchor : " + anchor);
                 }
                 else if (image.TrackingState == TrackingState.Stopped && visualizer != null)
                 {
                     m_Visualizers.Remove(image.DatabaseIndex);
-                    GameObject.Destroy(visualizer.gameObject);
                 }
             }
 
-            // Show the fit-to-scan overlay if there are no images that are Tracking.
-            foreach (var visualizer in m_Visualizers.Values)
-            {
-                if (visualizer.Image.TrackingState == TrackingState.Tracking)
-                {
-                    FitToScanOverlay.SetActive(false);
-                    return;
-                }
-            }
+            //// Show the fit-to-scan overlay if there are no images that are Tracking.
+            //foreach (var visualizer in m_Visualizers.Values)
+            //{
+            //    if (visualizer.Image.TrackingState == TrackingState.Tracking)
+            //    {
+            //        FitToScanOverlay.SetActive(false);
+            //        return;
+            //    }
+            //}
 
             FitToScanOverlay.SetActive(true);
         }

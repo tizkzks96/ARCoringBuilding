@@ -42,6 +42,14 @@ namespace ImageCropperNamespace
             StartCoroutine(TakeScreenshotAndCrop());
         }
 
+        public IEnumerator SnapShot(AugmentedImage image)
+        {
+            yield return new WaitForSeconds(1.0f);
+
+            Crop(image);
+
+        }
+
         public void Crop(AugmentedImage image)
 		{
 			// If image cropper is already open, do nothing
@@ -53,9 +61,13 @@ namespace ImageCropperNamespace
 
 		private IEnumerator TakeScreenshotAndCrop(AugmentedImage image = null)
 		{
-			yield return new WaitForEndOfFrame();
+            yield return new WaitForSeconds(2.0f);
+            yield return new WaitForEndOfFrame();
 
-			float minAspectRatio, maxAspectRatio;
+            // Scean Home 으로 변경
+            SceanContorller.instance.ChangeScean(SceanState.MAIN);
+
+            float minAspectRatio, maxAspectRatio;
 			minAspectRatio = 1f;
 			maxAspectRatio = 1f;
             //Screen.width, Screen.height
@@ -107,7 +119,7 @@ namespace ImageCropperNamespace
             BuildingInfo createObject = BuildingDatabase.Instance.GetByName("Building_ApartmentLarge_Brown");
             BuildingUI.instance.InstantiateBuildingSlot(createObject.ID, screenshot);
 
-
+            cube.transform.localRotation = new Quaternion(0,180,0,0);
             cube.GetComponent<MeshRenderer>().material.mainTexture = screenshot;
 
 
