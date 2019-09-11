@@ -165,8 +165,16 @@ namespace GoogleARCore.Examples.HelloAR
                     }
 
                     // Instantiate Andy model at the hit pose.
-                    var andyObject = Instantiate(prefab, hit.Pose.position, hit.Pose.rotation);
+                    Vector3 currentPos;
+                    currentPos = new Vector3(Mathf.Round(hit.Pose.position.x),
+                                                 Mathf.Round(hit.Pose.position.y),
+                                                 hit.Pose.position.z);
 
+                    Debug.Log("instant position : " + currentPos);
+
+                    var andyObject = Instantiate(prefab, currentPos, hit.Pose.rotation);
+
+                    
                     // Compensate for the hitPose rotation facing away from the raycast (i.e.
                     // camera).
                     andyObject.transform.Rotate(0, k_ModelRotation, 0, Space.Self);
