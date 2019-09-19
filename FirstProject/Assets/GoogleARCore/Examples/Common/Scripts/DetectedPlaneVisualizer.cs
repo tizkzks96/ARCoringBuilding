@@ -58,6 +58,7 @@ namespace GoogleARCore.Examples.Common
         /// </summary>
         public void Update()
         {
+
             if (m_DetectedPlane == null)
             {
                 return;
@@ -85,7 +86,7 @@ namespace GoogleARCore.Examples.Common
         public void Initialize(DetectedPlane plane)
         {
             m_DetectedPlane = plane;
-            //m_MeshRenderer.material.SetColor("_GridColor", Color.white);
+            m_MeshRenderer.material.SetColor("_GridColor", Color.white);
             m_MeshRenderer.material.SetFloat("_UvRotation", Random.Range(0.0f, 360.0f));
 
             Update();
@@ -103,6 +104,7 @@ namespace GoogleARCore.Examples.Common
                 return;
             }
 
+
             m_PreviousFrameMeshVertices.Clear();
             m_PreviousFrameMeshVertices.AddRange(m_MeshVertices);
 
@@ -113,6 +115,9 @@ namespace GoogleARCore.Examples.Common
             m_MeshRenderer.material.SetVector("_PlaneNormal", planeNormal);
 
             int planePolygonCount = m_MeshVertices.Count;
+
+            Debug.Log("aaaa : " + (m_MeshVertices[0] - m_MeshVertices[1]));
+            Debug.Log("bbbb : " + (m_MeshVertices[1] - m_MeshVertices[2]));
 
             // The following code converts a polygon to a mesh with two polygons, inner polygon
             // renders with 100% opacity and fade out to outter polygon with opacity 0%, as shown
@@ -129,7 +134,7 @@ namespace GoogleARCore.Examples.Common
             // Fill transparent color to vertices 0 to 3.
             for (int i = 0; i < planePolygonCount; ++i)
             {
-                m_MeshColors.Add(Color.clear);
+                m_MeshColors.Add(Color.blue);
             }
 
             // Feather distance 0.2 meters.

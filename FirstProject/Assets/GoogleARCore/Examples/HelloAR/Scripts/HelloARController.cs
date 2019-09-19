@@ -131,6 +131,8 @@ namespace GoogleARCore.Examples.HelloAR
 
             if (Frame.Raycast(touch.position.x, touch.position.y, raycastFilter, out hit))
             {
+
+                Debug.Log("터치 포지션 : " + touch.position);
                 // Use hit pose and camera pose to check if hittest is from the
                 // back of the plane, if it is, no need to create the anchor.
                 if ((hit.Trackable is DetectedPlane) &&
@@ -166,22 +168,25 @@ namespace GoogleARCore.Examples.HelloAR
 
                     // Instantiate Andy model at the hit pose.
                     Vector3 currentPos;
-                    currentPos = new Vector3(Mathf.Round(hit.Pose.position.x),
-                                                 Mathf.Round(hit.Pose.position.y),
-                                                 hit.Pose.position.z);
+                    currentPos = //hit.Pose.position;
+                    new Vector3(Mathf.Round((hit.Pose.position.x * 100) * 0.01f),
+                                             Mathf.Round((hit.Pose.position.y * 100) * 0.01f),
+                                             hit.Pose.position.z);
 
-                    Debug.Log("instant position : " + currentPos);
+                    Debug.Log("instant position : " + hit.Pose.position);
 
-                    var andyObject = Instantiate(prefab, currentPos, hit.Pose.rotation);
+                    var andyObject = Instantiate(prefab, hit.Pose.position, hit.Pose.rotation);
 
                     
                     // Compensate for the hitPose rotation facing away from the raycast (i.e.
                     // camera).
-                    andyObject.transform.Rotate(0, k_ModelRotation, 0, Space.Self);
+                    //andyObject.transform.Rotate(0, k_ModelRotation, 0, Space.Self);
 
                     // Create an anchor to allow ARCore to track the hitpoint as understanding of
                     // the physical world evolves.
                     var anchor = hit.Trackable.CreateAnchor(hit.Pose);
+
+                    //anchor.transform.position = currentPos;
 
                     // Make Andy model a child of the anchor.
                     andyObject.transform.parent = anchor.transform;
