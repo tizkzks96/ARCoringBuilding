@@ -22,6 +22,7 @@ namespace GoogleARCore.Examples.Common
 {
     using System.Collections.Generic;
     using GoogleARCore;
+    using UnityEditor;
     using UnityEngine;
 
     /// <summary>
@@ -43,6 +44,10 @@ namespace GoogleARCore.Examples.Common
         private Mesh m_Mesh;
 
         private MeshRenderer m_MeshRenderer;
+        private int mapSize = 1;
+        private float size = 1;
+
+        public List<Vector3> MeshVertices { get => m_MeshVertices; set => m_MeshVertices = value; }
 
         /// <summary>
         /// The Unity Awake() method.
@@ -97,16 +102,16 @@ namespace GoogleARCore.Examples.Common
         /// </summary>
         private void _UpdateMeshIfNeeded()
         {
-            m_DetectedPlane.GetBoundaryPolygon(m_MeshVertices);
+            m_DetectedPlane.GetBoundaryPolygon(MeshVertices);
 
-            if (_AreVerticesListsEqual(m_PreviousFrameMeshVertices, m_MeshVertices))
+            if (_AreVerticesListsEqual(m_PreviousFrameMeshVertices, MeshVertices))
             {
                 return;
             }
 
 
             m_PreviousFrameMeshVertices.Clear();
-            m_PreviousFrameMeshVertices.AddRange(m_MeshVertices);
+            m_PreviousFrameMeshVertices.AddRange(MeshVertices);
 
             m_PlaneCenter = m_DetectedPlane.CenterPose.position;
 
@@ -114,10 +119,10 @@ namespace GoogleARCore.Examples.Common
 
             m_MeshRenderer.material.SetVector("_PlaneNormal", planeNormal);
 
-            int planePolygonCount = m_MeshVertices.Count;
+            int planePolygonCount = MeshVertices.Count;
 
-            Debug.Log("aaaa : " + (m_MeshVertices[0] - m_MeshVertices[1]));
-            Debug.Log("bbbb : " + (m_MeshVertices[1] - m_MeshVertices[2]));
+            Debug.Log("aaaa : " + (MeshVertices[0] - MeshVertices[1]));
+            Debug.Log("bbbb : " + (MeshVertices[1] - MeshVertices[2]));
 
             // The following code converts a polygon to a mesh with two polygons, inner polygon
             // renders with 100% opacity and fade out to outter polygon with opacity 0%, as shown
@@ -134,7 +139,7 @@ namespace GoogleARCore.Examples.Common
             // Fill transparent color to vertices 0 to 3.
             for (int i = 0; i < planePolygonCount; ++i)
             {
-                m_MeshColors.Add(Color.blue);
+                m_MeshColors.Add(Color.clear);
             }
 
             // Feather distance 0.2 meters.
@@ -146,13 +151,13 @@ namespace GoogleARCore.Examples.Common
             // Add vertex 4 to 7.
             for (int i = 0; i < planePolygonCount; ++i)
             {
-                Vector3 v = m_MeshVertices[i];
+                Vector3 v = MeshVertices[i];
 
                 // Vector from plane center to current point
                 Vector3 d = v - m_PlaneCenter;
 
                 float scale = 1.0f - Mathf.Min(featherLength / d.magnitude, featherScale);
-                m_MeshVertices.Add((scale * d) + m_PlaneCenter);
+                MeshVertices.Add((scale * d) + m_PlaneCenter);
 
                 m_MeshColors.Add(Color.white);
             }
@@ -188,7 +193,7 @@ namespace GoogleARCore.Examples.Common
             }
 
             m_Mesh.Clear();
-            m_Mesh.SetVertices(m_MeshVertices);
+            m_Mesh.SetVertices(MeshVertices);
             m_Mesh.SetTriangles(m_MeshIndices, 0);
             m_Mesh.SetColors(m_MeshColors);
         }
@@ -209,6 +214,88 @@ namespace GoogleARCore.Examples.Common
             }
 
             return true;
+        }
+
+     
+
+        private void OnDrawGizmos()
+        {
+            Gizmos.color = Color.blue;
+            Gizmos.DrawSphere(m_PlaneCenter, 0.1f);
+
+            //for (float i = 0.1f; i < 10; i+=0.1f)
+            //{
+            //    Gizmos.color = Color.blue;
+            //    Gizmos.DrawSphere(m_PlaneCenter + Vector3.right * i, 0.01f);
+            //}
+
+            float minDistance = CustomMath.DistanceToPoint(m_PlaneCenter, m_PreviousFrameMeshVertices[0]);
+
+            foreach (Vector3 point in m_PreviousFrameMeshVertices)
+            {
+                Gizmos.color = Color.blue;
+                Gizmos.DrawSphere(point, 0.1f);
+
+                float currentDistance = CustomMath.DistanceToPoint(m_PlaneCenter, point);
+                if(minDistance > currentDistance)
+                {
+                    minDistance = currentDistance;
+                }
+
+                
+            }
+            Handles.color = Color.red;
+            Handles.DrawWireDisc(m_PlaneCenter // position
+                                          , new Vector3(0,1,0)                       // normal
+                                          , minDistance);                              // radius
+
+            Gizmos.color = Color.yellow;
+            float squreSide = minDistance * 2 / Mathf.Sqrt(2);
+            Gizmos.DrawWireCube(m_PlaneCenter, new Vector3(squreSide, 0, squreSide));
+
+            Vector3 leftPoint = m_PlaneCenter - squreSide / 2 * Vector3.left;
+            Vector3 rightPoint = m_PlaneCenter - squreSide / 2 * Vector3.right;
+            Vector3 forwardPoint = m_PlaneCenter - squreSide / 2 * Vector3.forward;
+            Vector3 backPoint = m_PlaneCenter - squreSide / 2 * Vector3.back;
+
+            Gizmos.color = Color.green;
+            Gizmos.DrawSphere(m_PlaneCenter - leftPoint + backPoint, 0.1f);
+
+            Gizmos.color = Color.gray;
+            Gizmos.DrawSphere(m_PlaneCenter - leftPoint + forwardPoint, 0.1f);
+
+            Gizmos.color = Color.white;
+            Gizmos.DrawSphere(m_PlaneCenter - rightPoint + forwardPoint, 0.1f);
+
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawSphere(m_PlaneCenter - rightPoint + backPoint, 0.1f);
+
+
+            Gizmos.DrawSphere(leftPoint - Vector3.right , 0.1f);
+
+            for (float i = rightPoint.x; i < leftPoint.x; i += 0.1f)
+            {
+                Gizmos.DrawSphere(((i * Vector3.right) + (m_PlaneCenter.y * Vector3.up)), 0.01f);
+            }
+
+        }
+
+        public Vector3 GetNearestPointOnGrid(Vector3 position)
+        {
+            position -= transform.position;
+
+            float xCount = Mathf.RoundToInt(position.x / size);
+            float yCount = Mathf.RoundToInt(position.y / size);
+            float zCount = Mathf.RoundToInt(position.z / size);
+
+            Vector3 result = new Vector3(
+                (float)xCount * size - 0.5f,
+                (float)yCount * size + 0.5f,
+                (float)zCount * size - 0.5f);
+
+            result += transform.position;
+
+            return result;
         }
     }
 }
