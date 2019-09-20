@@ -42,7 +42,18 @@ namespace GoogleARCore.Examples.Common
 
         public List<DetectedPlane> NewPlanes { get => m_NewPlanes; set => m_NewPlanes = value; }
 
-
+        public static bool tempBtnbool = true;
+        public static void tempBtn()
+        {
+            if (tempBtnbool == false)
+            {
+                tempBtnbool = true;
+            }
+            else
+            {
+                tempBtnbool = false;
+            }
+        }
 
         /// <summary>
         /// The Unity Update method.
@@ -67,7 +78,7 @@ namespace GoogleARCore.Examples.Common
                     Instantiate(DetectedPlanePrefab, Vector3.zero, Quaternion.identity, transform);
                 planeObject.GetComponent<DetectedPlaneVisualizer>().Initialize(NewPlanes[i]);
 
-                Debug.Log("몇번 실행이 될까요?");
+                Debug.Log("몇번 실행이 될까요? : " + NewPlanes.Count);
             }
         }
     }

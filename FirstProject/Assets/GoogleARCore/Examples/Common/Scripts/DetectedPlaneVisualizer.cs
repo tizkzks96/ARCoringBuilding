@@ -20,6 +20,7 @@
 
 namespace GoogleARCore.Examples.Common
 {
+    using System.Collections;
     using System.Collections.Generic;
     using GoogleARCore;
     using UnityEditor;
@@ -47,7 +48,12 @@ namespace GoogleARCore.Examples.Common
         private int mapSize = 1;
         private float size = 1;
 
-        private Vector3[,] m_MapArray = new Vector3[20, 20];
+        private Vector3[,] m_MapArray = new Vector3[50, 50];
+
+        public GameObject prefab;
+        private bool _endDetect = true;
+
+        float minDistance;
 
         public List<Vector3> MeshVertices { get => m_MeshVertices; set => m_MeshVertices = value; }
         public Vector3 PlaneCenter { get => m_PlaneCenter; set => m_PlaneCenter = value; }
@@ -61,6 +67,8 @@ namespace GoogleARCore.Examples.Common
             m_Mesh = GetComponent<MeshFilter>().mesh;
             m_MeshRenderer = GetComponent<UnityEngine.MeshRenderer>();
         }
+
+        
 
         /// <summary>
         /// The Unity Update() method.
@@ -85,6 +93,7 @@ namespace GoogleARCore.Examples.Common
 
             m_MeshRenderer.enabled = true;
 
+            
             _UpdateMeshIfNeeded();
         }
 
@@ -124,9 +133,6 @@ namespace GoogleARCore.Examples.Common
             m_MeshRenderer.material.SetVector("_PlaneNormal", planeNormal);
 
             int planePolygonCount = MeshVertices.Count;
-
-            Debug.Log("aaaa : " + (MeshVertices[0] - MeshVertices[1]));
-            Debug.Log("bbbb : " + (MeshVertices[1] - MeshVertices[2]));
 
             // The following code converts a polygon to a mesh with two polygons, inner polygon
             // renders with 100% opacity and fade out to outter polygon with opacity 0%, as shown
@@ -220,8 +226,8 @@ namespace GoogleARCore.Examples.Common
             return true;
         }
 
-     
 
+        
         private void OnDrawGizmos()
         {
             Gizmos.color = Color.blue;
@@ -232,8 +238,10 @@ namespace GoogleARCore.Examples.Common
             //    Gizmos.color = Color.blue;
             //    Gizmos.DrawSphere(m_PlaneCenter + Vector3.right * i, 0.01f);
             //}
-
-            float minDistance = CustomMath.DistanceToPoint(PlaneCenter, m_PreviousFrameMeshVertices[0]);
+            if(m_PreviousFrameMeshVertices[0] != null)
+            {
+                minDistance = CustomMath.DistanceToPoint(PlaneCenter, m_PreviousFrameMeshVertices[0]);
+            }
 
             foreach (Vector3 point in m_PreviousFrameMeshVertices)
             {
@@ -248,50 +256,94 @@ namespace GoogleARCore.Examples.Common
 
                 
             }
-            Handles.color = Color.red;
-            Handles.DrawWireDisc(PlaneCenter // position
-                                          , new Vector3(0,1,0)                       // normal
-                                          , minDistance);                              // radius
-
-            Gizmos.color = Color.yellow;
             float squreSide = minDistance * 2 / Mathf.Sqrt(2);
-            Gizmos.DrawWireCube(PlaneCenter, new Vector3(squreSide, 0, squreSide));
 
             Vector3 leftPoint = PlaneCenter - squreSide / 2 * Vector3.left;
             Vector3 rightPoint = PlaneCenter - squreSide / 2 * Vector3.right;
             Vector3 forwardPoint = PlaneCenter - squreSide / 2 * Vector3.forward;
             Vector3 backPoint = PlaneCenter - squreSide / 2 * Vector3.back;
 
-            Gizmos.color = Color.green;
-            Gizmos.DrawSphere(PlaneCenter - leftPoint + backPoint, 0.1f);
+            int m = 0;
+            int n = 0;
+            for (float i = rightPoint.x; i < leftPoint.x; i += 0.1f)
+            {
+                for (float j = forwardPoint.z; j < backPoint.z; j += 0.1f)
+                {
+                    // 높이 , 수평, 수직
+                    //m_MapArray[m, n] = PlaneCenter.y * Vector3.up + i * Vector3.right + j * Vector3.forward;
+                    //print(m_MapArray[m, n]);
+                    //n++;+
+                    Gizmos.DrawSphere(PlaneCenter.y * Vector3.up + i * Vector3.right + j * Vector3.forward, 0.01f);
 
-            Gizmos.color = Color.gray;
-            Gizmos.DrawSphere(PlaneCenter - leftPoint + forwardPoint, 0.1f);
+                    if (m > 10 && n > 10 && _endDetect)
+                    {
 
-            Gizmos.color = Color.white;
-            Gizmos.DrawSphere(PlaneCenter - rightPoint + forwardPoint, 0.1f);
+                        _endDetect = false;
+                        StartCoroutine(FixGridArray(leftPoint, rightPoint, forwardPoint, backPoint));
+                    }
 
-            Gizmos.color = Color.yellow;
-            Gizmos.DrawSphere(PlaneCenter - rightPoint + backPoint, 0.1f);
+                    if (m > 10 && n > 10)
+                    {
+                        Gizmos.color = Color.black;
+                        Gizmos.DrawSphere(PlaneCenter, 0.01f);
+                    }
+                    n++;
+                }
+                n = 0;
+                m++;
+            }
+
+            //Handles.color = Color.red;
+            //Handles.DrawWireDisc(PlaneCenter // position
+            //                              , new Vector3(0,1,0)                       // normal
+            //                              , minDistance);                              // radius
 
 
-            Gizmos.DrawSphere(leftPoint - Vector3.right , 0.1f);
+            //Gizmos.color = Color.yellow;
+            //Gizmos.DrawWireCube(PlaneCenter, new Vector3(squreSide, 0, squreSide));
+
+            
+
+            //Gizmos.color = Color.green;
+            //Gizmos.DrawSphere(PlaneCenter - leftPoint + backPoint, 0.1f);
+
+            //Gizmos.color = Color.gray;
+            //Gizmos.DrawSphere(PlaneCenter - leftPoint + forwardPoint, 0.1f);
+
+            //Gizmos.color = Color.white;
+            //Gizmos.DrawSphere(PlaneCenter - rightPoint + forwardPoint, 0.1f);
+
+            //Gizmos.color = Color.yellow;
+            //Gizmos.DrawSphere(PlaneCenter - rightPoint + backPoint, 0.1f);
+
+            //Gizmos.DrawSphere(leftPoint - Vector3.right , 0.1f);
+
+            
+        }
+        
+        public IEnumerator FixGridArray(Vector3 leftPoint, Vector3 rightPoint, Vector3 forwardPoint, Vector3 backPoint)
+        {
+            int m = 0;
+            int n = 0;
+            
+            Anchor anchor = m_DetectedPlane.CreateAnchor(m_DetectedPlane.CenterPose);
 
             for (float i = rightPoint.x; i < leftPoint.x; i += 0.1f)
             {
-                int m = 0;
-                for(float j = forwardPoint.z; j < backPoint.z; j += 0.1f)
+                for (float j = forwardPoint.z; j < backPoint.z; j += 0.1f)
                 {
-                    int n = 0;
-                    // 높이 , 수평, 수직
-                    Gizmos.DrawSphere(PlaneCenter.y * Vector3.up + i * Vector3.right + j * Vector3.forward, 0.01f);
+                    Instantiate(prefab, PlaneCenter.y * Vector3.up + i * Vector3.right + j * Vector3.forward, Quaternion.identity, transform);
                     m_MapArray[m, n] = PlaneCenter.y * Vector3.up + i * Vector3.right + j * Vector3.forward;
-                    print(m_MapArray[m, n]);
                     n++;
                 }
+                n = 0;
                 m++;
             }
+
+            transform.GetComponent<DetectedPlaneVisualizer>().enabled = false;
+            yield return null;
         }
+
 
         public Vector3 GetNearestPointOnGrid(Vector3 position)
         {

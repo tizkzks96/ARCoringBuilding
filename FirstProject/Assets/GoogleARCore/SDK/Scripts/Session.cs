@@ -150,5 +150,6 @@ namespace GoogleARCore
         {
             return LifecycleManager.Instance.RequestApkInstallation(userRequested);
         }
+
     }
 }
