@@ -124,15 +124,31 @@ namespace GoogleARCore.Examples.HelloAR
                 return;
             }
 
+            RaycastHit _hit;
+
             // Raycast against the location the player touched to search for planes.
             TrackableHit hit;
             TrackableHitFlags raycastFilter = TrackableHitFlags.PlaneWithinPolygon |
                 TrackableHitFlags.FeaturePointWithSurfaceNormal;
 
+            //Ray raycast = FindObjectOfType<Frame>().ScreenPointToRay(touch.position);
+            //RaycastHit raycastHit;
+            //if (Physics.Raycast(raycast, out raycastHit))
+            //{
+            //    Debug.LogError("Something Hit");
+            //    if (raycastHit.collider.name == "Andy")
+            //    {
+            //        Debug.LogError("andy clicked");
+            //    }
+            //}
+            //else
+            //{
+            //    Debug.LogError("No hit detected");
+            //}
+
             if (Frame.Raycast(touch.position.x, touch.position.y, raycastFilter, out hit))
             {
-
-                Debug.Log("터치 포지션 : " + touch.position);
+                    Debug.Log("터치 포지션 : " + touch.position);
                 // Use hit pose and camera pose to check if hittest is from the
                 // back of the plane, if it is, no need to create the anchor.
                 if ((hit.Trackable is DetectedPlane) &&
@@ -175,7 +191,7 @@ namespace GoogleARCore.Examples.HelloAR
 
                     Debug.Log("instant position : " + hit.Pose.position);
 
-                    var andyObject = Instantiate(prefab, hit.Pose.position, hit.Pose.rotation);
+                    var andyObject = Instantiate(prefab, GetNearestPointOnGrid(hit.Pose.position, DetectedPlaneVisualizer.Gab), hit.Pose.rotation);
 
                     
                     // Compensate for the hitPose rotation facing away from the raycast (i.e.
@@ -184,7 +200,7 @@ namespace GoogleARCore.Examples.HelloAR
 
                     // Create an anchor to allow ARCore to track the hitpoint as understanding of
                     // the physical world evolves.
-                    var anchor = hit.Trackable.CreateAnchor(hit.Pose);
+                    var anchor = hit.Trackable.CreateAnchor(new Pose(GetNearestPointOnGrid(hit.Pose.position, DetectedPlaneVisualizer.Gab), Quaternion.identity));
 
                     //anchor.transform.position = currentPos;
 
@@ -266,6 +282,21 @@ namespace GoogleARCore.Examples.HelloAR
                     toastObject.Call("show");
                 }));
             }
+        }
+        public Vector3 GetNearestPointOnGrid(Vector3 position, Vector3 gab)
+        {
+            position -= transform.position;
+
+            float xPosition = Mathf.Round(position.x * 1000) * 0.001f;
+            //float yPosition = Mathf.Round(position.y / size);
+            float zPosition = Mathf.Round(position.z * 1000) * 0.001f;
+
+            Vector3 result = new Vector3(
+                (float)xPosition + gab.x,
+                position.y,
+                (float)zPosition + gab.z);
+
+            return result;
         }
     }
 }

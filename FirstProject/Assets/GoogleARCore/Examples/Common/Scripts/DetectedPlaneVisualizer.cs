@@ -48,16 +48,19 @@ namespace GoogleARCore.Examples.Common
         private int mapSize = 1;
         private float size = 1;
 
-        private Vector3[,] m_MapArray = new Vector3[50, 50];
+        private static Vector3[,] m_MapArray = new Vector3[50, 50];
 
         public GameObject prefab;
         private bool _endDetect = true;
 
         float minDistance;
 
+        private static Vector3 gab;
+
         public List<Vector3> MeshVertices { get => m_MeshVertices; set => m_MeshVertices = value; }
         public Vector3 PlaneCenter { get => m_PlaneCenter; set => m_PlaneCenter = value; }
-        public Vector3[,] MapArray { get => m_MapArray; set => m_MapArray = value; }
+        public static  Vector3[,] MapArray { get => m_MapArray; set => m_MapArray = value; }
+        public static Vector3 Gab { get => m_MapArray[0, 0]; set => gab = value; }
 
         /// <summary>
         /// The Unity Awake() method.
@@ -339,28 +342,12 @@ namespace GoogleARCore.Examples.Common
                 n = 0;
                 m++;
             }
-
+            Gab = m_MapArray[0, 0];
             transform.GetComponent<DetectedPlaneVisualizer>().enabled = false;
             yield return null;
         }
 
 
-        public Vector3 GetNearestPointOnGrid(Vector3 position)
-        {
-            position -= transform.position;
-
-            float xCount = Mathf.RoundToInt(position.x / size);
-            float yCount = Mathf.RoundToInt(position.y / size);
-            float zCount = Mathf.RoundToInt(position.z / size);
-
-            Vector3 result = new Vector3(
-                (float)xCount * size - 0.5f,
-                (float)yCount * size + 0.5f,
-                (float)zCount * size - 0.5f);
-
-            result += transform.position;
-
-            return result;
-        }
+      
     }
 }

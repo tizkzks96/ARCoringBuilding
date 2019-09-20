@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 33340294062673050}
   - component: {fileID: 23646549736039258}
   - component: {fileID: 114776205485222536}
-  - component: {fileID: 5268340214176629489}
   m_Layer: 0
   m_Name: DetectedPlaneVisualizer
   m_TagString: Untagged
@@ -92,21 +91,3 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefab: {fileID: 1994254046939066, guid: 2b99fe8d8c6b3664fb1f1884d544c62b, type: 3}
---- !u!114 &5268340214176629489
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1654175882956584}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  outlineMode: 0
-  outlineColor: {r: 0, g: 0, b: 0, a: 1}
-  outlineWidth: 4.5
-  precomputeOutline: 0
-  bakeKeys: []
-  bakeValues: []
