@@ -3147,6 +3147,8 @@ MonoBehaviour:
     type: 3}
   AndyPointPrefab: {fileID: 1190091649889860, guid: b27e8d7fe70df464188ea5dcf2af0bb3,
     type: 3}
+  ManipulatorPrefab: {fileID: 1122865395318488, guid: 5c87dc79fb04d3e47b5adba5dd871a01,
+    type: 3}
 --- !u!1 &1770080475
 GameObject:
   m_ObjectHideFlags: 0

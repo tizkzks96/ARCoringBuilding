@@ -23,6 +23,7 @@ namespace GoogleARCore.Examples.HelloAR
     using System.Collections.Generic;
     using GoogleARCore;
     using GoogleARCore.Examples.Common;
+    using GoogleARCore.Examples.ObjectManipulation;
     using UnityEngine;
     using UnityEngine.EventSystems;
 
@@ -34,7 +35,7 @@ namespace GoogleARCore.Examples.HelloAR
     /// <summary>
     /// Controls the HelloAR example.
     /// </summary>
-    public class HelloARController : MonoBehaviour
+    public class HelloARController : Manipulator
     {
         public static HelloARController instance;
 
@@ -65,6 +66,11 @@ namespace GoogleARCore.Examples.HelloAR
         /// A model to place when a raycast from a user touch hits a feature point.
         /// </summary>
         public GameObject AndyPointPrefab;
+
+        /// <summary>
+        /// Manipulator prefab to attach placed objects to.
+        /// </summary>
+        public GameObject ManipulatorPrefab;
 
         /// <summary>
         /// The rotation in degrees need to apply to model when the Andy model is placed.
@@ -107,48 +113,30 @@ namespace GoogleARCore.Examples.HelloAR
         /// <summary>
         /// The Unity Update() method.
         /// </summary>
-        public void Update()
+        public new void Update()
         {
             _UpdateApplicationLifecycle();
+        }
 
-            // If the player has not touched the screen, we are done with this update.
-            Touch touch;
-            if (Input.touchCount < 1 || (touch = Input.GetTouch(0)).phase != TouchPhase.Began)
+        protected override bool CanStartManipulationForGesture(TapGesture gesture)
+        {
+            Debug.Log("CanStartManipulationForGesture true");
+
+            if (gesture.TargetObject == null)
             {
-                return;
-            }
+                Debug.Log("CanStartManipulationForGesture");
 
-            // Should not handle input if the player is pointing on UI.
-            if (EventSystem.current.IsPointerOverGameObject(touch.fingerId))
-            {
-                return;
+                return true;
             }
-
-            RaycastHit _hit;
+            Debug.Log("OnStartManipulation : " + gesture.TargetObject.transform.position);
 
             // Raycast against the location the player touched to search for planes.
             TrackableHit hit;
-            TrackableHitFlags raycastFilter = TrackableHitFlags.PlaneWithinPolygon |
-                TrackableHitFlags.FeaturePointWithSurfaceNormal;
+            TrackableHitFlags raycastFilter = TrackableHitFlags.PlaneWithinPolygon;
 
-            //Ray raycast = FindObjectOfType<Frame>().ScreenPointToRay(touch.position);
-            //RaycastHit raycastHit;
-            //if (Physics.Raycast(raycast, out raycastHit))
-            //{
-            //    Debug.LogError("Something Hit");
-            //    if (raycastHit.collider.name == "Andy")
-            //    {
-            //        Debug.LogError("andy clicked");
-            //    }
-            //}
-            //else
-            //{
-            //    Debug.LogError("No hit detected");
-            //}
-
-            if (Frame.Raycast(touch.position.x, touch.position.y, raycastFilter, out hit))
+            if (Frame.Raycast(
+                gesture.StartPosition.x, gesture.StartPosition.y, raycastFilter, out hit))
             {
-                    Debug.Log("터치 포지션 : " + touch.position);
                 // Use hit pose and camera pose to check if hittest is from the
                 // back of the plane, if it is, no need to create the anchor.
                 if ((hit.Trackable is DetectedPlane) &&
@@ -181,34 +169,58 @@ namespace GoogleARCore.Examples.HelloAR
                     {
                         prefab = HorizontalPlanePrefab;
                     }
+                    //Debug.Log("unity test  gesture.TargetObject.transform.position : " + gesture.TargetObject.transform.position);
+                    //Debug.Log("unity test  gesture.TargetObject.transform : " + gesture.TargetObject.transform);
 
-                    // Instantiate Andy model at the hit pose.
-                    Vector3 currentPos;
-                    currentPos = //hit.Pose.position;
-                    new Vector3(Mathf.Round((hit.Pose.position.x * 100) * 0.01f),
-                                             Mathf.Round((hit.Pose.position.y * 100) * 0.01f),
-                                             hit.Pose.position.z);
+                    var andyObject =
+                        Instantiate(prefab, gesture.TargetObject.transform.position, Quaternion.identity);
 
-                    Debug.Log("instant position : " + hit.Pose.position);
-
-                    var andyObject = Instantiate(prefab, GetNearestPointOnGrid(hit.Pose.position, DetectedPlaneVisualizer.Gab), hit.Pose.rotation);
-
-                    
-                    // Compensate for the hitPose rotation facing away from the raycast (i.e.
-                    // camera).
-                    //andyObject.transform.Rotate(0, k_ModelRotation, 0, Space.Self);
+                    var manipulator =
+                        Instantiate(ManipulatorPrefab, gesture.TargetObject.transform.position, hit.Pose.rotation);
 
                     // Create an anchor to allow ARCore to track the hitpoint as understanding of
                     // the physical world evolves.
-                    var anchor = hit.Trackable.CreateAnchor(new Pose(GetNearestPointOnGrid(hit.Pose.position, DetectedPlaneVisualizer.Gab), Quaternion.identity));
+                    var anchor = hit.Trackable.CreateAnchor(new Pose(gesture.TargetObject.transform.position, Quaternion.identity));
 
-                    //anchor.transform.position = currentPos;
+                    //var anchor = hit.Trackable.CreateAnchor(new Pose(GetNearestPointOnGrid(hit.Pose.position, DetectedPlaneVisualizer.Gab), Quaternion.identity));
 
-                    // Make Andy model a child of the anchor.
-                    andyObject.transform.parent = anchor.transform;
+                    // Make Andy model a child of the manipulator.
+                    andyObject.transform.parent = manipulator.transform;
+
+                    // Make manipulator a child of the anchor.
+                    manipulator.transform.parent = anchor.transform;
+
+                    // Select the placed object.
+                    manipulator.GetComponent<Manipulator>().Select();
+
                 }
             }
+            return false;
         }
+
+        protected override void OnStartManipulation(TapGesture gesture)
+        {
+
+
+            if (gesture.WasCancelled)
+            {
+                Debug.Log("WasCancelled");
+
+                return;
+            }
+
+            // If gesture is targeting an existing object we are done.
+            if (gesture.TargetObject != null)
+            {
+                Debug.Log("TargetObject : " + gesture.TargetObject.transform);
+
+                return;
+            }
+
+            
+        }
+
+
 
         /// <summary>
         /// Check and update the application lifecycle.

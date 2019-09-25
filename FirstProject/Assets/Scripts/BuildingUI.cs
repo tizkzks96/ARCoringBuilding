@@ -6,7 +6,6 @@ using GoogleARCore.Examples.HelloAR;
 using GoogleARCore;
 using GoogleARCoreInternal;
 using System.IO;
-using GoogleARCore.Examples.ObjectManipulation;
 
 public enum UIState{
     HOME,
@@ -20,7 +19,7 @@ public enum UIState{
 /// 
 /// 나중에 여기에 BuildingSlot 추가할 때 디비에서 가져온걸 for문 돌려서 추가해야함
 /// </summary>
-public class BuildingUI : Manipulator
+public class BuildingUI : MonoBehaviour
 {
     public static BuildingUI instance;
 
@@ -32,11 +31,6 @@ public class BuildingUI : Manipulator
 
     public GameObject buildingSlot;
 
-    public Camera FirstPersonCamera;
-
-    public GameObject ManipulatorPrefab;
-
-
     public UIState UIState { get; set; } = UIState.HOME;
 
     public void Awake()
@@ -46,8 +40,6 @@ public class BuildingUI : Manipulator
         {
             //if not, set instance to this
             instance = this;
-
-            FirstPersonCamera = FindObjectOfType<Camera>();
         }
 
 
@@ -155,39 +147,7 @@ public class BuildingUI : Manipulator
     }
 
 
-    protected override void OnEndManipulation(TapGesture gesture)
-    {
-        if (gesture.WasCancelled)
-        {
-            return;
-        }
 
-        // If gesture is targeting an existing object we are done.
-        if (gesture.TargetObject != null)
-        {
-            return;
-        }
-
-        // Raycast against the location the player touched to search for planes.
-        TrackableHit hit;
-        TrackableHitFlags raycastFilter = TrackableHitFlags.PlaneWithinPolygon;
-
-        if (Frame.Raycast(
-            gesture.StartPosition.x, gesture.StartPosition.y, raycastFilter, out hit))
-        {
-            // Use hit pose and camera pose to check if hittest is from the
-            // back of the plane, if it is, no need to create the anchor.
-            if ((hit.Trackable is DetectedPlane) &&
-                Vector3.Dot(FirstPersonCamera.transform.position - hit.Pose.position,
-                    hit.Pose.rotation * Vector3.up) < 0)
-            {
-                Debug.Log("Hit at back of the current DetectedPlane");
-            }
-            else
-            {
-            }
-        }
-    }
 
 
 
