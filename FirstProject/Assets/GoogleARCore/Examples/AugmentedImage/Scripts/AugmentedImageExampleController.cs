@@ -83,6 +83,10 @@ namespace GoogleARCore.Examples.AugmentedImage
             Application.targetFrameRate = 60;
         }
 
+        public void OnEnable()
+        {
+            FitToScanOverlay.SetActive(true);
+        }
         /// <summary>
         /// The Unity Update method.
         /// </summary>
@@ -123,6 +127,8 @@ namespace GoogleARCore.Examples.AugmentedImage
                 m_Visualizers.TryGetValue(image.DatabaseIndex, out visualizer);
                 if (image.TrackingState == TrackingState.Tracking && visualizer == false)
                 {
+                    Debug.Log("unity test 11111");
+                    FitToScanOverlay.SetActive(false);
                     //StartCoroutine(ImageCropperNamespace.ImageCropperController.instance.SnapShot(image));
                     ImageCropperNamespace.ImageCropperController.instance.Crop(image);
 

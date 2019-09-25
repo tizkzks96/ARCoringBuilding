@@ -378,7 +378,7 @@ namespace GoogleARCore.Examples.Common
             {
                 for (float j = forwardPoint.z; j < backPoint.z; j += 0.1f)
                 {
-                    var manipulator = Instantiate(prefab, PlaneCenter.y * Vector3.up + i * Vector3.right + j * Vector3.forward, Quaternion.identity, transform);
+                    var manipulator = Instantiate(prefab, (PlaneCenter.y + 0.001f) * Vector3.up + i * Vector3.right + j * Vector3.forward, Quaternion.identity, transform);
                     m_MapArray[m, n] = PlaneCenter.y * Vector3.up + i * Vector3.right + j * Vector3.forward;
                     //manipulator.GetComponent<Manipulator>().Select();
                     n++;

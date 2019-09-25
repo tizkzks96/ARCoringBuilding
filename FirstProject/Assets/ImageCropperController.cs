@@ -14,7 +14,8 @@ namespace ImageCropperNamespace
 
         public Material testma;
 
-        public GameObject cube;
+        public GameObject canvas;
+        //public GameObject cube;
 
         public void Awake()
         {
@@ -56,6 +57,7 @@ namespace ImageCropperNamespace
 			if( ImageCropper.Instance.IsOpen )
 				return;
 
+            Debug.Log("unity test CropCropCrop");
 			StartCoroutine( TakeScreenshotAndCrop(image) );
 		}
 
@@ -63,6 +65,7 @@ namespace ImageCropperNamespace
 		{
             yield return new WaitForSeconds(2.0f);
             yield return new WaitForEndOfFrame();
+            Debug.Log("unity test 22222");
 
             // Scean Home 으로 변경
             SceanContorller.instance.ChangeScean(SceanState.MAIN);
@@ -78,7 +81,7 @@ namespace ImageCropperNamespace
             {
                 Anchor anchor = image.CreateAnchor(image.CenterPose);
                 //GameObject croppedImageHolder = Instantiate(this.croppedImageHolder, anchor.transform).transform.GetChild(0).gameObject;
-                GameObject a = Instantiate(cube, anchor.transform);
+                //GameObject a = Instantiate(cube, anchor.transform);
             }
 
             
@@ -117,10 +120,10 @@ namespace ImageCropperNamespace
 
             //슬롯 생성 및 프리펩에 텍스쳐 저장
             BuildingInfo createObject = BuildingDatabase.Instance.GetByName("Building_ApartmentLarge_Brown");
-            BuildingUI.instance.InstantiateBuildingSlot(createObject.ID, screenshot);
+            BuildingUI.instance.InstantiateBuildingSlot(createObject.ID, screenshot, canvas.transform.Find("BottomUI/BuildingPanel"));
 
-            cube.transform.localRotation = new Quaternion(0,180,0,0);
-            cube.GetComponent<MeshRenderer>().material.mainTexture = screenshot;
+            //cube.transform.localRotation = new Quaternion(0,180,0,0);
+            //cube.GetComponent<MeshRenderer>().material.mainTexture = screenshot;
 
 
 

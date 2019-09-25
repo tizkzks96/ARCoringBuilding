@@ -421,7 +421,6 @@ namespace GoogleARCore.Examples.ObjectManipulation
 
         private void OnGestureStarted(TapGesture gesture)
         {
-            Debug.Log("§§§§§§§");
 
             //if (m_IsManipulating)
             //{
@@ -431,7 +430,7 @@ namespace GoogleARCore.Examples.ObjectManipulation
 
             if (CanStartManipulationForGesture(gesture))
             {
-                Debug.Log("★★★★★★★★");
+
                 m_IsManipulating = true;
                 gesture.onUpdated += OnUpdated;
                 gesture.onFinished += OnFinished;

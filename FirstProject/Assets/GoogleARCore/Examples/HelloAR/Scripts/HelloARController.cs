@@ -126,8 +126,10 @@ namespace GoogleARCore.Examples.HelloAR
             {
                 Debug.Log("CanStartManipulationForGesture");
 
-                return true;
+                return false;
             }
+
+
             Debug.Log("OnStartManipulation : " + gesture.TargetObject.transform.position);
 
             // Raycast against the location the player touched to search for planes.
@@ -192,6 +194,8 @@ namespace GoogleARCore.Examples.HelloAR
 
                     // Select the placed object.
                     manipulator.GetComponent<Manipulator>().Select();
+
+                    StartCoroutine(CustomAnimationCurve.Instance.TempAnimation(andyObject));
 
                 }
             }

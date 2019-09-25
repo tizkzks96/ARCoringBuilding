@@ -31,6 +31,8 @@ public class BuildingUI : MonoBehaviour
 
     public GameObject buildingSlot;
 
+    private Canvas canvas;
+
     public UIState UIState { get; set; } = UIState.HOME;
 
     public void Awake()
@@ -38,6 +40,9 @@ public class BuildingUI : MonoBehaviour
         //Check if instance already exists
         if (instance == null)
         {
+            canvas = FindObjectOfType<Canvas>();
+
+
             //if not, set instance to this
             instance = this;
         }
@@ -53,8 +58,6 @@ public class BuildingUI : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
-
         #region UIState 이동 버튼
         //HomePanel 버튼 연결
         HomePanel.transform.Find("EnvironmentBtn").GetComponent<Button>().onClick.AddListener(() => { ChangeState(UIState.ENVIRONMENT); });
@@ -115,15 +118,22 @@ public class BuildingUI : MonoBehaviour
     /// BuildingSlot object 를 생성한다.
     /// </summary>
     /// <param name="index">BuildingDatabase에 저장된 index</param>
-    public void InstantiateBuildingSlot(int index, Texture2D texture = null)
+    public void InstantiateBuildingSlot(int index, Texture2D texture = null, Transform parant = null)
     {
-        Canvas canvas = FindObjectOfType<Canvas>();
+        GameObject slot;
 
         if (canvas == null)
             return;
 
         //slot 생성
-        GameObject slot = Instantiate(buildingSlot, canvas.transform.Find("BottomUI/EnvironmentPanel"));
+        if(parant == null)
+        {
+            slot = Instantiate(buildingSlot, EnvironmentPanel.transform);
+        }
+        else
+        {
+            slot = Instantiate(buildingSlot, parant);
+        }
 
         BuildingInfo slotInfo = BuildingDatabase.Instance.GetByID(index);
 
