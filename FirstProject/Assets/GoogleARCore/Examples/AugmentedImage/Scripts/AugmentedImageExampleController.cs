@@ -42,6 +42,11 @@ namespace GoogleARCore.Examples.AugmentedImage
     {
         public static AugmentedImageExampleController instance;
 
+        //test
+        public GameObject imageCropperController;
+        public Texture croppedImageHolder;
+        //////////////////
+
         /// <summary>
         /// A prefab for visualizing an AugmentedImage.
         /// </summary>
@@ -130,11 +135,31 @@ namespace GoogleARCore.Examples.AugmentedImage
                     Debug.Log("unity test 11111");
                     FitToScanOverlay.SetActive(false);
                     //StartCoroutine(ImageCropperNamespace.ImageCropperController.instance.SnapShot(image));
-                    ImageCropperNamespace.ImageCropperController.instance.Crop(image);
+
+                    //수정했으니 변경해야됨 주석처리 지우자!!!!!
+                    //ImageCropperNamespace.ImageCropperController.instance.Crop(image);
+
 
 
                     // Create an anchor to ensure that ARCore keeps tracking this augmented image.
                     Anchor anchor = image.CreateAnchor(image.CenterPose);
+
+                    //test
+                    Instantiate(imageCropperController, anchor.transform);
+
+                    Texture2D screenshot = new Texture2D((int)size.x, (int)size.y, TextureFormat.RGB24, false);
+
+                    screenshot.ReadPixels(new Rect(Screen.width / 2 - size.x / 2, Screen.height / 2 - size.y / 2, size.x, size.y), 0, 0);
+                    //Texture2D screenshot = new Texture2D(Screen.width, Screen.height, TextureFormat.RGB24, false);
+
+                    //screenshot.ReadPixels(new Rect(0, 0, Screen.width, Screen.height), 0, 0);
+                    screenshot.Apply();
+
+                    croppedImageHolder.texture = screenshot;
+
+                    //////////////////////////////////////////////////
+
+
                     m_TempAugmentedImages.Clear();
                     Debug.Log("Unity Image - " + "★m_TempAugmentedImages null check: " + m_TempAugmentedImages);
 
