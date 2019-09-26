@@ -42,19 +42,15 @@ public class Coloring : Singleton<Coloring>
         yield return new WaitForEndOfFrame();
         CreateImage(); //Image Creation
 
-        Debug.Log("unity test 3asd");
 
         Point[] corners;
         FindRect(out corners);
 
-        Debug.Log("unity test 4asd");
         TransformImage(corners);
         ShowImage(); //Image Visualization 
-        Debug.Log("unity test 5asd");
         bgr.Release();
         bin.Release();
         fitOverlay.SetActive(true);
-        Debug.Log("unity test 1asd");
         // Scean Home 으로 변경
         //SceanContorller.instance.ChangeScean(SceanState.MAIN);
         //canvas.SetActive(true);//Making UIs visible. 
@@ -174,10 +170,8 @@ public class Coloring : Singleton<Coloring>
 
     public void StartCV()
     {
-        Debug.Log("unity test 1asd");
         fitOverlay.SetActive(false);
         StartCoroutine(ImageProcessing()); //Calling coroutine. 
-        Debug.Log("unity test 2asd");
     }
 
     // Update is called once per frame

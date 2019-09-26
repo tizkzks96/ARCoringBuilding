@@ -163,7 +163,6 @@ namespace GoogleARCore.Examples.ObjectManipulation
         /// </summary>
         internal void Deselect()
         {
-            Debug.Log("unity test 3 ");
             SelectedObject = null;
         }
 
@@ -175,10 +174,8 @@ namespace GoogleARCore.Examples.ObjectManipulation
         {
             if (SelectedObject == target)
             {
-                Debug.Log("unity test 1 : " + target);
                 return;
             }
-            Debug.Log("unity test 2 : " + target);
             Deselect();
             SelectedObject = target;
         }

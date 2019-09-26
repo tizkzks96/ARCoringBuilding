@@ -7,11 +7,6 @@ using UnityEngine;
 public class PlaceManipulator : Manipulator
 {
 
-    /// <summary>
-    /// The visualization game object that will become active when the object is selected.
-    /// </summary>
-    public GameObject SelectionVisualization;
-
     protected override void Update()
     {
         base.Update();
@@ -53,11 +48,9 @@ public class PlaceManipulator : Manipulator
 
     protected override void OnSelected()
     {
-        SelectionVisualization.SetActive(true);
     }
 
     protected override void OnDeselected()
     {
-        SelectionVisualization.SetActive(false);
     }
 }

@@ -13,7 +13,6 @@ public class CustomAnimationCurve : Singleton<CustomAnimationCurve>
         float y = ac.Evaluate(t);
         while (1 >= t)
         {
-            print("AA");
             y = ac.Evaluate(t);
             animationObject.transform.position = new Vector3(0, animationObject.transform.position.y + y*2f, 0);
         }

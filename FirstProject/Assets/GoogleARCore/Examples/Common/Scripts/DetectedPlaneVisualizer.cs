@@ -46,9 +46,6 @@ namespace GoogleARCore.Examples.Common
         private Mesh m_Mesh;
 
         private MeshRenderer m_MeshRenderer;
-
-        private static Vector3[,] m_MapArray = new Vector3[50, 50];
-
         public GameObject prefab;
         private bool _endDetect = true;
 
@@ -58,8 +55,8 @@ namespace GoogleARCore.Examples.Common
 
         public List<Vector3> MeshVertices { get => m_MeshVertices; set => m_MeshVertices = value; }
         public Vector3 PlaneCenter { get => m_PlaneCenter; set => m_PlaneCenter = value; }
-        public static  Vector3[,] MapArray { get => m_MapArray; set => m_MapArray = value; }
-        public static Vector3 Gab { get => m_MapArray[0, 0]; set => gab = value; }
+        public static Vector3[,] MapArray { get; set; } = new Vector3[50, 50];
+        public static Vector3 Gab { get => MapArray[0, 0]; set => gab = value; }
 
         /// <summary>
         /// The Unity Awake() method.
@@ -124,7 +121,6 @@ namespace GoogleARCore.Examples.Common
             {
                 return;
             }
-
 
             m_PreviousFrameMeshVertices.Clear();
             m_PreviousFrameMeshVertices.AddRange(MeshVertices);
@@ -210,7 +206,6 @@ namespace GoogleARCore.Examples.Common
             m_Mesh.SetTriangles(m_MeshIndices, 0);
             m_Mesh.SetColors(m_MeshColors);
         }
-
         private bool _AreVerticesListsEqual(List<Vector3> firstList, List<Vector3> secondList)
         {
             if (firstList.Count != secondList.Count)
@@ -228,7 +223,6 @@ namespace GoogleARCore.Examples.Common
 
             return true;
         }
-
         public void SeleteArea()
         {
             if (m_PreviousFrameMeshVertices[0] != null)
@@ -272,6 +266,30 @@ namespace GoogleARCore.Examples.Common
             }
         }
         
+        public IEnumerator FixGridArray(Vector3 leftPoint, Vector3 rightPoint, Vector3 forwardPoint, Vector3 backPoint)
+        {
+            int m = 0;
+            int n = 0;
+            
+            Anchor anchor = m_DetectedPlane.CreateAnchor(m_DetectedPlane.CenterPose);
+
+            for (float i = rightPoint.x; i < leftPoint.x; i += 0.1f)
+            {
+                for (float j = forwardPoint.z; j < backPoint.z; j += 0.1f)
+                {
+                    Instantiate(prefab, (PlaneCenter.y + 0.001f) * Vector3.up + i * Vector3.right + j * Vector3.forward, Quaternion.identity, transform);
+                    MapArray[m, n] = PlaneCenter.y * Vector3.up + i * Vector3.right + j * Vector3.forward;
+                    n++;
+                }
+                n = 0;
+                m++;
+            }
+            Gab = MapArray[0, 0];
+            transform.GetComponent<DetectedPlaneVisualizer>().enabled = false;
+            yield return null;
+        }
+
+
         //private void OnDrawGizmos()
         //{
         //    Gizmos.color = Color.blue;
@@ -298,7 +316,7 @@ namespace GoogleARCore.Examples.Common
         //            minDistance = currentDistance;
         //        }
 
-                
+
         //    }
         //    float squreSide = minDistance * 2 / Mathf.Sqrt(2);
 
@@ -346,7 +364,7 @@ namespace GoogleARCore.Examples.Common
         //    //Gizmos.color = Color.yellow;
         //    //Gizmos.DrawWireCube(PlaneCenter, new Vector3(squreSide, 0, squreSide));
 
-            
+
 
         //    //Gizmos.color = Color.green;
         //    //Gizmos.DrawSphere(PlaneCenter - leftPoint + backPoint, 0.1f);
@@ -362,34 +380,7 @@ namespace GoogleARCore.Examples.Common
 
         //    //Gizmos.DrawSphere(leftPoint - Vector3.right , 0.1f);
 
-            
+
         //}
-        
-        public IEnumerator FixGridArray(Vector3 leftPoint, Vector3 rightPoint, Vector3 forwardPoint, Vector3 backPoint)
-        {
-            int m = 0;
-            int n = 0;
-            
-            Anchor anchor = m_DetectedPlane.CreateAnchor(m_DetectedPlane.CenterPose);
-
-            for (float i = rightPoint.x; i < leftPoint.x; i += 0.1f)
-            {
-                for (float j = forwardPoint.z; j < backPoint.z; j += 0.1f)
-                {
-                    var manipulator = Instantiate(prefab, (PlaneCenter.y + 0.001f) * Vector3.up + i * Vector3.right + j * Vector3.forward, Quaternion.identity, transform);
-                    m_MapArray[m, n] = PlaneCenter.y * Vector3.up + i * Vector3.right + j * Vector3.forward;
-                    //manipulator.GetComponent<Manipulator>().Select();
-                    n++;
-                }
-                n = 0;
-                m++;
-            }
-            Gab = m_MapArray[0, 0];
-            transform.GetComponent<DetectedPlaneVisualizer>().enabled = false;
-            yield return null;
-        }
-
-
-      
     }
 }

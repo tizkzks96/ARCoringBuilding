@@ -88,13 +88,6 @@ namespace GoogleARCore.Examples.AugmentedImage
 
             //FrameLowerRight.transform.localScale = new Vector3(1, 1, 1);
 
-            Debug.Log("Unity AugmentedImageVisualizer - " + "Image.ExtentX" + Image.ExtentX);
-            Debug.Log("Unity AugmentedImageVisualizer - " + "Image.ExtentZ" + Image.ExtentZ);
-            Debug.Log("Unity AugmentedImageVisualizer - " + "FrameLowerLeft.transform.localPosition" + FrameLowerLeft.transform.localPosition);
-
-            Debug.Log("Unity AugmentedImageVisualizer - " + "Image.ExtentX" + Image.ExtentX);
-            Debug.Log("Unity AugmentedImageVisualizer - " + "Image.ExtentZ" + Image.ExtentZ);
-            Debug.Log("Unity AugmentedImageVisualizer - " + "FrameLowerLeft.transform.localPosition" + FrameLowerLeft.transform.localPosition);
             FrameLowerLeft.SetActive(true);
             FrameLowerRight.SetActive(true);
             FrameUpperLeft.SetActive(true);

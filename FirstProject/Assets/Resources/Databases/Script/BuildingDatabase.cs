@@ -1,8 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-namespace UnityEngine
+﻿namespace UnityEngine
 {
     public class BuildingDatabase : ScriptableObject
     {

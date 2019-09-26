@@ -143,16 +143,10 @@ public class BuildingUI : MonoBehaviour
 
         }
 
-        slotInfo.BuildingPrefab.transform.localScale = new Vector3(0.01f, 0.01f, 0.01f);
+        slotInfo.BuildingPrefab.transform.localScale = new Vector3(0.006f, 0.006f, 0.006f);
 
         slot.GetComponent<SlotInfo>().Slotinfo = slotInfo;
 
         slot.transform.GetChild(0).GetComponent<Text>().text = "made : " + slotInfo.Name ;
-
-
-        //slot buildingsystem 변수에 this 연결
-        //slot.GetComponent<PreparationBlockSlotDragHandler>().BuildingSystem = transform.GetComponent<BuildingSystem>();
-
-        print("slot : " + slot);
     }
 }
