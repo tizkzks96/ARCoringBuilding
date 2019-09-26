@@ -4,6 +4,7 @@
 [Bb]uild/
 [Bb]uilds/
 Assets/AssetStoreTools*
+FirstProject/Assets/OpenCV+Unity/*
 
 # Visual Studio cache directory
 .vs/

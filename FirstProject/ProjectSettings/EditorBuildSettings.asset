@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/OpenCVtest/OpenCVTest.unity
+    guid: 8201889b701bf2f42bbb67da6d4fe4b6
+  - enabled: 1
     path: Assets/Scenes/ARTest.unity
     guid: b133daf0d76b5e445bddff1b4ae0ed96
   - enabled: 1
