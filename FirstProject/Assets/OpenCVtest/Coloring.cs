@@ -8,9 +8,9 @@ using UnityEngine.UI;
 public class Coloring : MonoBehaviour
 {
 
-    public MeshRenderer target; //Rendering Setting of Cube 
-    public GameObject canvas; //Canvas which involves UI 
-    public RawImage viewL, viewR; //Result viewer 
+    //public MeshRenderer target; //Rendering Setting of Cube 
+    //public GameObject canvas; //Canvas which involves UI 
+    //public RawImage viewL, viewR; //Result viewer 
     UnityEngine.Rect capRect;//Region of screen shot 
     Texture2D capTexture; //Texture of screenshot image 
     Texture2D colTexture; //Result of image processing(color) 
@@ -33,9 +33,9 @@ public class Coloring : MonoBehaviour
         capTexture = new Texture2D(w, h, TextureFormat.RGB24, false);
     }
 
-    IEnumerator ImageProcessing()
+    IEnumerator ImageProcessing(MeshRenderer target)
     {
-        canvas.SetActive(false);//Making UIs invisible 
+        //canvas.SetActive(false);//Making UIs invisible 
         yield return new WaitForEndOfFrame();
         CreateImage(); //Image Creation
 
@@ -44,12 +44,12 @@ public class Coloring : MonoBehaviour
 
 
         TransformImage(corners);
-        ShowImage(); //Image Visualization 
+        ShowImage(target); //Image Visualization 
 
         bgr.Release();
         bin.Release();
 
-        canvas.SetActive(true);//Making UIs visible. 
+        //canvas.SetActive(true);//Making UIs visible. 
     }
 
     void TransformImage(Point[] corners)
@@ -140,7 +140,7 @@ public class Coloring : MonoBehaviour
         Cv2.BitwiseNot(bin, bin);
 
     }
-    void ShowImage()
+    void ShowImage(MeshRenderer target)
     {
         if (colTexture != null) { DestroyImmediate(colTexture); }
         if (binTexture != null) { DestroyImmediate(binTexture); }
@@ -148,8 +148,8 @@ public class Coloring : MonoBehaviour
         colTexture = OpenCvSharp.Unity.MatToTexture(bgr);
         binTexture = OpenCvSharp.Unity.MatToTexture(bin);
 
-        viewL.texture = colTexture;
-        viewR.texture = binTexture;
+        //viewL.texture = colTexture;
+        //viewR.texture = binTexture;
 
         /*Setting texture on the coloring target object (cube)*/
         target.material.mainTexture = colTexture;
@@ -157,9 +157,9 @@ public class Coloring : MonoBehaviour
     }
 
 
-    public void StartCV()
+    public void StartCV(MeshRenderer target)
     {
-        StartCoroutine(ImageProcessing()); //Calling coroutine. 
+        StartCoroutine(ImageProcessing(target)); //Calling coroutine. 
     }
 
     // Update is called once per frame
