@@ -5,7 +5,7 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/OpenCVtest/OpenCVTest.unity
     guid: 8201889b701bf2f42bbb67da6d4fe4b6
   - enabled: 1

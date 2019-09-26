@@ -5,12 +5,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Coloring : MonoBehaviour
+public class Coloring : Singleton<Coloring>
 {
 
     //public MeshRenderer target; //Rendering Setting of Cube 
-    //public GameObject canvas; //Canvas which involves UI 
-    //public RawImage viewL, viewR; //Result viewer 
+    public GameObject canvas; //Canvas which involves UI 
+    public RawImage viewL, viewR; //Result viewer 
     UnityEngine.Rect capRect;//Region of screen shot 
     Texture2D capTexture; //Texture of screenshot image 
     Texture2D colTexture; //Result of image processing(color) 
@@ -18,37 +18,45 @@ public class Coloring : MonoBehaviour
 
     Mat bgr, bin;
 
+    public GameObject fitOverlay;
+
     // Start is called before the first frame update
     void Start()
     {
         int w = Screen.width;
         int h = Screen.height; //Definition of capture region as (0,0) to (w,h) 
 
-        int sx = (int)(w * 0.2);
-        int sy = (int)(h * 0.3);
-        w = (int)(w * 0.6);
-        h = (int)(h * 0.4);
+        int sx = (int)(w * 0.1);
+        int sy = (int)(h * 0.2);
+        w = (int)(w * 1);
+        h = (int)(h * 0.6);
 
-        capRect = new UnityEngine.Rect(sx, sy, w, h); //Creating texture image of the size of capRect
+        capRect = new UnityEngine.Rect(0, sy, w, h); //Creating texture image of the size of capRect
         capTexture = new Texture2D(w, h, TextureFormat.RGB24, false);
     }
 
-    IEnumerator ImageProcessing(MeshRenderer target)
+    IEnumerator ImageProcessing()
     {
         //canvas.SetActive(false);//Making UIs invisible 
+        yield return new WaitForSeconds(0.5f);
         yield return new WaitForEndOfFrame();
         CreateImage(); //Image Creation
+
+        Debug.Log("unity test 3asd");
 
         Point[] corners;
         FindRect(out corners);
 
-
+        Debug.Log("unity test 4asd");
         TransformImage(corners);
-        ShowImage(target); //Image Visualization 
-
+        ShowImage(); //Image Visualization 
+        Debug.Log("unity test 5asd");
         bgr.Release();
         bin.Release();
-
+        fitOverlay.SetActive(true);
+        Debug.Log("unity test 1asd");
+        // Scean Home 으로 변경
+        //SceanContorller.instance.ChangeScean(SceanState.MAIN);
         //canvas.SetActive(true);//Making UIs visible. 
     }
 
@@ -67,7 +75,7 @@ public class Coloring : MonoBehaviour
 
         Mat transform = Cv2.GetPerspectiveTransform(input, square);
 
-        Cv2.WarpPerspective(bgr, bgr, transform, new Size(512, 512));
+        Cv2.WarpPerspective(bgr, bgr, transform, new Size(256, 256));
         int s = (int)(256 * 0.05f);
         int w = (int)(256 * 0.9f);
         OpenCvSharp.Rect innerRect = new OpenCvSharp.Rect(s, s, w, w);
@@ -104,7 +112,7 @@ public class Coloring : MonoBehaviour
 
             double length = Cv2.ArcLength(contours[i], true);
 
-            Point[] tmp = Cv2.ApproxPolyDP(contours[i], length * 0.01f, true);
+            Point[] tmp = Cv2.ApproxPolyDP(contours[i], length * 0.1f, true);
 
             double area = Cv2.ContourArea(contours[i]);
             if (tmp.Length == 4 && area > maxArea)
@@ -114,16 +122,15 @@ public class Coloring : MonoBehaviour
             }
         }
 
-        if (corners != null)
-        {
-            bgr.DrawContours(new Point[][] { corners }, 0, Scalar.Red, 5);
-            //各頂点の位置に円を描画
-            for (int i = 0; i < corners.Length; i++)
-            {
-                bgr.Circle(corners[i], 20, Scalar.Blue, 5);
-            }
+        //if (corners != null)
+        //{
+        //    bgr.DrawContours(new Point[][] { corners }, 0, Scalar.Red, 5);
+        //    for (int i = 0; i < corners.Length; i++)
+        //    {
+        //        bgr.Circle(corners[i], 20, Scalar.Blue, 5);
+        //    }
 
-        }
+        //}
     }
 
     void CreateImage()
@@ -140,7 +147,7 @@ public class Coloring : MonoBehaviour
         Cv2.BitwiseNot(bin, bin);
 
     }
-    void ShowImage(MeshRenderer target)
+    void ShowImage()
     {
         if (colTexture != null) { DestroyImmediate(colTexture); }
         if (binTexture != null) { DestroyImmediate(binTexture); }
@@ -148,18 +155,29 @@ public class Coloring : MonoBehaviour
         colTexture = OpenCvSharp.Unity.MatToTexture(bgr);
         binTexture = OpenCvSharp.Unity.MatToTexture(bin);
 
-        //viewL.texture = colTexture;
+        viewL.texture = colTexture;
         //viewR.texture = binTexture;
 
         /*Setting texture on the coloring target object (cube)*/
-        target.material.mainTexture = colTexture;
+        //target.material.mainTexture = colTexture;
+        
+    }
 
+    public void CreatePrefab()
+    {
+        BuildingInfo createObject = BuildingDatabase.Instance.GetByName("Building_ApartmentLarge_Brown");
+        BuildingUI.instance.InstantiateBuildingSlot(createObject.ID, colTexture, canvas.transform.Find("BottomUI/BuildingPanel"));
+
+        SceanContorller.instance.ChangeScean(SceanState.MAIN);
     }
 
 
-    public void StartCV(MeshRenderer target)
+    public void StartCV()
     {
-        StartCoroutine(ImageProcessing(target)); //Calling coroutine. 
+        Debug.Log("unity test 1asd");
+        fitOverlay.SetActive(false);
+        StartCoroutine(ImageProcessing()); //Calling coroutine. 
+        Debug.Log("unity test 2asd");
     }
 
     // Update is called once per frame

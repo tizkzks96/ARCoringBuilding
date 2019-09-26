@@ -130,12 +130,11 @@ namespace GoogleARCore.Examples.AugmentedImage
                     Debug.Log("unity test 11111");
                     FitToScanOverlay.SetActive(false);
                     //StartCoroutine(ImageCropperNamespace.ImageCropperController.instance.SnapShot(image));
-                    ImageCropperNamespace.ImageCropperController.instance.Crop(image);
+                    //ImageCropperNamespace.ImageCropperController.instance.Crop(image);
 
+                    Coloring.Instance.StartCV();
 
                     // Create an anchor to ensure that ARCore keeps tracking this augmented image.
-                    Anchor anchor = image.CreateAnchor(image.CenterPose);
-                    m_TempAugmentedImages.Clear();
                     Debug.Log("Unity Image - " + "★m_TempAugmentedImages null check: " + m_TempAugmentedImages);
 
                     m_Visualizers.Add(image.DatabaseIndex, true);
@@ -160,7 +159,7 @@ namespace GoogleARCore.Examples.AugmentedImage
             //    }
             //}
 
-            FitToScanOverlay.SetActive(true);
+            //FitToScanOverlay.SetActive(true);
         }
     }
 }
