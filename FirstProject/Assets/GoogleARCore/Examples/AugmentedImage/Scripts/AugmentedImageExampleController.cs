@@ -127,23 +127,18 @@ namespace GoogleARCore.Examples.AugmentedImage
                 m_Visualizers.TryGetValue(image.DatabaseIndex, out visualizer);
                 if (image.TrackingState == TrackingState.Tracking && visualizer == false)
                 {
-                    Debug.Log("unity test 11111");
                     FitToScanOverlay.SetActive(false);
-                    //StartCoroutine(ImageCropperNamespace.ImageCropperController.instance.SnapShot(image));
-                    //ImageCropperNamespace.ImageCropperController.instance.Crop(image);
 
                     Coloring.Instance.StartCV();
 
                     // Create an anchor to ensure that ARCore keeps tracking this augmented image.
-                    Debug.Log("Unity Image - " + "★m_TempAugmentedImages null check: " + m_TempAugmentedImages);
-
                     m_Visualizers.Add(image.DatabaseIndex, true);
 
 
 
 
                 }
-                else if (image.TrackingState == TrackingState.Stopped && visualizer != null)
+                else if (image.TrackingState == TrackingState.Stopped)
                 {
                     m_Visualizers.Remove(image.DatabaseIndex);
                 }

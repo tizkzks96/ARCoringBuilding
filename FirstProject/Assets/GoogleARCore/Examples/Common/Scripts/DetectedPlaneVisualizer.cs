@@ -46,8 +46,6 @@ namespace GoogleARCore.Examples.Common
         private Mesh m_Mesh;
 
         private MeshRenderer m_MeshRenderer;
-        private int mapSize = 1;
-        private float size = 1;
 
         private static Vector3[,] m_MapArray = new Vector3[50, 50];
 
