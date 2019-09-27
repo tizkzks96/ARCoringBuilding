@@ -39,38 +39,11 @@ namespace GoogleARCore.Examples.HelloAR
     {
         public static HelloARController instance;
 
-
-
         /// <summary>
         /// The first-person camera being used to render the passthrough camera image (i.e. AR
         /// background).
         /// </summary>
         public Camera FirstPersonCamera;
-
-        /// <summary>
-        /// A prefab for tracking and visualizing detected planes.
-        /// </summary>
-        public GameObject DetectedPlanePrefab;
-
-        /// <summary>
-        /// A model to place when a raycast from a user touch hits a vertical plane.
-        /// </summary>
-        public GameObject AndyVerticalPlanePrefab;
-
-        /// <summary>
-        /// A model to place when a raycast from a user touch hits a horizontal plane.
-        /// </summary>
-        private GameObject horizontalPlanePrefab;
-
-        /// <summary>
-        /// A model to place when a raycast from a user touch hits a feature point.
-        /// </summary>
-        public GameObject AndyPointPrefab;
-
-        /// <summary>
-        /// Manipulator prefab to attach placed objects to.
-        /// </summary>
-        public GameObject ManipulatorPrefab;
 
         /// <summary>
         /// The rotation in degrees need to apply to model when the Andy model is placed.
@@ -83,7 +56,9 @@ namespace GoogleARCore.Examples.HelloAR
         /// </summary>
         private bool m_IsQuitting = false;
 
-        public GameObject HorizontalPlanePrefab { get => horizontalPlanePrefab; set => horizontalPlanePrefab = value; }
+        public GameObject placeObjectManipulatorPrefab;
+
+        public GameObject HorizontalPlanePrefab { get; set; }
 
         /// <summary>
         /// The Unity Awake() method.
@@ -97,7 +72,7 @@ namespace GoogleARCore.Examples.HelloAR
                 instance = this;
 
             }
-             
+
 
             //If instance already exists and it's not this:
             else if (instance != this)
@@ -150,52 +125,38 @@ namespace GoogleARCore.Examples.HelloAR
                 else
                 {
                     // Choose the Andy model for the Trackable that got hit.
-                    GameObject prefab;
-                    if (hit.Trackable is FeaturePoint)
-                    {
-                        prefab = AndyPointPrefab;
-                    }
-                    else if (hit.Trackable is DetectedPlane)
-                    {
-                        DetectedPlane detectedPlane = hit.Trackable as DetectedPlane;
-                        if (detectedPlane.PlaneType == DetectedPlaneType.Vertical)
-                        {
-                            prefab = AndyVerticalPlanePrefab;
-                        }
-                        else
-                        {
-                            prefab = HorizontalPlanePrefab;
-                        }
-                    }
-                    else
-                    {
-                        prefab = HorizontalPlanePrefab;
-                    }
+                    GameObject prefab = HorizontalPlanePrefab;
+
                     //Debug.Log("unity test  gesture.TargetObject.transform.position : " + gesture.TargetObject.transform.position);
                     //Debug.Log("unity test  gesture.TargetObject.transform : " + gesture.TargetObject.transform);
 
-                    var andyObject =
-                        Instantiate(prefab, gesture.TargetObject.transform.position, Quaternion.identity);
+                    
 
                     var manipulator =
-                        Instantiate(ManipulatorPrefab, gesture.TargetObject.transform.position, hit.Pose.rotation);
+                        Instantiate(placeObjectManipulatorPrefab, gesture.TargetObject.transform.position, hit.Pose.rotation);
+
+                    var placeObject =
+                        Instantiate(prefab, gesture.TargetObject.transform.position, Quaternion.identity);
 
                     // Create an anchor to allow ARCore to track the hitpoint as understanding of
                     // the physical world evolves.
-                    var anchor = hit.Trackable.CreateAnchor(new Pose(gesture.TargetObject.transform.position, Quaternion.identity));
+                    //var anchor = hit.Trackable.CreateAnchor(new Pose(gesture.TargetObject.transform.position, Quaternion.identity));
 
                     //var anchor = hit.Trackable.CreateAnchor(new Pose(GetNearestPointOnGrid(hit.Pose.position, DetectedPlaneVisualizer.Gab), Quaternion.identity));
 
                     // Make Andy model a child of the manipulator.
-                    andyObject.transform.parent = manipulator.transform;
+                    placeObject.transform.parent = manipulator.transform;
 
                     // Make manipulator a child of the anchor.
-                    manipulator.transform.parent = anchor.transform;
+                    gesture.TargetObject.transform.parent = manipulator.transform;
+
+                    placeObject.transform.rotation = gesture.TargetObject.transform.rotation;
+                    print("gggeture 타게사삿 : " + gesture.TargetObject.transform);
 
                     // Select the placed object.
                     manipulator.GetComponent<Manipulator>().Select();
 
-                    StartCoroutine(CustomAnimationCurve.Instance.TempAnimation(andyObject));
+                    StartCoroutine(CustomAnimationCurve.Instance.TempAnimation(placeObject));
 
                 }
             }
@@ -221,7 +182,7 @@ namespace GoogleARCore.Examples.HelloAR
                 return;
             }
 
-            
+
         }
 
 

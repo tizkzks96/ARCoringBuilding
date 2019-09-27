@@ -46,7 +46,7 @@ namespace GoogleARCore.Examples.Common
         private Mesh m_Mesh;
 
         private MeshRenderer m_MeshRenderer;
-        public GameObject prefab;
+        public GameObject GroundManipulatorPrefab;
         private bool _endDetect = true;
 
         float minDistance;
@@ -225,6 +225,11 @@ namespace GoogleARCore.Examples.Common
         }
         public void SeleteArea()
         {
+            if (!_endDetect)
+            {
+                return;
+            }
+
             if (m_PreviousFrameMeshVertices[0] != null)
             {
                 minDistance = CustomMath.DistanceToPoint(PlaneCenter, m_PreviousFrameMeshVertices[0]);
@@ -256,7 +261,10 @@ namespace GoogleARCore.Examples.Common
                     if (m > 10 && n > 10 && _endDetect)
                     {
                         _endDetect = false;
-                        StartCoroutine(FixGridArray(leftPoint, rightPoint, forwardPoint, backPoint));
+
+                        //Instantiate(GroundManipulatorPrefab,PlaneCenter, Quaternion.identity, transform);
+                        //StartCoroutine(FixGridArray(leftPoint, rightPoint, forwardPoint, backPoint));
+                        StartCoroutine(CreateCubeWorld(4));
                     }
                    
                     n++;
@@ -264,6 +272,36 @@ namespace GoogleARCore.Examples.Common
                 n = 0;
                 m++;
             }
+        }
+
+        public IEnumerator CreateCubeWorld(int size)
+        {
+            GameObject cubeWorld = new GameObject("CubeWorld");
+            cubeWorld.transform.SetParent(transform);
+            cubeWorld.transform.position = PlaneCenter;
+            float objectSize = 0.1f;
+            for (int z = 0; z < size; z++)
+            {
+                for(int y = 0; y < size; y++)
+                {
+                    for (int x = 0; x < size; x ++)
+                    {
+                        //3x3 이상 큐브일 때
+                        //눈에 보이지 않는 큐브는 생성하지 않음
+                        if (size > 2)
+                        {
+                            if ((z == 0 || z == size - 1) || (y == 0 || y == size - 1) || (x == 0 || x == size - 1))
+                            {
+                                GameObject ground = Instantiate(GroundManipulatorPrefab);
+                                ground.transform.position = cubeWorld.transform.position + new Vector3(x * objectSize, y * objectSize, z * objectSize);
+                                ground.transform.SetParent(cubeWorld.transform);
+                            }
+                        }
+                        
+                    }//new Vector3(k, j, i)
+                }
+            }
+            return null;
         }
         
         public IEnumerator FixGridArray(Vector3 leftPoint, Vector3 rightPoint, Vector3 forwardPoint, Vector3 backPoint)
@@ -277,7 +315,8 @@ namespace GoogleARCore.Examples.Common
             {
                 for (float j = forwardPoint.z; j < backPoint.z; j += 0.1f)
                 {
-                    Instantiate(prefab, (PlaneCenter.y + 0.001f) * Vector3.up + i * Vector3.right + j * Vector3.forward, Quaternion.identity, transform);
+                    GameObject manipulator = Instantiate(GroundManipulatorPrefab, (PlaneCenter.y + 0.001f) * Vector3.up + i * Vector3.right + j * Vector3.forward, Quaternion.identity, transform);
+
                     MapArray[m, n] = PlaneCenter.y * Vector3.up + i * Vector3.right + j * Vector3.forward;
                     n++;
                 }

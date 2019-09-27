@@ -11,6 +11,7 @@ public class SlotInfo : MonoBehaviour
 
     public void SetBuildingInfo()
     {
+        print("Slotinfo.BuildingPrefab : " + Slotinfo.BuildingPrefab);
         HelloARController.instance.HorizontalPlanePrefab = Slotinfo.BuildingPrefab;
     }
 }
