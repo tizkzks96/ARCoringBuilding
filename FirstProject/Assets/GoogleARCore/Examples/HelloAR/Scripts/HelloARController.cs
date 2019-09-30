@@ -133,10 +133,10 @@ namespace GoogleARCore.Examples.HelloAR
                     
 
                     var manipulator =
-                        Instantiate(placeObjectManipulatorPrefab, gesture.TargetObject.transform.position, hit.Pose.rotation);
+                        Instantiate(placeObjectManipulatorPrefab);
 
                     var placeObject =
-                        Instantiate(prefab, gesture.TargetObject.transform.position, Quaternion.identity);
+                        Instantiate(prefab);
 
                     // Create an anchor to allow ARCore to track the hitpoint as understanding of
                     // the physical world evolves.
@@ -145,19 +145,54 @@ namespace GoogleARCore.Examples.HelloAR
                     //var anchor = hit.Trackable.CreateAnchor(new Pose(GetNearestPointOnGrid(hit.Pose.position, DetectedPlaneVisualizer.Gab), Quaternion.identity));
 
                     // Make Andy model a child of the manipulator.
-                    placeObject.transform.parent = manipulator.transform;
+                    //placeObject.transform.parent = manipulator.transform;
+
+                    placeObject.transform.SetParent(manipulator.transform);
+
+                    manipulator.transform.SetParent(gesture.TargetObject.transform);
+
+                    manipulator.transform.transform.localPosition = new Vector3(0, 0, 0);
+
+                    placeObject.transform.localPosition = new Vector3(0,0,0);
 
                     // Make manipulator a child of the anchor.
-                    gesture.TargetObject.transform.parent = manipulator.transform;
+                    //gesture.TargetObject.transform.parent = manipulator.transform;
 
                     placeObject.transform.rotation = gesture.TargetObject.transform.rotation;
+
                     print("gggeture 타게사삿 : " + gesture.TargetObject.transform);
 
                     // Select the placed object.
                     manipulator.GetComponent<Manipulator>().Select();
 
-                    StartCoroutine(CustomAnimationCurve.Instance.TempAnimation(placeObject));
+                    //StartCoroutine(CustomAnimationCurve.Instance.TempAnimation(placeObject));
 
+                    if (gesture.TargetObject.transform.name == "bottom_face")
+                    {
+                        placeObject.transform.localPosition = Vector3.forward * 5 + Vector3.left * -5;
+                    }
+                    if (gesture.TargetObject.transform.name == "forward_face")
+                    {
+                        placeObject.transform.localPosition = Vector3.up * -5 + Vector3.left * -5;
+                    }
+                    if (gesture.TargetObject.transform.name == "left_face")
+                    {
+                        placeObject.transform.localPosition = Vector3.forward * -5 + Vector3.up * 5;
+                    }
+
+                    if (gesture.TargetObject.transform.name == "top_face")
+                    {
+                        placeObject.transform.localPosition = Vector3.forward * -5 + Vector3.left * 5;
+                    }
+
+                    if (gesture.TargetObject.transform.name == "back_face")
+                    {
+                        placeObject.transform.localPosition = Vector3.up * -5 + Vector3.left * 5;
+                    }
+                    if (gesture.TargetObject.transform.name == "right_face")
+                    {
+                        placeObject.transform.localPosition = Vector3.forward * 5 + Vector3.up * 5;
+                    }
                 }
             }
             return false;

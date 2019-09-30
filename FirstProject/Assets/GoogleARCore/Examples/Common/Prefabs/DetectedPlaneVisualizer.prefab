@@ -90,5 +90,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23e3f20de6c2e405a93736a38f74b0fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GroundManipulatorPrefab: {fileID: 1994254046939066, guid: 0e73af8010d048146926a3aa7b01af6a,
+  GroundManipulatorPrefab: {fileID: 1781065274991804, guid: 5fdb40cb9020baf4a8ac08950bc011fb,
     type: 3}

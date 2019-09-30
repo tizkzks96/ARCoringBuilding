@@ -258,7 +258,7 @@ namespace GoogleARCore.Examples.Common
                 {
                     // 높이 , 수평, 수직
 
-                    if (m > 10 && n > 10 && _endDetect)
+                    if (m > 2 && n > 2 && _endDetect)
                     {
                         _endDetect = false;
 
@@ -293,8 +293,11 @@ namespace GoogleARCore.Examples.Common
                             if ((z == 0 || z == size - 1) || (y == 0 || y == size - 1) || (x == 0 || x == size - 1))
                             {
                                 GameObject ground = Instantiate(GroundManipulatorPrefab);
+                                ground.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
                                 ground.transform.position = cubeWorld.transform.position + new Vector3(x * objectSize, y * objectSize, z * objectSize);
                                 ground.transform.SetParent(cubeWorld.transform);
+
+                                print("ground : " + ground.transform);
                             }
                         }
                         
