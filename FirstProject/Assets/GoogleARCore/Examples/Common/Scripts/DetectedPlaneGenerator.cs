@@ -76,9 +76,12 @@ namespace GoogleARCore.Examples.Common
                     // prefab is updated in Unity World coordinates.
                 GameObject planeObject =
                     Instantiate(DetectedPlanePrefab, Vector3.zero, Quaternion.identity, transform);
+                Debug.Log("몇번 실행이 될까요? : " + NewPlanes.Count);
+
                 planeObject.GetComponent<DetectedPlaneVisualizer>().Initialize(NewPlanes[i]);
 
                 Debug.Log("몇번 실행이 될까요? : " + NewPlanes.Count);
+                transform.GetComponent<DetectedPlaneGenerator>().enabled = false;
             }
         }
     }

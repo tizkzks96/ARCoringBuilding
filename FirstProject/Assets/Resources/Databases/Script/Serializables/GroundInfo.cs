@@ -16,7 +16,7 @@ namespace UnityEngine
     {
         public string Name;
         public int ID;
-        public GameObject BuildingPrefab;
+        public GameObject GroundPrefab;
         public GroundType groundType;
 
     }

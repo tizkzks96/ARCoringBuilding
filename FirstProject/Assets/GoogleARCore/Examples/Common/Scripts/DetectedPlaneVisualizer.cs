@@ -104,7 +104,7 @@ namespace GoogleARCore.Examples.Common
         public void Initialize(DetectedPlane plane)
         {
             m_DetectedPlane = plane;
-            m_MeshRenderer.material.SetColor("_GridColor", Color.white);
+            //m_MeshRenderer.material.SetColor("_GridColor", Color.white);
             m_MeshRenderer.material.SetFloat("_UvRotation", Random.Range(0.0f, 360.0f));
 
             Update();
@@ -143,12 +143,12 @@ namespace GoogleARCore.Examples.Common
             // |             |      | |         | |
             // |             |      |7-----------6|
             // ---------------     3---------------2
-            m_MeshColors.Clear();
+            //m_MeshColors.Clear();
 
             // Fill transparent color to vertices 0 to 3.
             for (int i = 0; i < planePolygonCount; ++i)
             {
-                m_MeshColors.Add(Color.clear);
+                //m_MeshColors.Add(Color.clear);
             }
 
             // Feather distance 0.2 meters.
@@ -168,7 +168,7 @@ namespace GoogleARCore.Examples.Common
                 float scale = 1.0f - Mathf.Min(featherLength / d.magnitude, featherScale);
                 MeshVertices.Add((scale * d) + PlaneCenter);
 
-                m_MeshColors.Add(Color.white);
+                //m_MeshColors.Add(Color.white);
             }
 
             m_MeshIndices.Clear();
@@ -204,7 +204,7 @@ namespace GoogleARCore.Examples.Common
             m_Mesh.Clear();
             m_Mesh.SetVertices(MeshVertices);
             m_Mesh.SetTriangles(m_MeshIndices, 0);
-            m_Mesh.SetColors(m_MeshColors);
+            //m_Mesh.SetColors(m_MeshColors);
         }
         private bool _AreVerticesListsEqual(List<Vector3> firstList, List<Vector3> secondList)
         {
@@ -274,11 +274,50 @@ namespace GoogleARCore.Examples.Common
             }
         }
 
+
+        public void CustomAnimationControll(GameObject cubeWorld, int size)
+        {
+            Animation anim = cubeWorld.AddComponent<Animation>();
+
+            AnimationCurve curve;
+
+            // create a new AnimationClip
+            AnimationClip clip = new AnimationClip();
+            clip.legacy = true;
+
+            // create a curve to move the GameObject and assign to the clip
+            Keyframe[] keys;
+            keys = new Keyframe[2];
+            keys[0] = new Keyframe(0.0f, cubeWorld.transform.position.y - size * 0.1f);
+            keys[1] = new Keyframe(5.0f, cubeWorld.transform.position.y);
+            curve = new AnimationCurve(keys);
+            clip.SetCurve("", typeof(Transform), "localPosition.y", curve);
+
+            // update the clip to a change the red color
+            //curve = AnimationCurve.Linear(0.0f, 1.0f, 2.0f, 0.0f);
+            //clip.SetCurve("", typeof(Material), "_Color.r", curve);
+            //clip.wrapMode = WrapMode.Loop;
+            // now animate the GameObject
+            anim.AddClip(clip, clip.name);
+            anim.Play(clip.name);
+        }
+
         public IEnumerator CreateCubeWorld(int size)
         {
             GameObject cubeWorld = new GameObject("CubeWorld");
+
+
+            //anim.clip = Resources.Load("ani1") as AnimationClip;
+
+
+
+
+
             cubeWorld.transform.SetParent(transform);
             cubeWorld.transform.position = PlaneCenter;
+
+            CustomAnimationControll(cubeWorld, size);
+
             float objectSize = 0.1f;
             for (int z = 0; z < size; z++)
             {
@@ -292,19 +331,20 @@ namespace GoogleARCore.Examples.Common
                         {
                             if ((z == 0 || z == size - 1) || (y == 0 || y == size - 1) || (x == 0 || x == size - 1))
                             {
-                                GameObject ground = Instantiate(GroundManipulatorPrefab);
+                                //GameObject ground = Instantiate(GroundManipulatorPrefab);
+                                GameObject ground = Instantiate(GroundDatabase.Instance.Get(0).GroundPrefab);
                                 ground.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
                                 ground.transform.position = cubeWorld.transform.position + new Vector3(x * objectSize, y * objectSize, z * objectSize);
                                 ground.transform.SetParent(cubeWorld.transform);
-
-                                print("ground : " + ground.transform);
                             }
                         }
                         
                     }//new Vector3(k, j, i)
                 }
             }
-            return null;
+
+
+            yield return null;
         }
         
         public IEnumerator FixGridArray(Vector3 leftPoint, Vector3 rightPoint, Vector3 forwardPoint, Vector3 backPoint)
