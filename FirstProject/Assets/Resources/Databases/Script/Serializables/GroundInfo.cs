@@ -18,7 +18,6 @@ namespace UnityEngine
         public int ID;
         public GameObject GroundPrefab;
         public GroundType groundType;
-
     }
 }
     

@@ -331,11 +331,33 @@ namespace GoogleARCore.Examples.Common
                         {
                             if ((z == 0 || z == size - 1) || (y == 0 || y == size - 1) || (x == 0 || x == size - 1))
                             {
-                                //GameObject ground = Instantiate(GroundManipulatorPrefab);
-                                GameObject ground = Instantiate(GroundDatabase.Instance.Get(0).GroundPrefab);
+                                //get ground info
+                                GroundInfo groundInfo = GroundDatabase.Instance.Get(Random.Range(0, 1));
+
+                                GameObject ground = Instantiate(groundInfo.GroundPrefab);
                                 ground.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
                                 ground.transform.position = cubeWorld.transform.position + new Vector3(x * objectSize, y * objectSize, z * objectSize);
                                 ground.transform.SetParent(cubeWorld.transform);
+
+                                
+                                switch (groundInfo.groundType)
+                                {
+                                    case GroundType.EMPTY:
+                                        GameObject bottom_face = ground.transform.FindChild("bottom_face").gameObject;
+                                        break;
+                                    case GroundType.BUILDING_SITE:
+                                        break;
+                                    case GroundType.ENVIROMENT_DECO:
+                                        break;
+                                    case GroundType.ROAD:
+                                        break;
+                                    case GroundType.WARTER:
+                                        break;
+                                    default:
+                                        break;
+                                }
+
+
                             }
                         }
                         
