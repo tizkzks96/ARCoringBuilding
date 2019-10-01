@@ -23,34 +23,34 @@ public class Coloring : Singleton<Coloring>
     // Start is called before the first frame update
     void Start()
     {
-        int w = Screen.width;
-        int h = Screen.height; //Definition of capture region as (0,0) to (w,h) 
+        int w = Screen.width; 
+        int h = Screen.height; //스크린 가로, 세로 영역
 
         int sx = (int)(w * 0.1);
         int sy = (int)(h * 0.2);
-        w = (int)(w * 1);
+        w = (int)(w * 0.8);
         h = (int)(h * 0.6);
 
-        capRect = new UnityEngine.Rect(0, sy, w, h); //Creating texture image of the size of capRect
+        capRect = new UnityEngine.Rect(sx, sy, w, h); //CapRect 크기의 텍스처 이미지 생성
         capTexture = new Texture2D(w, h, TextureFormat.RGB24, false);
     }
 
     IEnumerator ImageProcessing()
     {
-        //canvas.SetActive(false);//Making UIs invisible 
         yield return new WaitForSeconds(0.5f);
         yield return new WaitForEndOfFrame();
-        CreateImage(); //Image Creation
+        CreateImage(); //이미지 생성
 
 
         Point[] corners;
-        FindRect(out corners);
+        FindRect(out corners); //사각형 영역 추출
 
-        TransformImage(corners);
-        ShowImage(); //Image Visualization 
-        bgr.Release();
-        bin.Release();
-        fitOverlay.SetActive(true);
+        TransformImage(corners); //사각형 영역 Transform
+        ShowImage(); //Image Visualization
+        bgr.Release(); //메모리 해제
+        bin.Release(); // 메모리 해제
+        fitOverlay.SetActive(true); //
+
         // Scean Home 으로 변경
         //SceanContorller.instance.ChangeScean(SceanState.MAIN);
         //canvas.SetActive(true);//Making UIs visible. 
@@ -131,15 +131,19 @@ public class Coloring : Singleton<Coloring>
 
     void CreateImage()
     {
-        capTexture.ReadPixels(capRect, 0, 0);//Starting capturing 
-        capTexture.Apply();//Apply captured image. 
+        capTexture.ReadPixels(capRect, 0, 0);//이미지 캡쳐
+        capTexture.Apply();//캡쳐 이미지 적용
 
-        //Conversion Texure2D to 
+        //texture 를 material 로 변환
         bgr = OpenCvSharp.Unity.TextureToMat(capTexture);
 
+        //이미지 생상 그레이 스케일로 변환
         bin = bgr.CvtColor(ColorConversionCodes.BGR2GRAY);
 
+        //임계값, 최대값, 임계값 종류
         bin = bin.Threshold(100, 255, ThresholdTypes.Otsu);
+
+        //흑백이미지 반전
         Cv2.BitwiseNot(bin, bin);
 
     }
