@@ -343,7 +343,7 @@ namespace GoogleARCore.Examples.Common
                                 switch (groundInfo.groundType)
                                 {
                                     case GroundType.EMPTY:
-                                        GameObject bottom_face = ground.transform.FindChild("bottom_face").gameObject;
+                                        //GameObject bottom_face = ground.transform.Find("bottom_face").gameObject;
                                         break;
                                     case GroundType.BUILDING_SITE:
                                         break;
