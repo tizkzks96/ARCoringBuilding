@@ -49,7 +49,7 @@ public class Coloring : Singleton<Coloring>
         ShowImage(); //Image Visualization
         bgr.Release(); //메모리 해제
         bin.Release(); // 메모리 해제
-        fitOverlay.SetActive(true); //
+        fitOverlay.SetActive(true); 
 
         // Scean Home 으로 변경
         //SceanContorller.instance.ChangeScean(SceanState.MAIN);
@@ -173,10 +173,6 @@ public class Coloring : Singleton<Coloring>
         binTexture = OpenCvSharp.Unity.MatToTexture(bin);
 
         viewL.texture = colTexture;
-        //viewR.texture = binTexture;
-
-        /*Setting texture on the coloring target object (cube)*/
-        //target.material.mainTexture = colTexture;
     }
 
     public void CreatePrefab()
