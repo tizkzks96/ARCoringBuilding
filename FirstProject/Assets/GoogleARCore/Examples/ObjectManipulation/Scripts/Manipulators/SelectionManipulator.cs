@@ -69,7 +69,7 @@ namespace GoogleARCore.Examples.ObjectManipulation
             if (transform.hasChanged)
             {
                 float height = -m_ScaledElevation / transform.localScale.y;
-                SelectionVisualization.transform.localPosition = new Vector3(0, height, 0);
+                //SelectionVisualization.transform.localPosition = new Vector3(0, 10, 0);
             }
         }
 

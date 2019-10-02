@@ -142,7 +142,7 @@ GameObject:
   - component: {fileID: 114579463648431760}
   - component: {fileID: 3246661397919321205}
   m_Layer: 0
-  m_Name: Manipulator 1
+  m_Name: PlaceObjectManipulator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -171,7 +171,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1122865395318488}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7e22c6aeec7164535871a1eae7a78caa, type: 3}
   m_Name: 
@@ -198,13 +198,13 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1122865395318488}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 035bca4b574dc4a2a8d83b85d750c600, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ObjectTranslationMode: 2
-  MaxTranslationDistance: 3
+  ObjectTranslationMode: 0
+  MaxTranslationDistance: 30
 --- !u!114 &114264350914666538
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -237,12 +237,11 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1122865395318488}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fb582fbe303bdb5479c8a8a046dc98ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SelectionVisualization: {fileID: 1674464896453232}
 --- !u!1001 &3430603358908746426
 PrefabInstance:
   m_ObjectHideFlags: 0

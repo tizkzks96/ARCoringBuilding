@@ -47,6 +47,11 @@ namespace GoogleARCore.Examples.Common
 
         private MeshRenderer m_MeshRenderer;
         public GameObject GroundManipulatorPrefab;
+
+        public Camera firstPersonCamera;
+
+        private GameObject cubeWorld;
+
         private bool _endDetect = true;
 
         float minDistance;
@@ -63,6 +68,7 @@ namespace GoogleARCore.Examples.Common
         /// </summary>
         public void Awake()
         {
+            firstPersonCamera = FindObjectOfType<Camera>();
             m_Mesh = GetComponent<MeshFilter>().mesh;
             m_MeshRenderer = GetComponent<UnityEngine.MeshRenderer>();
         }
@@ -87,6 +93,12 @@ namespace GoogleARCore.Examples.Common
             else if (m_DetectedPlane.TrackingState != TrackingState.Tracking)
             {
                  m_MeshRenderer.enabled = false;
+                if(cubeWorld != null)
+                {
+                    cubeWorld.transform.SetParent(firstPersonCamera.transform);
+                    cubeWorld.transform.localPosition = new Vector3(0, -0.2f, 1.5f);
+                    cubeWorld.transform.localRotation = Quaternion.Euler(320, 300, 45);
+                }
                  return;
             }
 
@@ -304,7 +316,7 @@ namespace GoogleARCore.Examples.Common
 
         public IEnumerator CreateCubeWorld(int size)
         {
-            GameObject cubeWorld = new GameObject("CubeWorld");
+            cubeWorld = new GameObject("CubeWorld");
 
 
             //anim.clip = Resources.Load("ani1") as AnimationClip;

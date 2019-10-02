@@ -136,7 +136,7 @@ Shader "Animmal/Lava"
 			}
 			fixed4 frag( v2f IN
 			#if !defined( CAN_SKIP_VPOS )
-			, UNITY_VPOS_TYPE vpos : VPOS
+			, UNITY_VPOS_TYPE vpos : SV_POSITION
 			#endif
 			) : SV_Target
 			{

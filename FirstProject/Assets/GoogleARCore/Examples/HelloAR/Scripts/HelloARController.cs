@@ -95,7 +95,7 @@ namespace GoogleARCore.Examples.HelloAR
 
         protected override bool CanStartManipulationForGesture(TapGesture gesture)
         {
-            Debug.Log("CanStartManipulationForGesture true");
+            Debug.Log("CanStartManipulationForGesture true : " + gesture.TargetObject);
 
             if (gesture.TargetObject == null)
             {
@@ -103,17 +103,25 @@ namespace GoogleARCore.Examples.HelloAR
 
                 return false;
             }
+            else if(gesture.TargetObject.transform.tag == "Building")
+            {
+                print("gesture.TargetObject.transform.tag : " + gesture.TargetObject.transform.tag);
+                gesture.TargetObject.GetComponent<Manipulator>().Select();
+            }
+
 
 
             Debug.Log("OnStartManipulation : " + gesture.TargetObject.transform.position);
-
+            PlaceObject(gesture);
             // Raycast against the location the player touched to search for planes.
             TrackableHit hit;
-            TrackableHitFlags raycastFilter = TrackableHitFlags.PlaneWithinPolygon;
-
+            TrackableHitFlags raycastFilter = TrackableHitFlags.Default;
+            
             if (Frame.Raycast(
                 gesture.StartPosition.x, gesture.StartPosition.y, raycastFilter, out hit))
             {
+                print("VVVVV : " + gesture.TargetObject);
+
                 // Use hit pose and camera pose to check if hittest is from the
                 // back of the plane, if it is, no need to create the anchor.
                 if ((hit.Trackable is DetectedPlane) &&
@@ -124,77 +132,102 @@ namespace GoogleARCore.Examples.HelloAR
                 }
                 else
                 {
-                    // Choose the Andy model for the Trackable that got hit.
-                    GameObject prefab = HorizontalPlanePrefab;
-
-                    //Debug.Log("unity test  gesture.TargetObject.transform.position : " + gesture.TargetObject.transform.position);
-                    //Debug.Log("unity test  gesture.TargetObject.transform : " + gesture.TargetObject.transform);
+                    print("AAAAA : " + gesture.TargetObject);
 
                     
-
-                    var manipulator =
-                        Instantiate(placeObjectManipulatorPrefab);
-
-                    var placeObject =
-                        Instantiate(prefab);
-
-                    // Create an anchor to allow ARCore to track the hitpoint as understanding of
-                    // the physical world evolves.
-                    //var anchor = hit.Trackable.CreateAnchor(new Pose(gesture.TargetObject.transform.position, Quaternion.identity));
-
-                    //var anchor = hit.Trackable.CreateAnchor(new Pose(GetNearestPointOnGrid(hit.Pose.position, DetectedPlaneVisualizer.Gab), Quaternion.identity));
-
-                    // Make Andy model a child of the manipulator.
-                    //placeObject.transform.parent = manipulator.transform;
-
-                    placeObject.transform.SetParent(manipulator.transform);
-
-                    manipulator.transform.SetParent(gesture.TargetObject.transform);
-
-                    manipulator.transform.transform.localPosition = new Vector3(0, 0, 0);
-
-                    placeObject.transform.localPosition = new Vector3(0,0,0);
-
-                    // Make manipulator a child of the anchor.
-                    //gesture.TargetObject.transform.parent = manipulator.transform;
-
-                    placeObject.transform.rotation = gesture.TargetObject.transform.rotation;
-
-                    print("gggeture 타게사삿 : " + gesture.TargetObject.transform);
-
-                    // Select the placed object.
-                    manipulator.GetComponent<Manipulator>().Select();
-
-                    //StartCoroutine(CustomAnimationCurve.Instance.TempAnimation(placeObject));
-
-                    if (gesture.TargetObject.transform.name == "bottom_face")
-                    {
-                        placeObject.transform.localPosition = Vector3.forward * 5 + Vector3.left * -5;
-                    }
-                    if (gesture.TargetObject.transform.name == "forward_face")
-                    {
-                        placeObject.transform.localPosition = Vector3.up * -5 + Vector3.left * -5;
-                    }
-                    if (gesture.TargetObject.transform.name == "left_face")
-                    {
-                        placeObject.transform.localPosition = Vector3.forward * -5 + Vector3.up * 5;
-                    }
-
-                    if (gesture.TargetObject.transform.name == "top_face")
-                    {
-                        placeObject.transform.localPosition = Vector3.forward * -5 + Vector3.left * 5;
-                    }
-
-                    if (gesture.TargetObject.transform.name == "back_face")
-                    {
-                        placeObject.transform.localPosition = Vector3.up * -5 + Vector3.left * 5;
-                    }
-                    if (gesture.TargetObject.transform.name == "right_face")
-                    {
-                        placeObject.transform.localPosition = Vector3.forward * 5 + Vector3.up * 5;
-                    }
                 }
             }
+            return false;
+        }
+
+        public bool PlaceObject(TapGesture gesture)
+        {
+            if (HorizontalPlanePrefab == null)
+            {
+                return false;
+            }
+            //Debug.Log("unity test  gesture.TargetObject.transform.position : " + gesture.TargetObject.transform.position);
+            //Debug.Log("unity test  gesture.TargetObject.transform : " + gesture.TargetObject.transform);
+
+
+            else
+            {
+                // Choose the Andy model for the Trackable that got hit.
+                GameObject prefab = HorizontalPlanePrefab;
+
+                var manipulator =
+                    Instantiate(placeObjectManipulatorPrefab);
+
+                var placeObject =
+                    Instantiate(prefab);
+
+                // Create an anchor to allow ARCore to track the hitpoint as understanding of
+                // the physical world evolves.
+                //var anchor = hit.Trackable.CreateAnchor(new Pose(gesture.TargetObject.transform.position, Quaternion.identity));
+
+                //var anchor = hit.Trackable.CreateAnchor(new Pose(GetNearestPointOnGrid(hit.Pose.position, DetectedPlaneVisualizer.Gab), Quaternion.identity));
+
+                // Make Andy model a child of the manipulator.
+                //placeObject.transform.parent = manipulator.transform;
+
+                GameObject selectionVisualization = manipulator.transform.Find("Selection Visualization").gameObject;
+
+                selectionVisualization.transform.position = new Vector3(0, 0.01f, 0);
+
+                selectionVisualization.transform.localScale = new Vector3(50, 0, 50);
+
+                selectionVisualization.transform.SetParent(placeObject.transform);
+
+                placeObject.transform.SetParent(manipulator.transform);
+
+                manipulator.transform.SetParent(gesture.TargetObject.transform);
+
+                manipulator.transform.transform.localPosition = new Vector3(0, 0, 0);
+
+                placeObject.transform.localPosition = new Vector3(0, 0, 0);
+
+                placeObject.transform.rotation = gesture.TargetObject.transform.rotation;
+
+                manipulator.transform.SetParent(gesture.TargetObject.transform.parent.transform);
+
+                // Make manipulator a child of the anchor.
+                //gesture.TargetObject.transform.parent = manipulator.transform;
+
+
+                // Select the placed object.
+                manipulator.GetComponent<Manipulator>().Select();
+
+                //StartCoroutine(CustomAnimationCurve.Instance.TempAnimation(placeObject));
+
+                if (gesture.TargetObject.transform.name == "bottom_face")
+                {
+                    manipulator.transform.localPosition = Vector3.forward *2.5f + Vector3.left * -2.5f + Vector3.up * -5;
+                }
+                if (gesture.TargetObject.transform.name == "forward_face")
+                {
+                    manipulator.transform.localPosition = Vector3.up * -2.5f + Vector3.left * -2.5f + Vector3.forward * 5;
+                }
+                if (gesture.TargetObject.transform.name == "left_face")
+                {
+                    manipulator.transform.localPosition = Vector3.forward * -2.5f + Vector3.up * 2.5f + Vector3.right * 5;
+                }
+
+                if (gesture.TargetObject.transform.name == "top_face")
+                {
+                    manipulator.transform.localPosition = Vector3.forward * -2.5f + Vector3.left * 2.5f + Vector3.up * 5;
+                }
+
+                if (gesture.TargetObject.transform.name == "back_face")
+                {
+                    manipulator.transform.localPosition = Vector3.up * -2.5f + Vector3.left * 2.5f + Vector3.forward * -5;
+                }
+                if (gesture.TargetObject.transform.name == "right_face")
+                {
+                    manipulator.transform.localPosition = Vector3.forward * 2.5f + Vector3.up * 2.5f + Vector3.right * -5;
+                }
+                HorizontalPlanePrefab = null;
+            }
+
             return false;
         }
 

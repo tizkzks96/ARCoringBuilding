@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4039843999025660}
   - component: {fileID: 8717231565204865329}
-  - component: {fileID: 2723470693559746745}
   m_Layer: 0
   m_Name: GroundManipulator
   m_TagString: Untagged
@@ -44,16 +43,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb582fbe303bdb5479c8a8a046dc98ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &2723470693559746745
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1122865395318488}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ba5f69b857f00ac4995367aef4ac4dce, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  planeType: 0
