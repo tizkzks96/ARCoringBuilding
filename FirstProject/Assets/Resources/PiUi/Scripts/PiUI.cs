@@ -297,6 +297,7 @@ public class PiUI : MonoBehaviour
     /// <param name="screenPos">Place in screen position to open the menu</param>
     public void OpenMenu(Vector2 screenPos)
     {
+        PiUIManager.instance.CurrentMenu = GetComponent<PiUI>();
         menuPosition = screenPos;
         openedMenu = true;
         foreach (PiPiece pi in piList)

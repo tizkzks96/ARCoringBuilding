@@ -22,11 +22,7 @@ namespace PIUI
     // Update is called once per frame
     void Update()
     {
-        //Bool function that returns true if on a menu
-        if (piUi.OverAMenu( ))
-            Debug.Log("You are over a menu");
-        else
-            Debug.Log("You are not over a menu");
+        
         //Just open the normal Menu if A is pressed
         if (Input.GetKeyDown(KeyCode.A))
         {
@@ -51,9 +47,11 @@ namespace PIUI
                 }
                 //Since PiUI.sliceCount or PiUI.equalSlices didnt change just calling update
                 piUi.UpdatePiMenu("Normal Menu");
-            }
-            //Open or close the menu depending on it's current state at the center of the screne
-            piUi.ChangeMenuState("Normal Menu", new Vector2(Screen.width / 2f, Screen.height / 2f));
+
+                //Open or close the menu depending on it's current state at the center of the screne
+                piUi.ChangeMenuState("Normal Menu", new Vector2(Screen.width / 2f, Screen.height / 2f));
+             }
+            
         }
         if (Input.GetKeyDown(KeyCode.D))
         {
@@ -119,8 +117,24 @@ namespace PIUI
     //Test function that writes to the console and also closes the menu
     public void TestFunction()
     {
-        //Closes the menu
-        piUi.ChangeMenuState("Normal Menu1");
+            normalMenu = piUi.GetPiUIOf("Normal Menu1");
+            print(piUi.GetPiUIOf("Normal Menu1"));
+            int i = 0;
+            //Iterate through the piData on normal menu
+            foreach (PiUI.PiData data in normalMenu.piData)
+            {
+                //Changes slice label
+                data.sliceLabel = "Test" + i.ToString();
+                //Creates a new unity event and adds the testfunction to it
+                data.onSlicePressed = new UnityEngine.Events.UnityEvent();
+                data.onSlicePressed.AddListener(TestFunction);
+                i++;
+            }
+            //Since PiUI.sliceCount or PiUI.equalSlices didnt change just calling update
+            piUi.UpdatePiMenu("Normal Menu1");
+
+            //Closes the menu
+            piUi.ChangeMenuState("Normal Menu1");
         Debug.Log("You Clicked me!");
     }
 

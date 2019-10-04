@@ -1311,17 +1311,17 @@ PrefabInstance:
     - target: {fileID: 114358342674604368, guid: f8d1463efe512bc4a90597e508985031,
         type: 3}
       propertyPath: closeTransition
-      value: 1
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 224138766239629172, guid: f8d1463efe512bc4a90597e508985031,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 224138766239629172, guid: f8d1463efe512bc4a90597e508985031,
         type: 3}
       propertyPath: m_LocalScale.y
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 224700795880293456, guid: f8d1463efe512bc4a90597e508985031,
         type: 3}

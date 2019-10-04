@@ -4,13 +4,24 @@ using UnityEngine;
 
 public class PiUIManager : MonoBehaviour
 {
-    public NameMenuPair[] nameMenu;
+    public static PiUIManager instance;
 
+    public NameMenuPair[] nameMenu;
     private Dictionary<string, PiUI> dict = new Dictionary<string, PiUI>( );
+
+    public PiUI CurrentMenu { get; set; }
 
     private void Awake()
     {
-       foreach(NameMenuPair pair in nameMenu)
+        //Check if instance already exists
+        if (instance == null)
+        {
+            //if not, set instance to this
+            instance = this;
+
+        }
+
+        foreach (NameMenuPair pair in nameMenu)
         {
             dict.Add(pair.name, pair.menu);
         }
@@ -27,13 +38,16 @@ public class PiUIManager : MonoBehaviour
     public void ChangeMenuState(string menuName, Vector2 pos = default(Vector2))
     {
         PiUI currentPi = GetPiUIOf(menuName);
-        if (currentPi.openedMenu)
+
+        if (currentPi == CurrentMenu)
         {
-            print("open");
+            print("close");
             currentPi.CloseMenu( );
         }else
         {
-            print("close");
+            print("open");
+            if(CurrentMenu.openedMenu && CurrentMenu != null)
+                CurrentMenu.CloseMenu();
             currentPi.OpenMenu(pos);
         }
     }
