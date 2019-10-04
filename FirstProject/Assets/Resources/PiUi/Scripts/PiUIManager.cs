@@ -14,7 +14,7 @@ public class PiUIManager : MonoBehaviour
         {
             dict.Add(pair.name, pair.menu);
         }
-		transform.localScale = new Vector3(1f / Screen.width, 1f / Screen.height);
+		transform.localScale = new Vector3(0.1f, 0.1f, 0);
 		transform.position = Vector2.zero;
     }
 

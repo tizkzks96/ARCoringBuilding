@@ -167,7 +167,7 @@ public class PiUI : MonoBehaviour
         {
             ClearMenu( );
         }
-        transform.position = screenPosition;
+        //transform.position = screenPosition;
         float lastRot = 0;
         if (syncColors)
         {
@@ -206,10 +206,12 @@ public class PiUI : MonoBehaviour
             {
                 rot = 0;
             }
-            currentPi.transform.rotation = Quaternion.Euler(0, 0, rot);
+            currentPi.transform.localRotation = Quaternion.Euler(0, 0, rot);
+            currentPi.transform.localScale = new Vector3(1, 1, 0);
+
             lastRot += angle;
             angleList[i] = rot;
-            //currentPi.gameObject.SetActive(true);
+            currentPi.gameObject.SetActive(true);
             currentImage.rectTransform.localPosition = Vector2.zero;
             currentPi.SetData(piData[i], innerRadius, outerRadius, this);
             piList.Add(currentPi);
@@ -313,7 +315,7 @@ public class PiUI : MonoBehaviour
         switch (openTransition)
         {
             case TransitionType.Scale:
-                transform.localScale *= 0;
+                //transform.localScale *= 0;
                 break;
             case TransitionType.SlideRight:
                 tempPos.x = -outerRadius;
@@ -336,11 +338,11 @@ public class PiUI : MonoBehaviour
                 transform.position = tempPos;
                 break;
             case TransitionType.Fan:
-                transform.localScale = Vector2.one * scaleModifier;
+                //transform.localScale = Vector2.one * scaleModifier;
                 PiRotationToNil( );
                 break;
             case TransitionType.ScaleAndFan:
-                transform.localScale *= 0;
+                //transform.localScale *= 0;
                 PiRotationToNil( );
                 break;
         }
@@ -385,7 +387,8 @@ public class PiUI : MonoBehaviour
     {
         if (openedMenu)
         {
-            transform.localScale = Vector2.Lerp(transform.localScale, Vector2.one * scaleModifier, Time.deltaTime * transitionSpeed);
+            transform.localScale = Vector2.Lerp(transform.localScale, new Vector2(0.01f, 0.01f), Time.deltaTime * transitionSpeed);
+            transform.localPosition = new Vector3(0, 0.01f, 0);
             if (Mathf.Abs((Vector2.one * scaleModifier).sqrMagnitude - transform.localScale.sqrMagnitude) < .05f)
             {
                 interactable = true;
@@ -519,20 +522,20 @@ public class PiUI : MonoBehaviour
         {
             if (openedMenu)
             {
-                piList[i].transform.rotation = Quaternion.Lerp(piList[i].transform.rotation, Quaternion.Euler(0, 0, angleList[i]), Time.deltaTime * transitionSpeed);
-                if (Mathf.Abs(angleList[i] - ((piList[i].transform.rotation.eulerAngles.z + 360) % 360)) > 3 && closeToAngle)
+                piList[i].transform.localRotation = Quaternion.Lerp(piList[i].transform.localRotation, Quaternion.Euler(0, 0, angleList[i]), Time.deltaTime * transitionSpeed);
+                if (Mathf.Abs(angleList[i] - ((piList[i].transform.localRotation.eulerAngles.z + 360) % 360)) > 3 && closeToAngle)
                 {
                     closeToAngle = false;
                 }
             }
             else if (!openedMenu)
             {
-                piList[i].transform.rotation = Quaternion.Lerp(piList[i].transform.rotation, Quaternion.Euler(0, 0, rotZ), Time.deltaTime * transitionSpeed);
-                float currentAngle = Mathf.Abs(piList[i].transform.rotation.eulerAngles.z + 360f) % 360;
+                piList[i].transform.localRotation = Quaternion.Lerp(piList[i].transform.localRotation, Quaternion.Euler(0, 0, rotZ), Time.deltaTime * transitionSpeed);
+                float currentAngle = Mathf.Abs(piList[i].transform.localRotation.eulerAngles.z + 360f) % 360;
                 float lowComp = (rotZ - 10 + 360f) % 360;
                 float highComp = (rotZ + 10 + 360f) % 360;
                 bool rotNil = (currentAngle >= lowComp && rotZ == 0 || currentAngle <= highComp && rotZ == 0);
-                if (currentAngle >= lowComp && currentAngle <= highComp || rotZ == piList[i].transform.rotation.eulerAngles.z || rotNil)
+                if (currentAngle >= lowComp && currentAngle <= highComp || rotZ == piList[i].transform.localRotation.eulerAngles.z || rotNil)
                 {
                     erase++;
                 }
@@ -571,7 +574,7 @@ public class PiUI : MonoBehaviour
             }
             int rot = Mathf.Clamp((int)(angle + lastRot), 0, 359);
             Vector3 rotVec = new Vector3(0, 0, rot);
-            piList[i].transform.rotation = Quaternion.Euler(rotVec);
+            piList[i].transform.localRotation = Quaternion.Euler(rotVec);
             lastRot += angle;
         }
     }
@@ -583,7 +586,7 @@ public class PiUI : MonoBehaviour
     {
         foreach (PiPiece pi in piList)
         {
-            pi.transform.rotation = Quaternion.identity;
+            pi.transform.localRotation = Quaternion.identity;
         }
     }
 

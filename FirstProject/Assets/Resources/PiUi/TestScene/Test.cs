@@ -120,7 +120,7 @@ namespace PIUI
     public void TestFunction()
     {
         //Closes the menu
-        piUi.ChangeMenuState("Normal Menu");
+        piUi.ChangeMenuState("Normal Menu1");
         Debug.Log("You Clicked me!");
     }
 

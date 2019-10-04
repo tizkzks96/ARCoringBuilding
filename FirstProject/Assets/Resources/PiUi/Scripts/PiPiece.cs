@@ -74,11 +74,11 @@ public class PiPiece : MonoBehaviour
         {
             if (isOver && transform.localScale.sqrMagnitude < (Vector2.one * parent.hoverScale).sqrMagnitude)
             {
-                transform.localScale = Vector2.Lerp(transform.localScale, Vector2.one * parent.hoverScale, Time.deltaTime * 10f);
+                //transform.localScale = Vector2.Lerp(transform.localScale, Vector2.one * parent.hoverScale, Time.deltaTime * 10f);
             }
             else if (transform.localScale.sqrMagnitude > 1 && !isOver)
             {
-                transform.localScale = Vector2.Lerp(transform.localScale, Vector2.one, Time.deltaTime * 10f);
+                //transform.localScale = Vector2.Lerp(transform.localScale, Vector2.one, Time.deltaTime * 10f);
             }
             Vector2 mousePos = Input.mousePosition;
             Vector2 temp = mousePos - (Vector2)transform.position;
@@ -140,21 +140,21 @@ public class PiPiece : MonoBehaviour
         }
         if (transform.rotation.eulerAngles.z == 359f || transform.rotation.eulerAngles.z == 0)
         {
-            transform.rotation = Quaternion.identity;
+            //transform.rotation = Quaternion.identity;
         }
         if (transform.rotation.eulerAngles.z == 359f || transform.rotation.eulerAngles.z == 0 && parent.openedMenu)
         {
-            transform.rotation = Quaternion.identity;
+            //transform.rotation = Quaternion.identity;
             maxAngle = 359f;
             minAngle = 359f - (thisImg.fillAmount * 360);
         }
         else if (parent.interactable)
         {
-            maxAngle = transform.rotation.eulerAngles.z;
-            minAngle = transform.rotation.eulerAngles.z - (thisImg.fillAmount * 360);
+           // maxAngle = transform.rotation.eulerAngles.z;
+            //minAngle = transform.rotation.eulerAngles.z - (thisImg.fillAmount * 360);
         }
-        sliceLabel.transform.rotation = Quaternion.identity;
-        sliceIcon.transform.rotation = Quaternion.identity;
+        //sliceLabel.transform.rotation = Quaternion.identity;
+        //sliceIcon.transform.rotation = Quaternion.identity;
         if (lastFrameIsOver != isOver && isInteractable && parent.interactable && onHoverEvents)
         {
             if (isOver && onHoverEnter.GetPersistentEventCount() >= 0)

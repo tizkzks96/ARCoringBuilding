@@ -6,6 +6,7 @@ TagManager:
   tags:
   - ManipulationSystem
   - Building
+  - Ground
   layers:
   - Default
   - TransparentFX

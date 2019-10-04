@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 2308041280072256674}
   m_Layer: 0
   m_Name: Cube_Soil
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
@@ -245,22 +245,12 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.2
       objectReference: {fileID: 0}
-    - target: {fileID: 5654068401286126105, guid: 944ed75e01c3a2f4eb9e1fe75439c936,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8305923250402904455, guid: 944ed75e01c3a2f4eb9e1fe75439c936,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 5001468400738771353, guid: 944ed75e01c3a2f4eb9e1fe75439c936,
         type: 3}
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7654866095794037500, guid: 944ed75e01c3a2f4eb9e1fe75439c936,
+    - target: {fileID: 5654068401286126105, guid: 944ed75e01c3a2f4eb9e1fe75439c936,
         type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -271,6 +261,16 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7435905544374956633, guid: 944ed75e01c3a2f4eb9e1fe75439c936,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7654866095794037500, guid: 944ed75e01c3a2f4eb9e1fe75439c936,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8305923250402904455, guid: 944ed75e01c3a2f4eb9e1fe75439c936,
         type: 3}
       propertyPath: m_Enabled
       value: 0

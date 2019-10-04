@@ -39,6 +39,14 @@ namespace GoogleARCore.Examples.HelloAR
     {
         public static HelloARController instance;
 
+
+        [SerializeField]
+        PiUIManager piUi;
+        private bool menuOpened;
+        private PiUI normalMenu;
+
+
+
         /// <summary>
         /// The first-person camera being used to render the passthrough camera image (i.e. AR
         /// background).
@@ -85,6 +93,11 @@ namespace GoogleARCore.Examples.HelloAR
             Application.targetFrameRate = 60;
         }
 
+        private void Start()
+        {
+            normalMenu = piUi.GetPiUIOf("Normal Menu");
+        }
+
         /// <summary>
         /// The Unity Update() method.
         /// </summary>
@@ -112,11 +125,13 @@ namespace GoogleARCore.Examples.HelloAR
 
 
             Debug.Log("OnStartManipulation : " + gesture.TargetObject.transform.position);
-            PlaceObject(gesture);
+            PiUiController(gesture);
+
+            //PlaceObject(gesture);
             //// Raycast against the location the player touched to search for planes.
             //TrackableHit hit;
             //TrackableHitFlags raycastFilter = TrackableHitFlags.Default;
-            
+
             //if (Frame.Raycast(
             //    gesture.StartPosition.x, gesture.StartPosition.y, raycastFilter, out hit))
             //{
@@ -134,7 +149,7 @@ namespace GoogleARCore.Examples.HelloAR
             //    {
             //        print("AAAAA : " + gesture.TargetObject);
 
-                    
+
             //    }
             //}
             return false;
@@ -342,6 +357,86 @@ namespace GoogleARCore.Examples.HelloAR
                 (float)zPosition + gab.z);
 
             return result;
+        }
+
+        public void PiUiController(TapGesture gesture)
+        {
+            print("touch0");
+
+            //Update the menu and add the Testfunction to the button action if s or Fire1 axis is pressed
+            if (gesture.TargetObject.transform.tag == "Ground")
+            {
+                //Ensure menu isnt currently open on update just for a cleaner look
+                if (!piUi.PiOpened("Normal Menu"))
+                {
+
+
+                    piUi.transform.SetParent(gesture.TargetObject.transform);
+                    piUi.transform.localScale = new Vector3(1f, 1f, 0);
+
+
+                    //piUi.transform.position = gesture.TargetObject.transform.position + Vector3.up * 0.01f;
+
+                    piUi.transform.localRotation = Quaternion.Euler(90, gesture.TargetObject.transform.rotation.y, gesture.TargetObject.transform.rotation.z);
+
+                    if (gesture.TargetObject.transform.name == "bottom_face")
+                    {
+                        print("bottom_face");
+                        piUi.transform.localPosition = Vector3.forward * 2.5f + Vector3.left * -2.5f + Vector3.up * -0.01f;
+                    }
+                    if (gesture.TargetObject.transform.name == "forward_face")
+                    {
+                        print("forward_face");
+                        piUi.transform.localPosition = Vector3.up * -2.5f + Vector3.left * -2.5f + Vector3.forward * 0.01f;
+                    }
+                    if (gesture.TargetObject.transform.name == "left_face")
+                    {
+                        print("left_face");
+                        piUi.transform.localPosition = Vector3.forward * -2.5f + Vector3.up * 2.5f + Vector3.right * 0.01f;
+                    }
+
+                    if (gesture.TargetObject.transform.name == "top_face")
+                    {
+                        print("top_face");
+                        piUi.transform.localPosition = Vector3.forward * -2.5f + Vector3.left * 2.5f + Vector3.up * 0.01f;
+                    }
+
+                    if (gesture.TargetObject.transform.name == "back_face")
+                    {
+                        print("back_face");
+                        piUi.transform.localPosition = Vector3.up * 2.5f + Vector3.left * 2.5f + Vector3.forward * -0.01f;
+                    }
+                    if (gesture.TargetObject.transform.name == "right_face")
+                    {
+                        print("right_face");
+                        piUi.transform.localPosition = Vector3.forward * 2.5f + Vector3.up * 2.5f + Vector3.right * -0.01f;
+                    }
+
+
+                    int i = 0;
+                    //Iterate through the piData on normal menu
+                    foreach (PiUI.PiData data in normalMenu.piData)
+                    {
+                        //Changes slice label
+                        data.sliceLabel = "Test" + i.ToString();
+                        //Creates a new unity event and adds the testfunction to it
+                        data.onSlicePressed = new UnityEngine.Events.UnityEvent();
+                        data.onSlicePressed.AddListener(TestFunction);
+                        i++;
+                    }
+                    //Since PiUI.sliceCount or PiUI.equalSlices didnt change just calling update
+                    piUi.UpdatePiMenu("Normal Menu");
+                }
+                //Open or close the menu depending on it's current state at the center of the screne
+                piUi.ChangeMenuState("Normal Menu", gesture.TargetObject.transform.position);
+            }
+        }
+
+        public void TestFunction()
+        {
+            //Closes the menu
+            piUi.ChangeMenuState("Normal Menu");
+            Debug.Log("You Clicked me!");
         }
     }
 }
