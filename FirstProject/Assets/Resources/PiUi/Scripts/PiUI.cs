@@ -229,7 +229,7 @@ public class PiUI : MonoBehaviour
             {
                 case TransitionType.Scale:
                     Scale( );
-                    transform.position = menuPosition;
+                    //transform.position = menuPosition;
                     break;
                 case TransitionType.SlideRight:
                     SlideRight( );
@@ -258,7 +258,7 @@ public class PiUI : MonoBehaviour
             {
                 case TransitionType.Scale:
                     Scale( );
-                    transform.position = menuPosition;
+                    //transform.position = menuPosition;
                     break;
                 case TransitionType.SlideRight:
                     SlideRight( );
@@ -315,7 +315,7 @@ public class PiUI : MonoBehaviour
         switch (openTransition)
         {
             case TransitionType.Scale:
-                //transform.localScale *= 0;
+                transform.localScale *= 0;
                 break;
             case TransitionType.SlideRight:
                 tempPos.x = -outerRadius;
@@ -338,11 +338,11 @@ public class PiUI : MonoBehaviour
                 transform.position = tempPos;
                 break;
             case TransitionType.Fan:
-                //transform.localScale = Vector2.one * scaleModifier;
+                transform.localScale = Vector2.one * scaleModifier;
                 PiRotationToNil( );
                 break;
             case TransitionType.ScaleAndFan:
-                //transform.localScale *= 0;
+                transform.localScale *= 0;
                 PiRotationToNil( );
                 break;
         }
@@ -397,7 +397,7 @@ public class PiUI : MonoBehaviour
         else if (!openedMenu)
         {
             transform.localScale = Vector2.Lerp(transform.localScale, Vector2.zero, Time.deltaTime * transitionSpeed);
-            if (transform.localScale.x < .05f)
+            if (transform.localScale.x < .00005f)
             {
                 transform.localScale = Vector2.zero;
                 foreach (PiPiece pi in piList)

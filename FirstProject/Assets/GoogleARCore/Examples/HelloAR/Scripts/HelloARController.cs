@@ -108,7 +108,7 @@ namespace GoogleARCore.Examples.HelloAR
 
         protected override bool CanStartManipulationForGesture(TapGesture gesture)
         {
-            Debug.Log("CanStartManipulationForGesture true : " + gesture.TargetObject);
+
 
             if (gesture.TargetObject == null)
             {
@@ -122,9 +122,6 @@ namespace GoogleARCore.Examples.HelloAR
                 gesture.TargetObject.GetComponent<Manipulator>().Select();
             }
 
-
-
-            Debug.Log("OnStartManipulation : " + gesture.TargetObject.transform.position);
             PiUiController(gesture);
 
             //PlaceObject(gesture);
@@ -213,33 +210,8 @@ namespace GoogleARCore.Examples.HelloAR
                 manipulator.GetComponent<Manipulator>().Select();
 
                 //StartCoroutine(CustomAnimationCurve.Instance.TempAnimation(placeObject));
+                TabGesturePositionCorrection(gesture, manipulator.transform, 5);
 
-                if (gesture.TargetObject.transform.name == "bottom_face")
-                {
-                    manipulator.transform.localPosition = Vector3.forward *2.5f + Vector3.left * -2.5f + Vector3.up * -5;
-                }
-                if (gesture.TargetObject.transform.name == "forward_face")
-                {
-                    manipulator.transform.localPosition = Vector3.up * -2.5f + Vector3.left * -2.5f + Vector3.forward * 5;
-                }
-                if (gesture.TargetObject.transform.name == "left_face")
-                {
-                    manipulator.transform.localPosition = Vector3.forward * -2.5f + Vector3.up * 2.5f + Vector3.right * 5;
-                }
-
-                if (gesture.TargetObject.transform.name == "top_face")
-                {
-                    manipulator.transform.localPosition = Vector3.forward * -2.5f + Vector3.left * 2.5f + Vector3.up * 5;
-                }
-
-                if (gesture.TargetObject.transform.name == "back_face")
-                {
-                    manipulator.transform.localPosition = Vector3.up * -2.5f + Vector3.left * 2.5f + Vector3.forward * -5;
-                }
-                if (gesture.TargetObject.transform.name == "right_face")
-                {
-                    manipulator.transform.localPosition = Vector3.forward * 2.5f + Vector3.up * 2.5f + Vector3.right * -5;
-                }
                 HorizontalPlanePrefab = null;
             }
 
@@ -359,59 +331,23 @@ namespace GoogleARCore.Examples.HelloAR
             return result;
         }
 
+        
+
         public void PiUiController(TapGesture gesture)
         {
-            print("touch0");
-
             //Update the menu and add the Testfunction to the button action if s or Fire1 axis is pressed
             if (gesture.TargetObject.transform.tag == "Ground")
             {
                 //Ensure menu isnt currently open on update just for a cleaner look
                 if (!piUi.PiOpened("Normal Menu"))
                 {
-
-
                     piUi.transform.SetParent(gesture.TargetObject.transform);
-                    piUi.transform.localScale = new Vector3(1f, 1f, 0);
 
-
-                    //piUi.transform.position = gesture.TargetObject.transform.position + Vector3.up * 0.01f;
+                    piUi.transform.localScale = new Vector3(1.5f, 1.5f, 0);
 
                     piUi.transform.localRotation = Quaternion.Euler(90, gesture.TargetObject.transform.rotation.y, gesture.TargetObject.transform.rotation.z);
 
-                    if (gesture.TargetObject.transform.name == "bottom_face")
-                    {
-                        print("bottom_face");
-                        piUi.transform.localPosition = Vector3.forward * 2.5f + Vector3.left * -2.5f + Vector3.up * -0.01f;
-                    }
-                    if (gesture.TargetObject.transform.name == "forward_face")
-                    {
-                        print("forward_face");
-                        piUi.transform.localPosition = Vector3.up * -2.5f + Vector3.left * -2.5f + Vector3.forward * 0.01f;
-                    }
-                    if (gesture.TargetObject.transform.name == "left_face")
-                    {
-                        print("left_face");
-                        piUi.transform.localPosition = Vector3.forward * -2.5f + Vector3.up * 2.5f + Vector3.right * 0.01f;
-                    }
-
-                    if (gesture.TargetObject.transform.name == "top_face")
-                    {
-                        print("top_face");
-                        piUi.transform.localPosition = Vector3.forward * -2.5f + Vector3.left * 2.5f + Vector3.up * 0.01f;
-                    }
-
-                    if (gesture.TargetObject.transform.name == "back_face")
-                    {
-                        print("back_face");
-                        piUi.transform.localPosition = Vector3.up * 2.5f + Vector3.left * 2.5f + Vector3.forward * -0.01f;
-                    }
-                    if (gesture.TargetObject.transform.name == "right_face")
-                    {
-                        print("right_face");
-                        piUi.transform.localPosition = Vector3.forward * 2.5f + Vector3.up * 2.5f + Vector3.right * -0.01f;
-                    }
-
+                    TabGesturePositionCorrection(gesture, piUi.transform, 0.01f);
 
                     int i = 0;
                     //Iterate through the piData on normal menu
@@ -437,6 +373,37 @@ namespace GoogleARCore.Examples.HelloAR
             //Closes the menu
             piUi.ChangeMenuState("Normal Menu");
             Debug.Log("You Clicked me!");
+        }
+
+
+        public void TabGesturePositionCorrection(TapGesture gesture, Transform obejct, float height)
+        {
+            if (gesture.TargetObject.transform.name == "bottom_face")
+            {
+                obejct.transform.localPosition = Vector3.forward * 2.5f + Vector3.left * -2.5f + Vector3.up * -height;
+            }
+            if (gesture.TargetObject.transform.name == "forward_face")
+            {
+                obejct.transform.localPosition = Vector3.up * -2.5f + Vector3.left * -2.5f + Vector3.forward * height;
+            }
+            if (gesture.TargetObject.transform.name == "left_face")
+            {
+                obejct.transform.localPosition = Vector3.forward * -2.5f + Vector3.up * 2.5f + Vector3.right * height;
+            }
+
+            if (gesture.TargetObject.transform.name == "top_face")
+            {
+                obejct.transform.localPosition = Vector3.forward * -2.5f + Vector3.left * 2.5f + Vector3.up * height;
+            }
+
+            if (gesture.TargetObject.transform.name == "back_face")
+            {
+                obejct.transform.localPosition = Vector3.up * 2.5f + Vector3.left * 2.5f + Vector3.forward * -height;
+            }
+            if (gesture.TargetObject.transform.name == "right_face")
+            {
+                obejct.transform.localPosition = Vector3.forward * 2.5f + Vector3.up * 2.5f + Vector3.right * -height;
+            }
         }
     }
 }

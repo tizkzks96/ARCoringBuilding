@@ -72,14 +72,17 @@ public class PiPiece : MonoBehaviour
         sliceLabel.transform.position = Center( ) - new Vector2(0, sliceIcon.rectTransform.sizeDelta.y + parent.textVerticalOffset) * parent.scaleModifier * transform.lossyScale.magnitude;
         if (isInteractable)
         {
-            if (isOver && transform.localScale.sqrMagnitude < (Vector2.one * parent.hoverScale).sqrMagnitude)
-            {
-                //transform.localScale = Vector2.Lerp(transform.localScale, Vector2.one * parent.hoverScale, Time.deltaTime * 10f);
-            }
-            else if (transform.localScale.sqrMagnitude > 1 && !isOver)
-            {
-                //transform.localScale = Vector2.Lerp(transform.localScale, Vector2.one, Time.deltaTime * 10f);
-            }
+            //hover
+            //if (isOver && transform.localScale.sqrMagnitude < (Vector2.one * parent.hoverScale).sqrMagnitude)
+            //{
+            //    //주석
+            //    transform.localScale = Vector2.Lerp(transform.localScale, Vector2.one * parent.hoverScale, Time.deltaTime * 10f);
+            //}
+            //else if (transform.localScale.sqrMagnitude > 1 && !isOver)
+            //{
+            //    //주석
+            //    transform.localScale = Vector2.Lerp(transform.localScale, Vector2.one, Time.deltaTime * 10f);
+            //}
             Vector2 mousePos = Input.mousePosition;
             Vector2 temp = mousePos - (Vector2)transform.position;
             float angle = (Mathf.Atan2(temp.y, temp.x) * Mathf.Rad2Deg);
@@ -140,21 +143,26 @@ public class PiPiece : MonoBehaviour
         }
         if (transform.rotation.eulerAngles.z == 359f || transform.rotation.eulerAngles.z == 0)
         {
+            //주석
             //transform.rotation = Quaternion.identity;
         }
         if (transform.rotation.eulerAngles.z == 359f || transform.rotation.eulerAngles.z == 0 && parent.openedMenu)
         {
+            //주석
             //transform.rotation = Quaternion.identity;
+
             maxAngle = 359f;
             minAngle = 359f - (thisImg.fillAmount * 360);
         }
         else if (parent.interactable)
         {
-           // maxAngle = transform.rotation.eulerAngles.z;
-            //minAngle = transform.rotation.eulerAngles.z - (thisImg.fillAmount * 360);
+            //주석
+            maxAngle = transform.rotation.eulerAngles.z;
+            minAngle = transform.rotation.eulerAngles.z - (thisImg.fillAmount * 360);
         }
-        //sliceLabel.transform.rotation = Quaternion.identity;
-        //sliceIcon.transform.rotation = Quaternion.identity;
+        //주석
+        sliceLabel.transform.rotation = Quaternion.identity;
+        sliceIcon.transform.rotation = Quaternion.identity;
         if (lastFrameIsOver != isOver && isInteractable && parent.interactable && onHoverEvents)
         {
             if (isOver && onHoverEnter.GetPersistentEventCount() >= 0)

@@ -29,9 +29,11 @@ public class PiUIManager : MonoBehaviour
         PiUI currentPi = GetPiUIOf(menuName);
         if (currentPi.openedMenu)
         {
+            print("open");
             currentPi.CloseMenu( );
         }else
         {
+            print("close");
             currentPi.OpenMenu(pos);
         }
     }
