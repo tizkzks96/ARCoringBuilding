@@ -113,30 +113,30 @@ namespace GoogleARCore.Examples.HelloAR
 
             Debug.Log("OnStartManipulation : " + gesture.TargetObject.transform.position);
             PlaceObject(gesture);
-            // Raycast against the location the player touched to search for planes.
-            TrackableHit hit;
-            TrackableHitFlags raycastFilter = TrackableHitFlags.Default;
+            //// Raycast against the location the player touched to search for planes.
+            //TrackableHit hit;
+            //TrackableHitFlags raycastFilter = TrackableHitFlags.Default;
             
-            if (Frame.Raycast(
-                gesture.StartPosition.x, gesture.StartPosition.y, raycastFilter, out hit))
-            {
-                print("VVVVV : " + gesture.TargetObject);
+            //if (Frame.Raycast(
+            //    gesture.StartPosition.x, gesture.StartPosition.y, raycastFilter, out hit))
+            //{
+            //    print("VVVVV : " + gesture.TargetObject);
 
-                // Use hit pose and camera pose to check if hittest is from the
-                // back of the plane, if it is, no need to create the anchor.
-                if ((hit.Trackable is DetectedPlane) &&
-                    Vector3.Dot(FirstPersonCamera.transform.position - hit.Pose.position,
-                        hit.Pose.rotation * Vector3.up) < 0)
-                {
-                    Debug.Log("Hit at back of the current DetectedPlane");
-                }
-                else
-                {
-                    print("AAAAA : " + gesture.TargetObject);
+            //    // Use hit pose and camera pose to check if hittest is from the
+            //    // back of the plane, if it is, no need to create the anchor.
+            //    if ((hit.Trackable is DetectedPlane) &&
+            //        Vector3.Dot(FirstPersonCamera.transform.position - hit.Pose.position,
+            //            hit.Pose.rotation * Vector3.up) < 0)
+            //    {
+            //        Debug.Log("Hit at back of the current DetectedPlane");
+            //    }
+            //    else
+            //    {
+            //        print("AAAAA : " + gesture.TargetObject);
 
                     
-                }
-            }
+            //    }
+            //}
             return false;
         }
 

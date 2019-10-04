@@ -33,7 +33,7 @@ namespace PIUI
             piUi.ChangeMenuState("Normal Menu", new Vector2(Screen.width / 2f, Screen.height / 2f));
         }
         //Update the menu and add the Testfunction to the button action if s or Fire1 axis is pressed
-        if (Input.GetKeyDown(KeyCode.S) || Input.GetButtonDown("Fire1"))
+        if (Input.GetKeyDown(KeyCode.S) || Input.GetButtonUp("Fire1"))
         {
             //Ensure menu isnt currently open on update just for a cleaner look
             if (!piUi.PiOpened("Normal Menu"))
