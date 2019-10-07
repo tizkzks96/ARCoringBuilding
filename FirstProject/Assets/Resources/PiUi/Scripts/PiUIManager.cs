@@ -10,12 +10,15 @@ public class PiUIManager : MonoBehaviour
     private Dictionary<string, PiUI> dict = new Dictionary<string, PiUI>( );
 
     public PiUI CurrentMenu { get; set; }
+    public string CurrentMenuName { get; set; }
 
     private void Awake()
     {
         //Check if instance already exists
         if (instance == null)
         {
+            CurrentMenu = null;
+
             //if not, set instance to this
             instance = this;
 
@@ -46,12 +49,31 @@ public class PiUIManager : MonoBehaviour
         }else
         {
             print("open");
-            if(CurrentMenu.openedMenu && CurrentMenu != null)
-                CurrentMenu.CloseMenu();
             currentPi.OpenMenu(pos);
         }
     }
-   
+
+    public void OpenMenu(string menuName, Vector2 pos = default(Vector2))
+    {
+        PiUI currentPi = GetPiUIOf(menuName);
+        if (CurrentMenu != null)
+        {
+            CloseMenu();
+        }
+        CurrentMenu = currentPi;
+        CurrentMenuName = menuName;
+        currentPi.OpenMenu(pos);
+    }
+
+    public void CloseMenu(Vector2 pos = default(Vector2))
+    {
+        if (CurrentMenu == null)
+            return;
+        PiUI currentPi = GetPiUIOf(CurrentMenuName);
+
+        currentPi.CloseMenu();
+    }
+
     /// <summary>
     /// Gets if the passed in piUi is currently opened
     /// </summary>

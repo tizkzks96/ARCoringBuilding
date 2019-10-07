@@ -633,6 +633,7 @@ PlayerSettings:
   webGLLinkerTarget: 1
   webGLThreadsSupport: 0
   scriptingDefineSymbols:
+    1: BAYATGAMES;BAYATGAMES_SAVEGAMEPRO
     7: BAYATGAMES;BAYATGAMES_SAVEGAMEPRO
   platformArchitecture: {}
   scriptingBackend: {}

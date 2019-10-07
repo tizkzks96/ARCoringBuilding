@@ -29,10 +29,10 @@ namespace PIUI
             piUi.ChangeMenuState("Normal Menu", new Vector2(Screen.width / 2f, Screen.height / 2f));
         }
         //Update the menu and add the Testfunction to the button action if s or Fire1 axis is pressed
-        if (Input.GetKeyDown(KeyCode.S) || Input.GetButtonUp("Fire1"))
+        if (Input.GetMouseButtonDown(0))
         {
-            //Ensure menu isnt currently open on update just for a cleaner look
-            if (!piUi.PiOpened("Normal Menu"))
+                //Ensure menu isnt currently open on update just for a cleaner look
+            if (PiUIManager.instance.CurrentMenu == null)
             {
                 int i = 0;
                 //Iterate through the piData on normal menu
@@ -49,7 +49,7 @@ namespace PIUI
                 piUi.UpdatePiMenu("Normal Menu");
 
                 //Open or close the menu depending on it's current state at the center of the screne
-                piUi.ChangeMenuState("Normal Menu", new Vector2(Screen.width / 2f, Screen.height / 2f));
+                piUi.OpenMenu("Normal Menu", new Vector2(Screen.width / 2f, Screen.height / 2f));
              }
             
         }
@@ -101,7 +101,8 @@ namespace PIUI
                 }
                 piUi.RegeneratePiMenu("Normal Menu");
             }
-            piUi.ChangeMenuState("Normal Menu", new Vector2(Screen.width / 2f, Screen.height / 2f));
+                //piUi.OpenMenu("Normal Menu", new Vector2(Screen.width / 2f, Screen.height / 2f));
+           // piUi.ChangeMenuState("", new Vector2(Screen.width / 2f, Screen.height / 2f));
         }
 
         //Set joystick input on the normal menu which the piPieces check
@@ -117,25 +118,27 @@ namespace PIUI
     //Test function that writes to the console and also closes the menu
     public void TestFunction()
     {
-            normalMenu = piUi.GetPiUIOf("Normal Menu1");
-            print(piUi.GetPiUIOf("Normal Menu1"));
-            int i = 0;
-            //Iterate through the piData on normal menu
-            foreach (PiUI.PiData data in normalMenu.piData)
-            {
-                //Changes slice label
-                data.sliceLabel = "Test" + i.ToString();
-                //Creates a new unity event and adds the testfunction to it
-                data.onSlicePressed = new UnityEngine.Events.UnityEvent();
-                data.onSlicePressed.AddListener(TestFunction);
-                i++;
-            }
-            //Since PiUI.sliceCount or PiUI.equalSlices didnt change just calling update
-            piUi.UpdatePiMenu("Normal Menu1");
+        PiUIManager.instance.CloseMenu();
+            PiUIManager.instance.OpenMenu("Normal Menu1", new Vector2(Screen.width / 2f, Screen.height / 2f));
+        //    normalMenu = piUi.GetPiUIOf("Normal Menu1");
+        //    print(piUi.GetPiUIOf("Normal Menu1"));
+        //    int i = 0;
+        //    //Iterate through the piData on normal menu
+        //    foreach (PiUI.PiData data in normalMenu.piData)
+        //    {
+        //        //Changes slice label
+        //        data.sliceLabel = "Test" + i.ToString();
+        //        //Creates a new unity event and adds the testfunction to it
+        //        data.onSlicePressed = new UnityEngine.Events.UnityEvent();
+        //        data.onSlicePressed.AddListener(TestFunction);
+        //        i++;
+        //    }
+        //    //Since PiUI.sliceCount or PiUI.equalSlices didnt change just calling update
+        //    piUi.UpdatePiMenu("Normal Menu1");
 
-            //Closes the menu
-            piUi.ChangeMenuState("Normal Menu1");
-        Debug.Log("You Clicked me!");
+        //    //Closes the menu
+        //    piUi.ChangeMenuState("Normal Menu1");
+        //Debug.Log("You Clicked me!");
     }
 
     public void OnHoverEnter()

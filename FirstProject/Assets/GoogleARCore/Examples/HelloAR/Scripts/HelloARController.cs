@@ -113,6 +113,9 @@ namespace GoogleARCore.Examples.HelloAR
             if (gesture.TargetObject == null)
             {
                 Debug.Log("CanStartManipulationForGesture");
+                print("close menu");
+
+                piUi.CloseMenu();
 
                 return false;
             }
@@ -120,6 +123,10 @@ namespace GoogleARCore.Examples.HelloAR
             {
                 print("gesture.TargetObject.transform.tag : " + gesture.TargetObject.transform.tag);
                 gesture.TargetObject.GetComponent<Manipulator>().Select();
+            }
+            else
+            {
+                
             }
 
             PiUiController(gesture);
@@ -362,16 +369,22 @@ namespace GoogleARCore.Examples.HelloAR
                     }
                     //Since PiUI.sliceCount or PiUI.equalSlices didnt change just calling update
                     piUi.UpdatePiMenu("Normal Menu");
+
+                    //Open or close the menu depending on it's current state at the center of the screne
+                    piUi.OpenMenu("Normal Menu", gesture.TargetObject.transform.position);
                 }
-                //Open or close the menu depending on it's current state at the center of the screne
-                piUi.ChangeMenuState("Normal Menu", gesture.TargetObject.transform.position);
+                
+            }
+            else
+            {
+                
             }
         }
 
         public void TestFunction()
         {
             //Closes the menu
-            piUi.ChangeMenuState("Normal Menu");
+            piUi.OpenMenu("Normal Menu1");
             Debug.Log("You Clicked me!");
         }
 
