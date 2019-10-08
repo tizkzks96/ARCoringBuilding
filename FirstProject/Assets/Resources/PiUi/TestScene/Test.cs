@@ -41,7 +41,7 @@ namespace PIUI
                     //Changes slice label
                     data.sliceLabel = "Test" + i.ToString( );
                     //Creates a new unity event and adds the testfunction to it
-                    data.onSlicePressed = new UnityEngine.Events.UnityEvent( );
+                    data.onSlicePressed = new UnityEngine.Events.UnityEvent();
                     data.onSlicePressed.AddListener(TestFunction);
                     i++;
                 }

@@ -68,8 +68,8 @@ public class PiPiece : MonoBehaviour
     public void ManualUpdate()
     {
         Vector2 inputAxis = parent.joystickInput;
-        sliceIcon.transform.position = Center( );
-        sliceLabel.transform.position = Center( ) - new Vector2(0, sliceIcon.rectTransform.sizeDelta.y + parent.textVerticalOffset) * parent.scaleModifier * transform.lossyScale.magnitude;
+        //sliceIcon.transform.position = Center( );
+        //sliceLabel.transform.position = Center( ) - new Vector2(0, sliceIcon.rectTransform.sizeDelta.y + parent.textVerticalOffset) * parent.scaleModifier * transform.lossyScale.magnitude;
         if (isInteractable)
         {
             //hover
@@ -83,39 +83,44 @@ public class PiPiece : MonoBehaviour
             //    //주석
             //    transform.localScale = Vector2.Lerp(transform.localScale, Vector2.one, Time.deltaTime * 10f);
             //}
+
             Vector2 mousePos = Input.mousePosition;
-            Vector2 temp = mousePos - (Vector2)transform.position;
+            Vector2 temp = mousePos - (Vector2)parent.transform.parent.transform.localPosition;
             float angle = (Mathf.Atan2(temp.y, temp.x) * Mathf.Rad2Deg);
             angle = (angle + 360) % 360;
+
+            
+
             scaledOR = outerRadius;
             if (angle < maxAngle && angle > minAngle && temp.magnitude >= innerRadius && temp.magnitude <= scaledOR)
             {
                 isOver = true;
             }
-            else if (parent.useController && isInteractable)
-            {
-                temp = inputAxis;
-                angle = (Mathf.Atan2(temp.y, temp.x) * Mathf.Rad2Deg);
-                angle = (angle + 360) % 360;
-                if (angle == 0)
-                {
-                    angle += 1;
-                }
-                if (angle < maxAngle && angle >= minAngle && inputAxis != Vector2.zero)
-                {
-                    isOver = true;
-                }
-                else
-                {
-                    isOver = false;
-                    thisImg.color= Color.Lerp(thisImg.color, normalColor, Time.deltaTime * 10f);
-                }
+            //}
+            //else if (parent.useController && isInteractable)
+            //{
+            //    temp = inputAxis;
+            //    angle = (Mathf.Atan2(temp.y, temp.x) * Mathf.Rad2Deg);
+            //    angle = (angle + 360) % 360;
+            //    if (angle == 0)
+            //    {
+            //        angle += 1;
+            //    }
+            //    if (angle < maxAngle && angle >= minAngle && inputAxis != Vector2.zero)
+            //    {
+            //        isOver = true;
+            //    }
+            //    else
+            //    {
+            //        isOver = false;
+            //        thisImg.color= Color.Lerp(thisImg.color, normalColor, Time.deltaTime * 10f);
+            //    }
 
-            }
+            //}
             else
             {
                 isOver = false;
-                thisImg.color= Color.Lerp(thisImg.color, normalColor, Time.deltaTime * 10f);
+                thisImg.color = Color.Lerp(thisImg.color, normalColor, Time.deltaTime * 10f);
             }
             if (!parent.interactable)
             {
@@ -129,10 +134,16 @@ public class PiPiece : MonoBehaviour
             {
                 scaledOR *= parent.hoverScale;
                 transform.SetAsLastSibling( );
-                thisImg.color= Color.Lerp(thisImg.color, highlightColor, Time.deltaTime * 10f);
-                if (Input.GetMouseButtonDown(0) || Input.GetMouseButtonUp(0) || parent.useController && parent.joystickButton)
+                thisImg.color = Color.Lerp(thisImg.color, highlightColor, Time.deltaTime * 10f);
+
+                // || parent.useController && parent.joystickButton
+                if (Input.GetMouseButtonDown(0) || parent.useController && parent.joystickButton)
                 {
-                    clickEvent.Invoke( );
+                }
+                if (Input.GetMouseButtonUp(0))
+                {
+                    clickEvent.Invoke();
+                    print("temp : " + temp);
                 }
             }
         }

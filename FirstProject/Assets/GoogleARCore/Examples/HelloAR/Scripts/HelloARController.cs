@@ -108,7 +108,11 @@ namespace GoogleARCore.Examples.HelloAR
 
         protected override bool CanStartManipulationForGesture(TapGesture gesture)
         {
-
+            print(gesture.TargetObject.transform);
+            if (PiUIManager.instance.CurrentMenu != null)
+            {
+                return false;
+            }
 
             if (gesture.TargetObject == null)
             {
@@ -356,17 +360,8 @@ namespace GoogleARCore.Examples.HelloAR
 
                     TabGesturePositionCorrection(gesture, piUi.transform, 0.01f);
 
-                    int i = 0;
-                    //Iterate through the piData on normal menu
-                    foreach (PiUI.PiData data in normalMenu.piData)
-                    {
-                        //Changes slice label
-                        data.sliceLabel = "Test" + i.ToString();
-                        //Creates a new unity event and adds the testfunction to it
-                        data.onSlicePressed = new UnityEngine.Events.UnityEvent();
-                        data.onSlicePressed.AddListener(TestFunction);
-                        i++;
-                    }
+                    MakeMenuList();
+
                     //Since PiUI.sliceCount or PiUI.equalSlices didnt change just calling update
                     piUi.UpdatePiMenu("Normal Menu");
 
@@ -381,11 +376,30 @@ namespace GoogleARCore.Examples.HelloAR
             }
         }
 
+        public void Asdf()
+        {
+            print("Asdf");
+        }
+
+        public void MakeMenuList()
+        {
+            int i = 0;
+            //Iterate through the piData on normal menu
+            foreach (PiUI.PiData data in normalMenu.piData)
+            {
+                //Changes slice label
+                data.sliceLabel = "Test" + i.ToString();
+                //Creates a new unity event and adds the testfunction to it
+                data.onSlicePressed = new UnityEngine.Events.UnityEvent();
+                data.onSlicePressed.AddListener(() => Asdf());
+                i++;
+            }
+        }
+
         public void TestFunction()
         {
-            //Closes the menu
-            piUi.OpenMenu("Normal Menu1");
-            Debug.Log("You Clicked me!");
+            PiUIManager.instance.CloseMenu();
+            PiUIManager.instance.OpenMenu("Normal Menu1");
         }
 
 

@@ -26,10 +26,10 @@ public class Coloring : Singleton<Coloring>
         int w = Screen.width; 
         int h = Screen.height; //스크린 가로, 세로 영역
 
-        int sx = (int)(w * 0.1);
-        int sy = (int)(h * 0.2);
-        w = (int)(w * 0.8);
-        h = (int)(h * 0.6);
+        int sx = (int)(w * 0);
+        int sy = (int)(h * 0);
+        w = (int)(w * 1);
+        h = (int)(h * 1);
 
         capRect = new UnityEngine.Rect(sx, sy, w, h); //CapRect 크기의 텍스처 이미지 생성
         capTexture = new Texture2D(w, h, TextureFormat.RGB24, false);
