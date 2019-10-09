@@ -178,7 +178,8 @@ public class Coloring : Singleton<Coloring>
     public void CreatePrefab()
     {
         BuildingInfo createObject = BuildingDatabase.Instance.GetByName("Building_ApartmentLarge_Brown");
-        BuildingUI.instance.InstantiateBuildingSlot(createObject.ID, colTexture, canvas.transform.Find("BottomUI/BuildingPanel"));
+
+        ObjectPlaceUIManager.instance.InstantiateBuildingSlot(createObject.ID, colTexture, false);
 
         SceanContorller.instance.ChangeScean(SceanState.MAIN);
     }

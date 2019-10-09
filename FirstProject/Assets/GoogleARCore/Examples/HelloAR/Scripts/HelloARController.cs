@@ -170,7 +170,7 @@ namespace GoogleARCore.Examples.HelloAR
 
         }
 
-        public bool PlaceObject(TapGesture gesture)
+        public bool PlaceObject(GameObject target, GameObject HorizontalPlanePrefab)
         {
             if (HorizontalPlanePrefab == null)
             {
@@ -210,15 +210,15 @@ namespace GoogleARCore.Examples.HelloAR
 
                 placeObject.transform.SetParent(manipulator.transform);
 
-                manipulator.transform.SetParent(gesture.TargetObject.transform);
+                manipulator.transform.SetParent(target.transform);
 
                 manipulator.transform.transform.localPosition = new Vector3(0, 0, 0);
 
                 placeObject.transform.localPosition = new Vector3(0, 0, 0);
 
-                placeObject.transform.rotation = gesture.TargetObject.transform.rotation;
+                placeObject.transform.rotation = target.transform.rotation;
 
-                manipulator.transform.SetParent(gesture.TargetObject.transform.parent.transform);
+                manipulator.transform.SetParent(target.transform.parent.transform);
 
                 // Make manipulator a child of the anchor.
                 //gesture.TargetObject.transform.parent = manipulator.transform;
@@ -228,7 +228,7 @@ namespace GoogleARCore.Examples.HelloAR
                 manipulator.GetComponent<Manipulator>().Select();
 
                 //StartCoroutine(CustomAnimationCurve.Instance.TempAnimation(placeObject));
-                TapGesturePositionCorrection(gesture, manipulator.transform, 5);
+                //TapGesturePositionCorrection(target, manipulator.transform, 5);
 
                 HorizontalPlanePrefab = null;
             }

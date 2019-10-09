@@ -95,6 +95,11 @@ public class ObjectPlaceUIManager : MonoBehaviour
 
             m_currentMenu = mainUI;
 
+
+            InstantiateBuildingSlot(0);
+            //InstantiateBuildingSlot(1);
+            //InstantiateBuildingSlot(2);
+
             mainUI.SetActive(false);
             evironmentUI.SetActive(false);
             buildingUI.SetActive(false);
@@ -122,7 +127,7 @@ public class ObjectPlaceUIManager : MonoBehaviour
         placePlane.transform.localRotation = gesture.TargetObject.transform.localRotation;
 
         SetButtonPosition(0.5f);
-
+        ChangeState(UIState.HOME);
         //MakeSlotPosition(20, 5);
     }
 
@@ -134,7 +139,7 @@ public class ObjectPlaceUIManager : MonoBehaviour
         }
 
         int amount = CurrentMenu.transform.childCount;
-        print(CurrentMenu.transform.childCount);
+        print("CurrnetMenu : " + CurrentMenu.transform + " : " + CurrentMenu.transform.childCount);
         for (int i = 0; i < amount; i++)
         {
             GameObject currnetOjbect = CurrentMenu.transform.GetChild(i).gameObject;
@@ -156,49 +161,66 @@ public class ObjectPlaceUIManager : MonoBehaviour
         }
     }
 
-    public void InstantiateBuildingSlot(int index, Texture2D texture = null, Transform parant = null)
+    public void InstantiateBuildingSlot(int index, Texture2D texture = null, bool _default = true)
     {
         GameObject slot;
 
+        print("A");
         //slot 생성
-        if (parant == null)
+        if (_default)
         {
             slot = Instantiate(buildingSlot, evironmentUI.transform);
+            print("B");
         }
         else
         {
-            slot = Instantiate(buildingSlot, parant);
+            print("C");
+            slot = Instantiate(buildingSlot, buildingUI.transform);
         }
 
         BuildingInfo slotInfo = BuildingDatabase.Instance.GetByID(index);
-
+        print("D");
         if (texture != null)
         {
+            print("E0");
             slotInfo.BuildingPrefab.GetComponent<Renderer>().sharedMaterial.mainTexture = texture;
+            print("E");
         }
+        print("F");
 
         slotInfo.BuildingPrefab.transform.localScale = new Vector3(0.006f, 0.006f, 0.006f);
 
         slot.GetComponent<SlotInfo>().Slotinfo = slotInfo;
 
+        slot.GetComponent<Button>().onClick.AddListener(() => {
+            HelloARController.instance.PlaceObject(placePlane, slotInfo.BuildingPrefab);
+            ChangeState(UIState.NONE);
+            });
+
+        SetButtonPosition(0.5f);
         //slot.transform.GetChild(0).GetComponent<Text>().text = "made : " + slotInfo.Name;
     }
+
+
     public void ChangeState(UIState uiState)
     {
         switch (uiState)
         {
             case UIState.NONE:
-                StartCoroutine(Scale(false, 10, mainUI));
+
+                StartCoroutine(Scale(false, 10, m_currentMenu));
 
                 spotSquare.SetActive(false);
 
-                //mainUI.SetActive(false);
-
-                evironmentUI.SetActive(false);
-
-                buildingUI.SetActive(false);
+                m_currentMenu = mainUI;
                 break;
             case UIState.HOME:
+                m_currentMenu = mainUI;
+
+                SetButtonPosition(0.5f);
+
+                StartCoroutine(Scale(true, 10, m_currentMenu));
+
                 spotSquare.SetActive(true);
 
                 mainUI.SetActive(true);
@@ -208,6 +230,12 @@ public class ObjectPlaceUIManager : MonoBehaviour
                 buildingUI.SetActive(false);
                 break;
             case UIState.ENVIRONMENT:
+                m_currentMenu = evironmentUI;
+
+                SetButtonPosition(0.5f);
+
+                StartCoroutine(Scale(true, 10, m_currentMenu));
+
                 spotSquare.SetActive(true);
 
                 mainUI.SetActive(false);
@@ -217,6 +245,12 @@ public class ObjectPlaceUIManager : MonoBehaviour
                 buildingUI.SetActive(false);
                 break;
             case UIState.BUILDING:
+                m_currentMenu = buildingUI;
+
+                SetButtonPosition(0.5f);
+
+                StartCoroutine(Scale(true, 10, m_currentMenu));
+
                 spotSquare.SetActive(true);
 
                 mainUI.SetActive(false);
@@ -233,6 +267,10 @@ public class ObjectPlaceUIManager : MonoBehaviour
     private IEnumerator Scale(bool state, float transitionSpeed, GameObject target)
     {
         RectTransform targetRect = target.GetComponent<RectTransform>();
+        if(state == true)
+        {
+            targetRect.localScale = Vector3.zero;
+        }
         while (true)
         {
             //true is open
@@ -240,9 +278,10 @@ public class ObjectPlaceUIManager : MonoBehaviour
             {
 
                 targetRect.localScale = Vector3.Lerp(targetRect.transform.localScale, Vector3.one, Time.deltaTime * transitionSpeed);
-
-                if (Mathf.Abs((Vector2.one).sqrMagnitude - targetRect.transform.localScale.sqrMagnitude) < .05f)
+                print("BB");
+                if (Mathf.Abs((Vector2.one).sqrMagnitude - targetRect.transform.localScale.sqrMagnitude) < .5f)
                 {
+                    targetRect.localScale = Vector3.one;
                     break;
                 }
             }
@@ -255,45 +294,16 @@ public class ObjectPlaceUIManager : MonoBehaviour
                 {
                     targetRect.transform.localScale = Vector3.zero;
                     target.SetActive(false);
-                    targetRect.transform.localScale = Vector3.one;
                     break;
                 }
             }
             yield return null;
         }
 
+        if(state == false)
+        {
+            targetRect.transform.localScale = Vector3.one;
+        }
         yield return null;
-    }
-
-    public void InstantiateBuildingSlot(int index, Texture2D texture = null, Transform parant = null)
-    {
-        GameObject slot;
-
-        if (canvas == null)
-            return;
-
-        //slot 생성
-        if (parant == null)
-        {
-            slot = Instantiate(buildingSlot, EnvironmentPanel.transform);
-        }
-        else
-        {
-            slot = Instantiate(buildingSlot, parant);
-        }
-
-        BuildingInfo slotInfo = BuildingDatabase.Instance.GetByID(index);
-
-        if (texture != null)
-        {
-            slotInfo.BuildingPrefab.GetComponent<Renderer>().sharedMaterial.mainTexture = texture;
-
-        }
-
-        slotInfo.BuildingPrefab.transform.localScale = new Vector3(0.006f, 0.006f, 0.006f);
-
-        slot.GetComponent<SlotInfo>().Slotinfo = slotInfo;
-
-        slot.transform.GetChild(0).GetComponent<Text>().text = "made : " + slotInfo.Name;
     }
 }

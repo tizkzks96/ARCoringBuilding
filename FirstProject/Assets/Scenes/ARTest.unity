@@ -814,7 +814,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 545211418}
-  - {fileID: 993178968}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1244,36 +1243,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1394164186}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &993178966
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 993178968}
-  m_Layer: 0
-  m_Name: GameObject
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &993178968
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 993178966}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 627916102}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &997520529
 GameObject:
   m_ObjectHideFlags: 0
@@ -3009,7 +2978,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26074b15f9c13404d858bfedb8b8c00c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  piUi: {fileID: 0}
+  menuOpened: 0
   FirstPersonCamera: {fileID: 896679035}
   placeObjectManipulatorPrefab: {fileID: 1122865395318488, guid: 5c87dc79fb04d3e47b5adba5dd871a01,
     type: 3}
@@ -3041,7 +3010,8 @@ MonoBehaviour:
   PlacePlane: {fileID: 298982719780143730, guid: 8b3b60136703bc0479a8a46893445c10,
     type: 3}
   placePlane: {fileID: 0}
-  buildingSlot: {fileID: 0}
+  buildingSlot: {fileID: 2432161457191809249, guid: 9ed2a8687bbde1c40bacdfafa55ea45f,
+    type: 3}
   mainUI: {fileID: 0}
   evironmentUI: {fileID: 0}
   buildingUI: {fileID: 0}
