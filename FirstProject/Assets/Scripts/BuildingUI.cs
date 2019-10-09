@@ -7,11 +7,7 @@ using GoogleARCore;
 using GoogleARCoreInternal;
 using System.IO;
 
-public enum UIState{
-    HOME,
-    ENVIRONMENT,
-    BUILDING
-}
+
 
 /// <summary>
 /// 

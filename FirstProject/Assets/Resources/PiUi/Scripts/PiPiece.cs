@@ -67,7 +67,6 @@ public class PiPiece : MonoBehaviour
 
     public void ManualUpdate()
     {
-        Vector2 inputAxis = parent.joystickInput;
         //sliceIcon.transform.position = Center( );
         //sliceLabel.transform.position = Center( ) - new Vector2(0, sliceIcon.rectTransform.sizeDelta.y + parent.textVerticalOffset) * parent.scaleModifier * transform.lossyScale.magnitude;
         if (isInteractable)

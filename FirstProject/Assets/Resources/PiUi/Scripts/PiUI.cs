@@ -177,6 +177,7 @@ public class PiUI : MonoBehaviour
         for (int i = 0; i < sliceCount; i++)
         {
             PiPiece currentPi = Instantiate(piCut);
+            
             Image currentImage = currentPi.GetComponent<Image>( );
             if (outline)
             {

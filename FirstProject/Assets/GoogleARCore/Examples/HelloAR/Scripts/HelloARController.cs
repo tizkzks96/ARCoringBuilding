@@ -41,9 +41,7 @@ namespace GoogleARCore.Examples.HelloAR
 
 
         [SerializeField]
-        PiUIManager piUi;
         private bool menuOpened;
-        private PiUI normalMenu;
 
 
 
@@ -95,7 +93,6 @@ namespace GoogleARCore.Examples.HelloAR
 
         private void Start()
         {
-            normalMenu = piUi.GetPiUIOf("Normal Menu");
         }
 
         /// <summary>
@@ -109,17 +106,12 @@ namespace GoogleARCore.Examples.HelloAR
         protected override bool CanStartManipulationForGesture(TapGesture gesture)
         {
             print(gesture.TargetObject.transform);
-            if (PiUIManager.instance.CurrentMenu != null)
-            {
-                return false;
-            }
 
             if (gesture.TargetObject == null)
             {
                 Debug.Log("CanStartManipulationForGesture");
                 print("close menu");
 
-                piUi.CloseMenu();
 
                 return false;
             }
@@ -133,7 +125,9 @@ namespace GoogleARCore.Examples.HelloAR
                 
             }
 
-            PiUiController(gesture);
+
+            ObjedtPlaceObjectController(gesture);
+            //PiUiController(gesture);
 
             //PlaceObject(gesture);
             //// Raycast against the location the player touched to search for planes.
@@ -161,6 +155,19 @@ namespace GoogleARCore.Examples.HelloAR
             //    }
             //}
             return false;
+        }
+
+        public void ObjedtPlaceObjectController(TapGesture gesture)
+        {
+            if (ObjectPlaceUIManager.instance.CurrentMenu.activeSelf == true)
+            {
+                print("ObjedtPlaceObjectController true");
+                return;
+            }
+            print("ObjedtPlaceObjectController run");
+
+            ObjectPlaceUIManager.instance.StartPlace(gesture);
+
         }
 
         public bool PlaceObject(TapGesture gesture)
@@ -221,7 +228,7 @@ namespace GoogleARCore.Examples.HelloAR
                 manipulator.GetComponent<Manipulator>().Select();
 
                 //StartCoroutine(CustomAnimationCurve.Instance.TempAnimation(placeObject));
-                TabGesturePositionCorrection(gesture, manipulator.transform, 5);
+                TapGesturePositionCorrection(gesture, manipulator.transform, 5);
 
                 HorizontalPlanePrefab = null;
             }
@@ -341,69 +348,8 @@ namespace GoogleARCore.Examples.HelloAR
 
             return result;
         }
-
         
-
-        public void PiUiController(TapGesture gesture)
-        {
-            //Update the menu and add the Testfunction to the button action if s or Fire1 axis is pressed
-            if (gesture.TargetObject.transform.tag == "Ground")
-            {
-                //Ensure menu isnt currently open on update just for a cleaner look
-                if (!piUi.PiOpened("Normal Menu"))
-                {
-                    piUi.transform.SetParent(gesture.TargetObject.transform);
-
-                    piUi.transform.localScale = new Vector3(1.5f, 1.5f, 0);
-
-                    piUi.transform.localRotation = Quaternion.Euler(90, gesture.TargetObject.transform.rotation.y, gesture.TargetObject.transform.rotation.z);
-
-                    TabGesturePositionCorrection(gesture, piUi.transform, 0.01f);
-
-                    MakeMenuList();
-
-                    //Since PiUI.sliceCount or PiUI.equalSlices didnt change just calling update
-                    piUi.UpdatePiMenu("Normal Menu");
-
-                    //Open or close the menu depending on it's current state at the center of the screne
-                    piUi.OpenMenu("Normal Menu", gesture.TargetObject.transform.position);
-                }
-                
-            }
-            else
-            {
-                
-            }
-        }
-
-        public void Asdf()
-        {
-            print("Asdf");
-        }
-
-        public void MakeMenuList()
-        {
-            int i = 0;
-            //Iterate through the piData on normal menu
-            foreach (PiUI.PiData data in normalMenu.piData)
-            {
-                //Changes slice label
-                data.sliceLabel = "Test" + i.ToString();
-                //Creates a new unity event and adds the testfunction to it
-                data.onSlicePressed = new UnityEngine.Events.UnityEvent();
-                data.onSlicePressed.AddListener(() => Asdf());
-                i++;
-            }
-        }
-
-        public void TestFunction()
-        {
-            PiUIManager.instance.CloseMenu();
-            PiUIManager.instance.OpenMenu("Normal Menu1");
-        }
-
-
-        public void TabGesturePositionCorrection(TapGesture gesture, Transform obejct, float height)
+        public void TapGesturePositionCorrection(TapGesture gesture, Transform obejct, float height)
         {
             if (gesture.TargetObject.transform.name == "bottom_face")
             {
