@@ -300,10 +300,18 @@ namespace GoogleARCore.Examples.Common
             // create a curve to move the GameObject and assign to the clip
             Keyframe[] keys;
             keys = new Keyframe[2];
-            keys[0] = new Keyframe(0.0f, cubeWorld.transform.position.y - size * 0.1f);
-            keys[1] = new Keyframe(5.0f, cubeWorld.transform.position.y);
+            keys[0] = new Keyframe(0.0f, 0);
+            keys[1] = new Keyframe(.5f, cubeWorld.transform.localScale.x);
             curve = new AnimationCurve(keys);
-            clip.SetCurve("", typeof(Transform), "localPosition.y", curve);
+            clip.SetCurve("", typeof(Transform), "localScale.x", curve);
+
+            keys[0] = new Keyframe(0.0f, 0);
+            keys[1] = new Keyframe(.5f, cubeWorld.transform.localScale.y);
+            clip.SetCurve("", typeof(Transform), "localScale.y", curve);
+
+            keys[0] = new Keyframe(0.0f, 0);
+            keys[1] = new Keyframe(.5f, cubeWorld.transform.localScale.z);
+            clip.SetCurve("", typeof(Transform), "localScale.z", curve);
 
             // update the clip to a change the red color
             //curve = AnimationCurve.Linear(0.0f, 1.0f, 2.0f, 0.0f);
