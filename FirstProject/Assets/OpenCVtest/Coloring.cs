@@ -5,6 +5,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// grabpass
+/// </summary>
 public class Coloring : Singleton<Coloring>
 {
 

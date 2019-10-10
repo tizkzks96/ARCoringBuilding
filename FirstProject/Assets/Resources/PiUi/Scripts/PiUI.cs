@@ -181,11 +181,11 @@ public class PiUI : MonoBehaviour
             Image currentImage = currentPi.GetComponent<Image>( );
             if (outline)
             {
-                currentPi.GetComponent<Outline>( ).effectColor = outlineColor;
+                //currentPi.GetComponent<Outline>( ).effectColor = outlineColor;
             }
             else
             {
-                currentPi.GetComponent<Outline>( ).enabled = outline;
+                //currentPi.GetComponent<Outline>( ).enabled = outline;
 
             }
             float fillPercentage = (1f / sliceCount);

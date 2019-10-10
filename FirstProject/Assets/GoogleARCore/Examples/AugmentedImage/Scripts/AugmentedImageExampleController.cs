@@ -54,6 +54,8 @@ namespace GoogleARCore.Examples.AugmentedImage
         /// </summary>
         public GameObject FitToScanOverlay;
 
+        public GameObject clipingmask;
+
         private Dictionary<int, bool> m_Visualizers
             = new Dictionary<int, bool>();
 
@@ -117,11 +119,14 @@ namespace GoogleARCore.Examples.AugmentedImage
             // Get updated augmented images for this frame.
             Session.GetTrackables<AugmentedImage>(
                 m_TempAugmentedImages, TrackableQueryFilter.Updated);
+            Debug.Log("testest : 123123");
 
             // Create visualizers and anchors for updated augmented images that are tracking and do
             // not previously have a visualizer. Remove visualizers for stopped images.
             foreach (var image in m_TempAugmentedImages)
             {
+                Debug.Log("testest :aaaaa ");
+
                 bool visualizer = false;
 
                 m_Visualizers.TryGetValue(image.DatabaseIndex, out visualizer);
@@ -129,13 +134,16 @@ namespace GoogleARCore.Examples.AugmentedImage
                 {
                     FitToScanOverlay.SetActive(false);
 
+                    Instantiate(clipingmask);
+
                     Coloring.Instance.StartCV();
 
                     // Create an anchor to ensure that ARCore keeps tracking this augmented image.
                     m_Visualizers.Add(image.DatabaseIndex, true);
 
+                    Debug.Log("testest : ");
 
-
+                    //image.ExtentX, z
 
                 }
                 else if (image.TrackingState == TrackingState.Stopped)

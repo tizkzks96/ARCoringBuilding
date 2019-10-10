@@ -172,11 +172,13 @@ namespace GoogleARCore.Examples.HelloAR
 
         public bool PlaceObject(GameObject target, GameObject HorizontalPlanePrefab)
         {
+
+            Debug.Log("unity test  gesture.TargetObject.transform.position : ");
+
             if (HorizontalPlanePrefab == null)
             {
                 return false;
             }
-            //Debug.Log("unity test  gesture.TargetObject.transform.position : " + gesture.TargetObject.transform.position);
             //Debug.Log("unity test  gesture.TargetObject.transform : " + gesture.TargetObject.transform);
 
 

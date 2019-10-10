@@ -65,6 +65,7 @@ public class ObjectPlaceUIManager : MonoBehaviour
     {
         if (placePlane == null)
         {
+            //data class
             placePlane = Instantiate(PlacePlane);
 
             canvas = placePlane.transform.Find("Canvas").gameObject;
@@ -99,7 +100,9 @@ public class ObjectPlaceUIManager : MonoBehaviour
             InstantiateBuildingSlot(0);
             //InstantiateBuildingSlot(1);
             //InstantiateBuildingSlot(2);
-
+            
+                
+            //캡슐화   
             mainUI.SetActive(false);
             evironmentUI.SetActive(false);
             buildingUI.SetActive(false);
@@ -165,28 +168,21 @@ public class ObjectPlaceUIManager : MonoBehaviour
     {
         GameObject slot;
 
-        print("A");
         //slot 생성
         if (_default)
         {
             slot = Instantiate(buildingSlot, evironmentUI.transform);
-            print("B");
         }
         else
         {
-            print("C");
             slot = Instantiate(buildingSlot, buildingUI.transform);
         }
 
         BuildingInfo slotInfo = BuildingDatabase.Instance.GetByID(index);
-        print("D");
         if (texture != null)
         {
-            print("E0");
             slotInfo.BuildingPrefab.GetComponent<Renderer>().sharedMaterial.mainTexture = texture;
-            print("E");
         }
-        print("F");
 
         slotInfo.BuildingPrefab.transform.localScale = new Vector3(0.006f, 0.006f, 0.006f);
 
@@ -207,7 +203,7 @@ public class ObjectPlaceUIManager : MonoBehaviour
         switch (uiState)
         {
             case UIState.NONE:
-
+                //캡슐화
                 StartCoroutine(Scale(false, 10, m_currentMenu));
 
                 spotSquare.SetActive(false);
@@ -271,6 +267,7 @@ public class ObjectPlaceUIManager : MonoBehaviour
         {
             targetRect.localScale = Vector3.zero;
         }
+
         while (true)
         {
             //true is open
