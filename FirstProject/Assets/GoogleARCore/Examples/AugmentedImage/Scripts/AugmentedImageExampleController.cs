@@ -56,8 +56,10 @@ namespace GoogleARCore.Examples.AugmentedImage
 
         public GameObject clipingmask;
 
-        private Dictionary<int, bool> m_Visualizers
-            = new Dictionary<int, bool>();
+        public GameObject tempCube;
+
+        private Dictionary<int, GameObject> m_Visualizers
+            = new Dictionary<int, GameObject>();
 
         private List<AugmentedImage> m_TempAugmentedImages = new List<AugmentedImage>();
 
@@ -119,29 +121,38 @@ namespace GoogleARCore.Examples.AugmentedImage
             // Get updated augmented images for this frame.
             Session.GetTrackables<AugmentedImage>(
                 m_TempAugmentedImages, TrackableQueryFilter.Updated);
-            Debug.Log("testest : 123123");
 
             // Create visualizers and anchors for updated augmented images that are tracking and do
             // not previously have a visualizer. Remove visualizers for stopped images.
             foreach (var image in m_TempAugmentedImages)
             {
-                Debug.Log("testest :aaaaa ");
+                Debug.Log("qweqwe : qweqwe");
 
-                bool visualizer = false;
+                GameObject visualizer = null;
 
                 m_Visualizers.TryGetValue(image.DatabaseIndex, out visualizer);
-                if (image.TrackingState == TrackingState.Tracking && visualizer == false)
+                if (image.TrackingState == TrackingState.Tracking && visualizer == null)
                 {
                     FitToScanOverlay.SetActive(false);
 
-                    Instantiate(clipingmask);
-
                     Coloring.Instance.StartCV();
+                    Debug.Log("testest : 1");
+                    Anchor anchor = image.CreateAnchor(image.CenterPose);
+                    Debug.Log("testest : 2");
+                    Instantiate(tempCube, anchor.transform);
+                    Debug.Log("testest : 3");
+                    visualizer = Instantiate(
+                        clipingmask, anchor.transform);
+                    Debug.Log("testest : 4");
+                    //visualizer.transform.position = image.CenterPose.position;
+                    //visualizer.transform.localScale = new Vector2(image.ExtentX, image.ExtentZ);
 
+                    Debug.Log("testest : 5");
                     // Create an anchor to ensure that ARCore keeps tracking this augmented image.
-                    m_Visualizers.Add(image.DatabaseIndex, true);
+                    m_Visualizers.Add(image.DatabaseIndex, visualizer);
 
-                    Debug.Log("testest : ");
+                    Debug.Log("testest : asd");
+
 
                     //image.ExtentX, z
 
