@@ -3,11 +3,12 @@
     Properties
     {
         _MainTex ("Albedo (RGB)", 2D) = "white" {}
+		_Emission ("Emmisive Color", float) = 0
     }
     SubShader
     {
-        Tags { "RenderType"="Opaque" }
-        //Tags { "RenderType"="Transparent""Queue" = "Transparent" }
+        //Tags { "RenderType"="Opaque" }
+        Tags { "RenderType"="Transparent""Queue" = "Transparent" }
 
         LOD 200
 
@@ -32,10 +33,9 @@
             fixed4 c = tex2D (_MainTex, IN.uv_MainTex);
 
 			float2 screenUV = IN.screenPos.rgb/ IN.screenPos.a;
-			screenUV = float2(screenUV.r, 1-screenUV.g);
+			//screenUV = float2(screenUV.r, 1-screenUV.g);
 			o.Emission = tex2D(_GrabTexture, screenUV);
             o.Alpha = c.a;
-
             //o.Albedo = c.rgb;
 
             // Metallic and smoothness come from slider variables

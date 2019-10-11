@@ -80,7 +80,7 @@ namespace GoogleARCore.Examples.AugmentedImage
             FrameLowerRight.transform.localPosition =
                 Vector3.zero;
             FrameLowerRight.transform.localScale =
-                new Vector3(Image.ExtentX*10, 0, Image.ExtentZ*10);
+                new Vector3(Image.ExtentX*11, 0, Image.ExtentZ*11);
             FrameUpperLeft.transform.localPosition =
                 (halfWidth * Vector3.left) + (halfHeight * Vector3.forward);
             ////FrameUpperRight.transform.localPosition =

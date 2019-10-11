@@ -1,4 +1,5 @@
-﻿using OpenCvSharp;
+﻿using GoogleARCore.Examples.AugmentedImage;
+using OpenCvSharp;
 using OpenCvSharp.Demo;
 using System.Collections;
 using System.Collections.Generic;
@@ -38,7 +39,7 @@ public class Coloring : Singleton<Coloring>
         capTexture = new Texture2D(w, h, TextureFormat.RGB24, false);
     }
 
-    IEnumerator ImageProcessing()
+    IEnumerator ImageProcessing(AugmentedImageVisualizer visualizer = null)
     {
         yield return new WaitForSeconds(0.5f);
         yield return new WaitForEndOfFrame();
@@ -52,8 +53,9 @@ public class Coloring : Singleton<Coloring>
         ShowImage(); //Image Visualization
         bgr.Release(); //메모리 해제
         bin.Release(); // 메모리 해제
-        fitOverlay.SetActive(true); 
-
+        fitOverlay.SetActive(true);
+        if(visualizer != null)
+            visualizer.gameObject.SetActive(false);
         // Scean Home 으로 변경
         //SceanContorller.instance.ChangeScean(SceanState.MAIN);
     }
@@ -188,7 +190,13 @@ public class Coloring : Singleton<Coloring>
     }
 
 
-    public void StartCV()
+    public void StartCV(AugmentedImageVisualizer visualizer = null)
+    {
+        fitOverlay.SetActive(false);
+        StartCoroutine(ImageProcessing(visualizer)); //Calling coroutine. 
+    }
+
+    public void StartCVbutton()
     {
         fitOverlay.SetActive(false);
         StartCoroutine(ImageProcessing()); //Calling coroutine. 

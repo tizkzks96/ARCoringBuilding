@@ -123,7 +123,6 @@ namespace GoogleARCore.Examples.AugmentedImage
             // Get updated augmented images for this frame.
             Session.GetTrackables<AugmentedImage>(
                 m_TempAugmentedImages, TrackableQueryFilter.Updated);
-
             // Create visualizers and anchors for updated augmented images that are tracking and do
             // not previously have a visualizer. Remove visualizers for stopped images.
             foreach (var image in m_TempAugmentedImages)
@@ -132,10 +131,20 @@ namespace GoogleARCore.Examples.AugmentedImage
                 m_Visualizers.TryGetValue(image.DatabaseIndex, out visualizer);
                 if (image.TrackingState == TrackingState.Tracking && visualizer == null)
                 {
-                    Coloring.Instance.StartCV();
+                    Anchor anchor = image.CreateAnchor(image.CenterPose);
+                    visualizer = (AugmentedImageVisualizer)Instantiate(
+                        AugmentedImageVisualizerPrefab, anchor.transform);
+                    visualizer.Image = image;
+                    m_Visualizers.Add(image.DatabaseIndex, visualizer);
+
+                    Coloring.Instance.StartCV(visualizer);
+
                     //visualizer.gameObject.SetActive(false);
+                    //m_TempAugmentedImages.Clear();
+
+                    //SceanContorller.instance.ChangeScean(SceanState.MAIN);
                 }
-                else if (image.TrackingState == TrackingState.Stopped && visualizer != null)
+                else if (image.TrackingState == TrackingState.Paused && visualizer != null)
                 {
                     m_Visualizers.Remove(image.DatabaseIndex);
                     GameObject.Destroy(visualizer.gameObject);
