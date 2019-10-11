@@ -15,6 +15,7 @@ public class Coloring : Singleton<Coloring>
     //public MeshRenderer target; //Rendering Setting of Cube 
     public GameObject canvas; //Canvas which involves UI 
     public RawImage viewL, viewR; //Result viewer 
+    public GameObject temp;
     UnityEngine.Rect capRect;//Region of screen shot 
     Texture2D capTexture; //Texture of screenshot image 
     Texture2D colTexture; //Result of image processing(color) 
@@ -35,8 +36,16 @@ public class Coloring : Singleton<Coloring>
         w = (int)(w * 1);
         h = (int)(h * 1);
 
-        capRect = new UnityEngine.Rect(sx, sy, w, h); //CapRect 크기의 텍스처 이미지 생성
-        capTexture = new Texture2D(w, h, TextureFormat.RGB24, false);
+        
+    }
+
+    public Vector3[] GetVertax(GameObject target)
+    {
+        var vertices = target.GetComponent<MeshFilter>().sharedMesh.vertices;
+        print(vertices.Length);
+        return vertices;
+            //transform.TransformPoint(vertices[0]);
+        //print("asdasd : " + worldPt);
     }
 
     IEnumerator ImageProcessing(AugmentedImageVisualizer visualizer = null)
@@ -46,10 +55,11 @@ public class Coloring : Singleton<Coloring>
         CreateImage(); //이미지 생성
 
 
-        Point[] corners;
-        FindRect(out corners); //사각형 영역 추출
 
-        TransformImage(corners); //사각형 영역 Transform
+        Point[] corners;
+        //FindRect(out corners); //사각형 영역 추출
+
+        //TransformImage(corners); //사각형 영역 Transform
         ShowImage(); //Image Visualization
         bgr.Release(); //메모리 해제
         bin.Release(); // 메모리 해제
@@ -192,14 +202,104 @@ public class Coloring : Singleton<Coloring>
 
     public void StartCV(AugmentedImageVisualizer visualizer = null)
     {
+        int length = GetVertax(temp).Length;
+        int sqrt = (int)Mathf.Sqrt(length + 1);
+
+        int t1 = 0;
+        int t2 = t1 + sqrt - 1;
+        int t3 = length - 1;
+        int t4 = length - sqrt;
+        Camera cam = FindObjectOfType<Camera>();
+
+        Vector3 w1 = temp.transform.TransformPoint(GetVertax(temp)[t1]);
+        Vector3 w2 = temp.transform.TransformPoint(GetVertax(temp)[t2]);
+        Vector3 w3 = temp.transform.TransformPoint(GetVertax(temp)[t3]);
+        Vector3 w4 = temp.transform.TransformPoint(GetVertax(temp)[t4]);
+
+        Vector2 s1 = cam.WorldToScreenPoint(w1);
+        Vector2 s2 = cam.WorldToScreenPoint(w2);
+        Vector2 s3 = cam.WorldToScreenPoint(w3);
+        Vector2 s4 = cam.WorldToScreenPoint(w4);
+
+        int w = (int)visualizer.Image.ExtentX;
+        int h = (int)visualizer.Image.ExtentZ;
+
+        Vector2 flagPosition = w2;
+
+        if(s2.x < s3.x)
+        {
+            flagPosition.x = s3.x;
+        }
+
+        if(s2.y < s1.y)
+        {
+            flagPosition.y = s1.y;
+        }
+
+        capRect = new UnityEngine.Rect(flagPosition.x, flagPosition.y, w, h); //CapRect 크기의 텍스처 이미지 생성
+        capTexture = new Texture2D(w, h, TextureFormat.RGB24, false);
+
         fitOverlay.SetActive(false);
         StartCoroutine(ImageProcessing(visualizer)); //Calling coroutine. 
+
     }
 
     public void StartCVbutton()
     {
         fitOverlay.SetActive(false);
         StartCoroutine(ImageProcessing()); //Calling coroutine. 
+        print("asd : " + GetVertax(temp));
+    }
+
+    private void OnDrawGizmos()
+    {
+
+        int length = GetVertax(temp).Length;
+        int sqrt = (int)Mathf.Sqrt(length + 1);
+
+        int t1 = 0;
+        int t2 = t1 + sqrt - 1;
+        int t3 = length - 1;
+        int t4 = length - sqrt;
+        Camera cam = FindObjectOfType<Camera>();
+
+        Vector3 w1 = temp.transform.TransformPoint(GetVertax(temp)[t1]);
+        Vector3 w2 = temp.transform.TransformPoint(GetVertax(temp)[t2]);
+        Vector3 w3 = temp.transform.TransformPoint(GetVertax(temp)[t3]);
+        Vector3 w4 = temp.transform.TransformPoint(GetVertax(temp)[t4]);
+
+        Vector2 s1 = cam.WorldToScreenPoint(w1);
+        Vector3 s2 = cam.WorldToScreenPoint(w2);
+        Vector3 s3 = cam.WorldToScreenPoint(w3);
+        Vector3 s4 = cam.WorldToScreenPoint(w4);
+
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawSphere(w1, 1);
+
+        Gizmos.color = Color.black;
+        Gizmos.DrawSphere(w2, 1);
+
+        Gizmos.color = Color.blue;
+        Gizmos.DrawSphere(w3, 1);
+
+        Gizmos.color = Color.gray;
+        Gizmos.DrawSphere(w4, 1);
+
+
+        //Gizmos.color = Color.yellow;
+        //Gizmos.DrawSphere(s1, 1);
+
+        //Gizmos.color = Color.black;
+        //Gizmos.DrawSphere(s2, 1);
+
+        //Gizmos.color = Color.blue;
+        //Gizmos.DrawSphere(s3, 1);
+
+        //Gizmos.color = Color.gray;
+        //Gizmos.DrawSphere(s4, 1);
+
+        print("asd : " + s1);
+
     }
 
     // Update is called once per frame
