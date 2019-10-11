@@ -147,7 +147,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: 054a9b859e3a3664ba8379d77769cd0c, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 8be7816805b133f4abd2eb613de3e2d0, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -210,3 +210,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4083ab255c8f1049ab13ce9030e2893, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  slotinfo:
+    Name: 
+    ID: 0
+    BuildingPrefab: {fileID: 0}

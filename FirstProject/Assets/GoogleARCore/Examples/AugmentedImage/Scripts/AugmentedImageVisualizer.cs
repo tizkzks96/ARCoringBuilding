@@ -67,7 +67,7 @@ namespace GoogleARCore.Examples.AugmentedImage
                 FrameLowerLeft.SetActive(false);
                 FrameLowerRight.SetActive(false);
                 FrameUpperLeft.SetActive(false);
-                FrameUpperRight.SetActive(false);
+                //FrameUpperRight.SetActive(false);
                 return;
             }
 
@@ -78,10 +78,12 @@ namespace GoogleARCore.Examples.AugmentedImage
             FrameLowerLeft.transform.localPosition =
                 (halfWidth * Vector3.left) + (halfHeight * Vector3.back);
             FrameLowerRight.transform.localPosition =
-                (halfWidth * Vector3.right) + (halfHeight * Vector3.back);
+                Vector3.zero;
+            FrameLowerRight.transform.localScale =
+                new Vector3(Image.ExtentX*10, 0, Image.ExtentZ*10);
             FrameUpperLeft.transform.localPosition =
                 (halfWidth * Vector3.left) + (halfHeight * Vector3.forward);
-            //FrameUpperRight.transform.localPosition =
+            ////FrameUpperRight.transform.localPosition =
             //    (halfWidth * Vector3.right) + (halfHeight * Vector3.forward);
 
             //FrameLowerLeft.transform.parent.parent = FrameLowerLeft.transform;
@@ -91,7 +93,7 @@ namespace GoogleARCore.Examples.AugmentedImage
             FrameLowerLeft.SetActive(true);
             FrameLowerRight.SetActive(true);
             FrameUpperLeft.SetActive(true);
-            FrameUpperRight.SetActive(true);
+            //FrameUpperRight.SetActive(true);
         }
     }
 }

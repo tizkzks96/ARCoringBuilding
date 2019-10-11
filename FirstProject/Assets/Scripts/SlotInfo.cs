@@ -5,7 +5,7 @@ using GoogleARCore.Examples.HelloAR;
 
 public class SlotInfo : MonoBehaviour
 {
-    private BuildingInfo slotinfo;
+    public BuildingInfo slotinfo;
 
     public BuildingInfo Slotinfo { get => slotinfo; set => slotinfo = value; }
 

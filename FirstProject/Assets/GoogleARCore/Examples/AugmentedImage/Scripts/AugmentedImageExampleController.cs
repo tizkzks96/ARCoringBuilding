@@ -58,8 +58,8 @@ namespace GoogleARCore.Examples.AugmentedImage
 
         public GameObject tempCube;
 
-        private Dictionary<int, GameObject> m_Visualizers
-            = new Dictionary<int, GameObject>();
+        private Dictionary<int, AugmentedImageVisualizer> m_Visualizers
+            = new Dictionary<int, AugmentedImageVisualizer>();
 
         private List<AugmentedImage> m_TempAugmentedImages = new List<AugmentedImage>();
 
@@ -94,6 +94,8 @@ namespace GoogleARCore.Examples.AugmentedImage
         /// <summary>
         /// The Unity Update method.
         /// </summary>
+            GameObject temp;
+        /// 
         public void Update()
         {
             // Exit the app when the 'back' button is pressed.
@@ -126,40 +128,17 @@ namespace GoogleARCore.Examples.AugmentedImage
             // not previously have a visualizer. Remove visualizers for stopped images.
             foreach (var image in m_TempAugmentedImages)
             {
-                Debug.Log("qweqwe : qweqwe");
-
-                GameObject visualizer = null;
-
+                AugmentedImageVisualizer visualizer = null;
                 m_Visualizers.TryGetValue(image.DatabaseIndex, out visualizer);
                 if (image.TrackingState == TrackingState.Tracking && visualizer == null)
                 {
-                    FitToScanOverlay.SetActive(false);
-
                     Coloring.Instance.StartCV();
-                    Debug.Log("testest : 1");
-                    Anchor anchor = image.CreateAnchor(image.CenterPose);
-                    Debug.Log("testest : 2");
-                    Instantiate(tempCube, anchor.transform);
-                    Debug.Log("testest : 3");
-                    visualizer = Instantiate(
-                        clipingmask, anchor.transform);
-                    Debug.Log("testest : 4");
-                    //visualizer.transform.position = image.CenterPose.position;
-                    //visualizer.transform.localScale = new Vector2(image.ExtentX, image.ExtentZ);
-
-                    Debug.Log("testest : 5");
-                    // Create an anchor to ensure that ARCore keeps tracking this augmented image.
-                    m_Visualizers.Add(image.DatabaseIndex, visualizer);
-
-                    Debug.Log("testest : asd");
-
-
-                    //image.ExtentX, z
-
+                    //visualizer.gameObject.SetActive(false);
                 }
-                else if (image.TrackingState == TrackingState.Stopped)
+                else if (image.TrackingState == TrackingState.Stopped && visualizer != null)
                 {
                     m_Visualizers.Remove(image.DatabaseIndex);
+                    GameObject.Destroy(visualizer.gameObject);
                 }
             }
 

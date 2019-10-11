@@ -96,7 +96,16 @@ public class ObjectPlaceUIManager : MonoBehaviour
 
             m_currentMenu = mainUI;
 
+            for(int i = 1; i< evironmentUI.transform.childCount - 1; i++)
+            {
+                Transform button = evironmentUI.transform.GetChild(i);
+                button.GetComponent<Button>().onClick.AddListener(() => {
+                    HelloARController.instance.PlaceObject(placePlane, button.GetComponent<SlotInfo>().slotinfo.BuildingPrefab);
+                    ChangeState(UIState.NONE);
+                });
+                Debug.Log("pe : " + button.GetComponent<SlotInfo>().slotinfo.BuildingPrefab);
 
+            }
             InstantiateBuildingSlot(0);
             //InstantiateBuildingSlot(1);
             //InstantiateBuildingSlot(2);

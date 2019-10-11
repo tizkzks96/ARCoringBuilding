@@ -43,7 +43,9 @@ namespace GoogleARCore.Examples.HelloAR
         [SerializeField]
         private bool menuOpened;
 
-
+        public GameObject temp1;
+        public GameObject temp2;
+        public GameObject temp1;
 
         /// <summary>
         /// The first-person camera being used to render the passthrough camera image (i.e. AR
