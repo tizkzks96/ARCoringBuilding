@@ -36,7 +36,10 @@ public class Coloring : Singleton<Coloring>
         w = (int)(w * 1);
         h = (int)(h * 1);
 
-        
+        capTexture = new Texture2D(w, h, TextureFormat.RGB24, false);
+        capRect = new UnityEngine.Rect(0, 0, w, h); //CapRect 크기의 텍스처 이미지 생성
+
+
     }
 
     public Vector3[] GetVertax(GameObject target)
@@ -58,8 +61,8 @@ public class Coloring : Singleton<Coloring>
 
         Point[] corners;
         //FindRect(out corners); //사각형 영역 추출
-
-        //TransformImage(corners); //사각형 영역 Transform
+        FindPoint(visualizer, out corners);
+        TransformImage(corners); //사각형 영역 Transform
         ShowImage(); //Image Visualization
         bgr.Release(); //메모리 해제
         bin.Release(); // 메모리 해제
@@ -75,7 +78,7 @@ public class Coloring : Singleton<Coloring>
         if (corners == null) return;
 
         //이미지 정렬
-        SortCorners(corners);
+        //SortCorners(corners);
 
         Point2f[] input = { corners[0], corners[1],
                          corners[2], corners[3] };
@@ -199,49 +202,74 @@ public class Coloring : Singleton<Coloring>
         SceanContorller.instance.ChangeScean(SceanState.MAIN);
     }
 
+    public void FindPoint(AugmentedImageVisualizer visualizer, out Point[] corners)
+    {
+        corners = new Point[4];
+
+        if(visualizer != null)
+        {
+            Camera cam = FindObjectOfType<Camera>();
+
+            int length = GetVertax(temp).Length;
+            int sqrt = (int)Mathf.Sqrt(length + 1);
+
+            int p1 = 0;
+            int p2 = p1 + sqrt - 1;
+            int p3 = length - 1;
+            int p4 = length - sqrt;
+
+            Vector3 w1 = temp.transform.TransformPoint(GetVertax(temp)[p1]);
+            Vector3 w2 = temp.transform.TransformPoint(GetVertax(temp)[p2]);
+            Vector3 w3 = temp.transform.TransformPoint(GetVertax(temp)[p3]);
+            Vector3 w4 = temp.transform.TransformPoint(GetVertax(temp)[p4]);
+
+            Vector2 s1 = cam.WorldToScreenPoint(w1);
+            Vector2 s2 = cam.WorldToScreenPoint(w2);
+            Vector2 s3 = cam.WorldToScreenPoint(w3);
+            Vector2 s4 = cam.WorldToScreenPoint(w4);
+
+            corners[0] = new Point(s3.x, s3.y);
+            corners[1] = new Point(s4.x, s4.y);
+            corners[2] = new Point(s1.x, s1.y);
+            corners[3] = new Point(s2.x, s2.y);
+            
+        }
+
+        else
+        {
+            corners[0] = new Point(0, Screen.height);
+            corners[1] = new Point(0, 0);
+            corners[2] = new Point(Screen.width, 0);
+            corners[3] = new Point(Screen.width, Screen.height);
+
+            print(corners);
+        }
+       
+
+
+        //int w = (int)visualizer.Image.ExtentX;
+        //int h = (int)visualizer.Image.ExtentZ;
+
+        //Vector2 flagPosition = w2;
+
+        //if (s2.x < s3.x)
+        //{
+        //    capRect = new UnityEngine.Rect(s3.x, s2.y, s1.x - s3.x, s2.y - s4.y); //CapRect 크기의 텍스처 이미지 생성
+
+        //}
+
+        //if (s2.x >= s3.x)
+        //{
+        //}
+    }
+
 
     public void StartCV(AugmentedImageVisualizer visualizer = null)
     {
-        int length = GetVertax(temp).Length;
-        int sqrt = (int)Mathf.Sqrt(length + 1);
-
-        int t1 = 0;
-        int t2 = t1 + sqrt - 1;
-        int t3 = length - 1;
-        int t4 = length - sqrt;
-        Camera cam = FindObjectOfType<Camera>();
-
-        Vector3 w1 = temp.transform.TransformPoint(GetVertax(temp)[t1]);
-        Vector3 w2 = temp.transform.TransformPoint(GetVertax(temp)[t2]);
-        Vector3 w3 = temp.transform.TransformPoint(GetVertax(temp)[t3]);
-        Vector3 w4 = temp.transform.TransformPoint(GetVertax(temp)[t4]);
-
-        Vector2 s1 = cam.WorldToScreenPoint(w1);
-        Vector2 s2 = cam.WorldToScreenPoint(w2);
-        Vector2 s3 = cam.WorldToScreenPoint(w3);
-        Vector2 s4 = cam.WorldToScreenPoint(w4);
-
-        int w = (int)visualizer.Image.ExtentX;
-        int h = (int)visualizer.Image.ExtentZ;
-
-        Vector2 flagPosition = w2;
-
-        if(s2.x < s3.x)
-        {
-            flagPosition.x = s3.x;
-        }
-
-        if(s2.y < s1.y)
-        {
-            flagPosition.y = s1.y;
-        }
-
-        capRect = new UnityEngine.Rect(flagPosition.x, flagPosition.y, w, h); //CapRect 크기의 텍스처 이미지 생성
-        capTexture = new Texture2D(w, h, TextureFormat.RGB24, false);
+        
 
         fitOverlay.SetActive(false);
         StartCoroutine(ImageProcessing(visualizer)); //Calling coroutine. 
-
     }
 
     public void StartCVbutton()
