@@ -28,16 +28,7 @@ public class Coloring : Singleton<Coloring>
     // Start is called before the first frame update
     void Start()
     {
-        int w = Screen.width; 
-        int h = Screen.height; //스크린 가로, 세로 영역
-
-        int sx = (int)(w * 0);
-        int sy = (int)(h * 0);
-        w = (int)(w * 1);
-        h = (int)(h * 1);
-
-        capTexture = new Texture2D(w, h, TextureFormat.RGB24, false);
-        capRect = new UnityEngine.Rect(0, 0, w, h); //CapRect 크기의 텍스처 이미지 생성
+        
 
 
     }
@@ -51,24 +42,28 @@ public class Coloring : Singleton<Coloring>
         //print("asdasd : " + worldPt);
     }
 
-    IEnumerator ImageProcessing(AugmentedImageVisualizer visualizer = null)
+    IEnumerator ImageProcessing()
     {
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(1f);
         yield return new WaitForEndOfFrame();
-        CreateImage(); //이미지 생성
+        Init();
+
+        CreateImageBgr(); //이미지 생성
 
 
 
         Point[] corners;
-        //FindRect(out corners); //사각형 영역 추출
-        FindPoint(visualizer, out corners);
+        FindPoint(out corners);
         TransformImage(corners); //사각형 영역 Transform
+        CreateImageBin(); //
+        //FindRect(out corners); //사각형 영역 추출
+        //TransformImage(corners); //사각형 영역 Transform
         ShowImage(); //Image Visualization
         bgr.Release(); //메모리 해제
         bin.Release(); // 메모리 해제
         fitOverlay.SetActive(true);
-        if(visualizer != null)
-            visualizer.gameObject.SetActive(false);
+        //if(visualizer != null)
+        //    visualizer.gameObject.SetActive(false);
         // Scean Home 으로 변경
         //SceanContorller.instance.ChangeScean(SceanState.MAIN);
     }
@@ -76,9 +71,10 @@ public class Coloring : Singleton<Coloring>
     void TransformImage(Point[] corners)
     {
         if (corners == null) return;
+        Debug.Log("unity test a corners[0]1 : " + corners[0]);
 
         //이미지 정렬
-        //SortCorners(corners);
+        SortCorners(corners);
 
         Point2f[] input = { corners[0], corners[1],
                          corners[2], corners[3] };
@@ -162,7 +158,7 @@ public class Coloring : Singleton<Coloring>
 
     //}
 
-    void CreateImage()
+    void CreateImageBgr()
     {
         capTexture.ReadPixels(capRect, 0, 0);//이미지 캡쳐
         capTexture.Apply();//캡쳐 이미지 적용
@@ -170,6 +166,14 @@ public class Coloring : Singleton<Coloring>
         //texture 를 matrix 로 변환
         bgr = OpenCvSharp.Unity.TextureToMat(capTexture);
 
+        
+
+        Debug.Log("CreateImage");
+
+    }
+
+    void CreateImageBin()
+    {
         //이미지 생상 그레이 스케일로 변환
         bin = bgr.CvtColor(ColorConversionCodes.BGR2GRAY);
 
@@ -186,6 +190,7 @@ public class Coloring : Singleton<Coloring>
     {
         if (colTexture != null) { DestroyImmediate(colTexture); }
         if (binTexture != null) { DestroyImmediate(binTexture); }
+        //bgr = bgr.Flip(FlipMode.X);
 
         colTexture = OpenCvSharp.Unity.MatToTexture(bgr);
         binTexture = OpenCvSharp.Unity.MatToTexture(bin);
@@ -202,13 +207,20 @@ public class Coloring : Singleton<Coloring>
         SceanContorller.instance.ChangeScean(SceanState.MAIN);
     }
 
-    public void FindPoint(AugmentedImageVisualizer visualizer, out Point[] corners)
+    public void FindPoint(out Point[] corners)
     {
+        Debug.Log("run FindPoint");
+
         corners = new Point[4];
 
-        if(visualizer != null)
-        {
+        //if(visualizer != null)
+        //{
             Camera cam = FindObjectOfType<Camera>();
+
+            Debug.Log("unity test as : get cam : " + cam);
+
+
+            //Debug.Log("unity test as : get temp : " + visualizer.FrameLowerRight.gameObject + " , " + temp);
 
             int length = GetVertax(temp).Length;
             int sqrt = (int)Mathf.Sqrt(length + 1);
@@ -228,23 +240,26 @@ public class Coloring : Singleton<Coloring>
             Vector2 s3 = cam.WorldToScreenPoint(w3);
             Vector2 s4 = cam.WorldToScreenPoint(w4);
 
-            corners[0] = new Point(s3.x, s3.y);
-            corners[1] = new Point(s4.x, s4.y);
-            corners[2] = new Point(s1.x, s1.y);
-            corners[3] = new Point(s2.x, s2.y);
-            
-        }
+            corners[0] = new Point2d(s2.x, s2.y);
+            corners[1] = new Point2d(s3.x, s3.y);
+            corners[2] = new Point2d(s4.x, s4.y);
+            corners[3] = new Point2d(s1.x, s1.y);
+        Debug.Log("unity test a w1 : " + w1);
 
-        else
-        {
-            corners[0] = new Point(0, Screen.height);
-            corners[1] = new Point(0, 0);
-            corners[2] = new Point(Screen.width, 0);
-            corners[3] = new Point(Screen.width, Screen.height);
+        Debug.Log("unity test a s1 : " + s1);
+        Debug.Log("unity test a corners[0] : " + corners[0]);
+        //}
 
-            print(corners);
-        }
-       
+        //else
+        //{
+        //    corners[0] = new Point(0, Screen.height);
+        //    corners[1] = new Point(0, 0);
+        //    corners[2] = new Point(Screen.width, 0);
+        //    corners[3] = new Point(Screen.width, Screen.height);
+
+        //    print(corners);
+        //}
+
 
 
         //int w = (int)visualizer.Image.ExtentX;
@@ -261,19 +276,39 @@ public class Coloring : Singleton<Coloring>
         //if (s2.x >= s3.x)
         //{
         //}
+
+        Debug.Log("end FindPoint");
+
     }
 
+    public void Init()
+    {
+        int w = Screen.width;
+        int h = Screen.height; //스크린 가로, 세로 영역
+
+        int sx = (int)(w * 0);
+        int sy = (int)(h * 0);
+        w = (int)(w * 1);
+        h = (int)(h * 1);
+
+        capTexture = new Texture2D(w, h, TextureFormat.RGB24, false);
+        capRect = new UnityEngine.Rect(0, 0, w, h); //CapRect 크기의 텍스처 이미지 생성
+    }
 
     public void StartCV(AugmentedImageVisualizer visualizer = null)
     {
-        
 
+
+        Debug.Log("run StartCV");
+        //temp = visualizer.FrameLowerRight.transform.Find("Plane").gameObject;
         fitOverlay.SetActive(false);
-        StartCoroutine(ImageProcessing(visualizer)); //Calling coroutine. 
+        StartCoroutine(ImageProcessing()); //Calling coroutine. 
     }
 
     public void StartCVbutton()
     {
+
+
         fitOverlay.SetActive(false);
         StartCoroutine(ImageProcessing()); //Calling coroutine. 
         print("asd : " + GetVertax(temp));
@@ -326,7 +361,7 @@ public class Coloring : Singleton<Coloring>
         //Gizmos.color = Color.gray;
         //Gizmos.DrawSphere(s4, 1);
 
-        print("asd : " + s1);
+
 
     }
 

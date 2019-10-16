@@ -643,56 +643,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2994818332806281865, guid: cd145ae9b1928024bba70d9818c135f1,
-        type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0.01
-      objectReference: {fileID: 0}
-    - target: {fileID: 2994818332806281865, guid: cd145ae9b1928024bba70d9818c135f1,
-        type: 3}
-      propertyPath: m_LocalScale.y
-      value: 0.01
-      objectReference: {fileID: 0}
-    - target: {fileID: 2994818332806281865, guid: cd145ae9b1928024bba70d9818c135f1,
-        type: 3}
-      propertyPath: m_LocalScale.z
-      value: 0.01
-      objectReference: {fileID: 0}
-    - target: {fileID: 1649633774129145802, guid: cd145ae9b1928024bba70d9818c135f1,
-        type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: 6fc764f2e0c88734e8aef77fd85a779c, type: 2}
-    - target: {fileID: 293062277071131064, guid: cd145ae9b1928024bba70d9818c135f1,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 293062277071131064, guid: cd145ae9b1928024bba70d9818c135f1,
-        type: 3}
-      propertyPath: outlineWidth
-      value: 267
-      objectReference: {fileID: 0}
-    - target: {fileID: 293062277071131064, guid: cd145ae9b1928024bba70d9818c135f1,
-        type: 3}
-      propertyPath: outlineColor.r
-      value: 0.6603774
-      objectReference: {fileID: 0}
-    - target: {fileID: 293062277071131064, guid: cd145ae9b1928024bba70d9818c135f1,
-        type: 3}
-      propertyPath: outlineColor.g
-      value: 0.14640442
-      objectReference: {fileID: 0}
-    - target: {fileID: 293062277071131064, guid: cd145ae9b1928024bba70d9818c135f1,
-        type: 3}
-      propertyPath: outlineColor.b
-      value: 0.14640442
-      objectReference: {fileID: 0}
-    - target: {fileID: 15366572930138853, guid: cd145ae9b1928024bba70d9818c135f1,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cd145ae9b1928024bba70d9818c135f1, type: 3}
 --- !u!4 &8322445776636850814 stripped
