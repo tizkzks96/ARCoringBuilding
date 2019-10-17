@@ -142,70 +142,10 @@ namespace GoogleARCore.Examples.AugmentedImage
 
                     Debug.Log("run marker");
 
-                    try
-                    {
-                        Debug.Log("unity test s visualizer1 : " + visualizer.transform);
-                        Debug.Log("unity test s visualizer2 : " + visualizer.transform.parent.transform);
-                        Debug.Log("unity test s visualizer3 : " + visualizer.transform.parent.transform.parent.transform);
-                        Debug.Log("unity test s visualizer4 : " + visualizer.transform.parent.transform.parent.transform.parent.transform);
-                        Debug.Log("unity test s visualizer5 : " + visualizer.transform.parent.transform.parent.transform.parent.transform.parent.transform);
-                    }
-                    catch (Exception e)
-                    {
-                    }
-                    
                     Coloring.Instance.temp = visualizer.FrameLowerRight.transform.Find("Plane").gameObject;
                     Coloring.Instance.StartCV();
-
-                    //visualizer.gameObject.SetActive(false);
-                    //m_TempAugmentedImages.Clear();
-
-                    //SceanContorller.instance.ChangeScean(SceanState.MAIN);
                 }
                 else if (image.TrackingState == TrackingState.Paused || image.TrackingState == TrackingState.Stopped && visualizer != null)
-                {
-                    m_Visualizers.Remove(image.DatabaseIndex);
-                    GameObject.Destroy(visualizer.gameObject);
-                }
-            }
-
-            //// Show the fit-to-scan overlay if there are no images that are Tracking.
-            //foreach (var visualizer in m_Visualizers.Values)
-            //{
-            //    if (visualizer.Image.TrackingState == TrackingState.Tracking)
-            //    {
-            //        FitToScanOverlay.SetActive(false);
-            //        return;
-            //    }
-            //}
-
-            //FitToScanOverlay.SetActive(true);
-        }
-
-        public void TempBtn()
-        {
-            Session.GetTrackables<AugmentedImage>(
-                m_TempAugmentedImages, TrackableQueryFilter.Updated);
-            foreach (var image in m_TempAugmentedImages)
-            {
-                AugmentedImageVisualizer visualizer = null;
-                m_Visualizers.TryGetValue(image.DatabaseIndex, out visualizer);
-                if (image.TrackingState == TrackingState.Tracking)
-                {
-                    Anchor anchor = image.CreateAnchor(image.CenterPose);
-                    visualizer.Image = image;
-                    m_Visualizers.Add(image.DatabaseIndex, visualizer);
-
-                    Debug.Log("run marker");
-                    Coloring.Instance.temp = visualizer.FrameLowerRight.transform.Find("Plane").gameObject;
-                    //Coloring.Instance.StartCV(visualizer);
-
-                    //visualizer.gameObject.SetActive(false);
-                    //m_TempAugmentedImages.Clear();
-
-                    //SceanContorller.instance.ChangeScean(SceanState.MAIN);
-                }
-                else if (image.TrackingState == TrackingState.Paused && visualizer != null)
                 {
                     m_Visualizers.Remove(image.DatabaseIndex);
                     GameObject.Destroy(visualizer.gameObject);

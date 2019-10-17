@@ -21,6 +21,8 @@ public class Coloring : Singleton<Coloring>
     Texture2D colTexture; //Result of image processing(color) 
     Texture2D binTexture; //Result of image processing(gray)
 
+    public GameObject[] points;
+
     Mat bgr, bin;
 
     public GameObject fitOverlay;
@@ -56,8 +58,8 @@ public class Coloring : Singleton<Coloring>
         FindPoint(out corners);
         TransformImage(corners); //사각형 영역 Transform
         CreateImageBin(); //
-        //FindRect(out corners); //사각형 영역 추출
-        //TransformImage(corners); //사각형 영역 Transform
+        FindRect(out corners); //사각형 영역 추출
+        TransformImage(corners); //사각형 영역 Transform
         ShowImage(); //Image Visualization
         bgr.Release(); //메모리 해제
         bin.Release(); // 메모리 해제
@@ -74,7 +76,7 @@ public class Coloring : Singleton<Coloring>
         Debug.Log("unity test a corners[0]1 : " + corners[0]);
 
         //이미지 정렬
-        SortCorners(corners);
+        //SortCorners(corners);
 
         Point2f[] input = { corners[0], corners[1],
                          corners[2], corners[3] };
@@ -192,6 +194,9 @@ public class Coloring : Singleton<Coloring>
         if (binTexture != null) { DestroyImmediate(binTexture); }
         //bgr = bgr.Flip(FlipMode.X);
 
+        bgr = bgr.Rotate(RotateFlags.Rotate90CounterClockwise);
+        bgr = bgr.Flip(FlipMode.X);
+
         colTexture = OpenCvSharp.Unity.MatToTexture(bgr);
         binTexture = OpenCvSharp.Unity.MatToTexture(bin);
 
@@ -215,39 +220,47 @@ public class Coloring : Singleton<Coloring>
 
         //if(visualizer != null)
         //{
-            Camera cam = FindObjectOfType<Camera>();
+        Camera cam = FindObjectOfType<Camera>();
 
-            Debug.Log("unity test as : get cam : " + cam);
+        Debug.Log("unity test as : get cam : " + cam);
 
 
-            //Debug.Log("unity test as : get temp : " + visualizer.FrameLowerRight.gameObject + " , " + temp);
+        //Debug.Log("unity test as : get temp : " + visualizer.FrameLowerRight.gameObject + " , " + temp);
 
-            int length = GetVertax(temp).Length;
-            int sqrt = (int)Mathf.Sqrt(length + 1);
+        int length = GetVertax(temp).Length;
+        int sqrt = (int)Mathf.Sqrt(length + 1);
 
-            int p1 = 0;
-            int p2 = p1 + sqrt - 1;
-            int p3 = length - 1;
-            int p4 = length - sqrt;
+        int p0 = 0;
+        int p1 = p0 + sqrt - 1;
+        int p2 = length - 1;
+        int p3 = length - sqrt;
 
-            Vector3 w1 = temp.transform.TransformPoint(GetVertax(temp)[p1]);
-            Vector3 w2 = temp.transform.TransformPoint(GetVertax(temp)[p2]);
-            Vector3 w3 = temp.transform.TransformPoint(GetVertax(temp)[p3]);
-            Vector3 w4 = temp.transform.TransformPoint(GetVertax(temp)[p4]);
+        Vector3 w0 = temp.transform.TransformPoint(GetVertax(temp)[p0]);
+        Vector3 w1 = temp.transform.TransformPoint(GetVertax(temp)[p1]);
+        Vector3 w2 = temp.transform.TransformPoint(GetVertax(temp)[p2]);
+        Vector3 w3 = temp.transform.TransformPoint(GetVertax(temp)[p3]);
 
-            Vector2 s1 = cam.WorldToScreenPoint(w1);
-            Vector2 s2 = cam.WorldToScreenPoint(w2);
-            Vector2 s3 = cam.WorldToScreenPoint(w3);
-            Vector2 s4 = cam.WorldToScreenPoint(w4);
+        Vector2 s0 = cam.WorldToScreenPoint(w0);
+        Vector2 s1 = cam.WorldToScreenPoint(w1);
+        Vector2 s2 = cam.WorldToScreenPoint(w2);
+        Vector2 s3 = cam.WorldToScreenPoint(w3);
 
-            corners[0] = new Point2d(s2.x, s2.y);
-            corners[1] = new Point2d(s3.x, s3.y);
-            corners[2] = new Point2d(s4.x, s4.y);
-            corners[3] = new Point2d(s1.x, s1.y);
-        Debug.Log("unity test a w1 : " + w1);
+        //corners[0] = new Point2d(s2.x, s2.y);
+        //corners[1] = new Point2d(s3.x, s3.y);
+        //corners[2] = new Point2d(s4.x, s4.y);
+        //corners[3] = new Point2d(s1.x, s1.y);
+        //0  3       1  0
+        //1  2       2  3
+        s0 = new Vector2(s0.x, Screen.height - s0.y);
+        s1 = new Vector2(s1.x, Screen.height - s1.y);
+        s2 = new Vector2(s2.x, Screen.height - s2.y);
+        s3 = new Vector2(s3.x, Screen.height - s3.y);
 
-        Debug.Log("unity test a s1 : " + s1);
-        Debug.Log("unity test a corners[0] : " + corners[0]);
+        corners[0] = new Point2d(s1.x, s1.y);
+        corners[1] = new Point2d(s0.x, s0.y);
+        corners[2] = new Point2d(s3.x, s3.y);
+        corners[3] = new Point2d(s2.x, s2.y);
+
         //}
 
         //else
@@ -314,56 +327,56 @@ public class Coloring : Singleton<Coloring>
         print("asd : " + GetVertax(temp));
     }
 
-    private void OnDrawGizmos()
-    {
+    //private void OnDrawGizmos()
+    //{
 
-        int length = GetVertax(temp).Length;
-        int sqrt = (int)Mathf.Sqrt(length + 1);
+    //    int length = GetVertax(temp).Length;
+    //    int sqrt = (int)Mathf.Sqrt(length + 1);
 
-        int t1 = 0;
-        int t2 = t1 + sqrt - 1;
-        int t3 = length - 1;
-        int t4 = length - sqrt;
-        Camera cam = FindObjectOfType<Camera>();
+    //    int t1 = 0;
+    //    int t2 = t1 + sqrt - 1;
+    //    int t3 = length - 1;
+    //    int t4 = length - sqrt;
+    //    Camera cam = FindObjectOfType<Camera>();
 
-        Vector3 w1 = temp.transform.TransformPoint(GetVertax(temp)[t1]);
-        Vector3 w2 = temp.transform.TransformPoint(GetVertax(temp)[t2]);
-        Vector3 w3 = temp.transform.TransformPoint(GetVertax(temp)[t3]);
-        Vector3 w4 = temp.transform.TransformPoint(GetVertax(temp)[t4]);
+    //    Vector3 w1 = temp.transform.TransformPoint(GetVertax(temp)[t1]);
+    //    Vector3 w2 = temp.transform.TransformPoint(GetVertax(temp)[t2]);
+    //    Vector3 w3 = temp.transform.TransformPoint(GetVertax(temp)[t3]);
+    //    Vector3 w4 = temp.transform.TransformPoint(GetVertax(temp)[t4]);
 
-        Vector2 s1 = cam.WorldToScreenPoint(w1);
-        Vector3 s2 = cam.WorldToScreenPoint(w2);
-        Vector3 s3 = cam.WorldToScreenPoint(w3);
-        Vector3 s4 = cam.WorldToScreenPoint(w4);
+    //    Vector2 s1 = cam.WorldToScreenPoint(w1);
+    //    Vector3 s2 = cam.WorldToScreenPoint(w2);
+    //    Vector3 s3 = cam.WorldToScreenPoint(w3);
+    //    Vector3 s4 = cam.WorldToScreenPoint(w4);
 
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawSphere(w1, 1);
+    //    Gizmos.color = Color.yellow;
+    //    Gizmos.DrawSphere(w1, 1);
 
-        Gizmos.color = Color.black;
-        Gizmos.DrawSphere(w2, 1);
+    //    Gizmos.color = Color.black;
+    //    Gizmos.DrawSphere(w2, 1);
 
-        Gizmos.color = Color.blue;
-        Gizmos.DrawSphere(w3, 1);
+    //    Gizmos.color = Color.blue;
+    //    Gizmos.DrawSphere(w3, 1);
 
-        Gizmos.color = Color.gray;
-        Gizmos.DrawSphere(w4, 1);
-
-
-        //Gizmos.color = Color.yellow;
-        //Gizmos.DrawSphere(s1, 1);
-
-        //Gizmos.color = Color.black;
-        //Gizmos.DrawSphere(s2, 1);
-
-        //Gizmos.color = Color.blue;
-        //Gizmos.DrawSphere(s3, 1);
-
-        //Gizmos.color = Color.gray;
-        //Gizmos.DrawSphere(s4, 1);
+    //    Gizmos.color = Color.gray;
+    //    Gizmos.DrawSphere(w4, 1);
 
 
+    //    //Gizmos.color = Color.yellow;
+    //    //Gizmos.DrawSphere(s1, 1);
 
-    }
+    //    //Gizmos.color = Color.black;
+    //    //Gizmos.DrawSphere(s2, 1);
+
+    //    //Gizmos.color = Color.blue;
+    //    //Gizmos.DrawSphere(s3, 1);
+
+    //    //Gizmos.color = Color.gray;
+    //    //Gizmos.DrawSphere(s4, 1);
+
+
+
+    //}
 
     // Update is called once per frame
     void Update()
