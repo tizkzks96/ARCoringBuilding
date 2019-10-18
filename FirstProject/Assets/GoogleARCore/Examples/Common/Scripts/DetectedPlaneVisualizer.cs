@@ -73,8 +73,6 @@ namespace GoogleARCore.Examples.Common
             m_MeshRenderer = GetComponent<UnityEngine.MeshRenderer>();
         }
 
-        
-
         /// <summary>
         /// The Unity Update() method.
         /// </summary>
@@ -100,6 +98,15 @@ namespace GoogleARCore.Examples.Common
                     cubeWorld.transform.localRotation = Quaternion.Euler(320, 300, 45);
                 }
                  return;
+            }
+            else if(m_DetectedPlane.TrackingState == TrackingState.Tracking)
+            {
+                if (cubeWorld != null)
+                {
+                    cubeWorld.transform.SetParent(transform);
+                    cubeWorld.transform.localPosition = Vector3.zero;
+                    cubeWorld.transform.localRotation = Quaternion.Euler(0, 0, 0);
+                }
             }
 
             m_MeshRenderer.enabled = true;
@@ -326,12 +333,7 @@ namespace GoogleARCore.Examples.Common
         {
             cubeWorld = new GameObject("CubeWorld");
 
-
             //anim.clip = Resources.Load("ani1") as AnimationClip;
-
-
-
-
 
             cubeWorld.transform.SetParent(transform);
             cubeWorld.transform.position = PlaneCenter;
@@ -376,16 +378,12 @@ namespace GoogleARCore.Examples.Common
                                     default:
                                         break;
                                 }
-
-
                             }
                         }
                         
                     }//new Vector3(k, j, i)
                 }
             }
-
-
             yield return null;
         }
         

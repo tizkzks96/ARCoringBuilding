@@ -48,16 +48,10 @@ namespace GoogleARCore.Examples.AugmentedImage
         /// </summary>
         public AugmentedImageVisualizer AugmentedImageVisualizerPrefab;
 
-        public GameObject CropRenderCanvasPrefab;
-
         /// <summary>
         /// The overlay containing the fit to scan user guide.
         /// </summary>
         public GameObject FitToScanOverlay;
-
-        public GameObject clipingmask;
-
-        public GameObject tempCube;
 
         private Dictionary<int, AugmentedImageVisualizer> m_Visualizers
             = new Dictionary<int, AugmentedImageVisualizer>();
@@ -74,12 +68,11 @@ namespace GoogleARCore.Examples.AugmentedImage
             {
                 //if not, set instance to this
                 instance = this;
-
             }
 
             //If instance already exists and it's not this:
             else if (instance != this)
-
+                
                 //Then destroy this. This enforces our singleton pattern, meaning there can only ever be one instance of a GameManager.
                 Destroy(gameObject);
 
@@ -92,6 +85,7 @@ namespace GoogleARCore.Examples.AugmentedImage
         {
             FitToScanOverlay.SetActive(true);
         }
+
         /// <summary>
         /// The Unity Update method.
         /// </summary>
@@ -115,24 +109,17 @@ namespace GoogleARCore.Examples.AugmentedImage
                 Screen.sleepTimeout = SleepTimeout.NeverSleep;
             }
 
-            //if (m_TempAugmentedImages == null)
-            //{
-            //    m_TempAugmentedImages = new List<AugmentedImage>();
-            //    Debug.Log("Unity Image - " + "m_TempAugmentedImages null check: " + m_TempAugmentedImages);
-            //}
-
             // Get updated augmented images for this frame.
             Session.GetTrackables<AugmentedImage>(
                 m_TempAugmentedImages, TrackableQueryFilter.Updated);
             // Create visualizers and anchors for updated augmented images that are tracking and do
             // not previously have a visualizer. Remove visualizers for stopped images.
-            Debug.Log("testetset");
-
             foreach (var image in m_TempAugmentedImages)
             {
                 AugmentedImageVisualizer visualizer = null;
                 m_Visualizers.TryGetValue(image.DatabaseIndex, out visualizer);
-                if (image.TrackingState == TrackingState.Tracking && visualizer == null)
+                
+                if (image.TrackingMethod == AugmentedImageTrackingMethod.FullTracking && visualizer == null)
                 {
                     Anchor anchor = image.CreateAnchor(image.CenterPose);
                     visualizer = (AugmentedImageVisualizer)Instantiate(
@@ -140,12 +127,11 @@ namespace GoogleARCore.Examples.AugmentedImage
                     visualizer.Image = image;
                     m_Visualizers.Add(image.DatabaseIndex, visualizer);
 
-                    Debug.Log("run marker");
+                    Coloring.Instance.visualizer = visualizer.FrameLowerRight.transform.GetChild(0).gameObject;
 
-                    Coloring.Instance.temp = visualizer.FrameLowerRight.transform.Find("Plane").gameObject;
                     Coloring.Instance.StartCV();
                 }
-                else if (image.TrackingState == TrackingState.Paused || image.TrackingState == TrackingState.Stopped && visualizer != null)
+                else if (image.TrackingMethod == AugmentedImageTrackingMethod.LastKnownPose || image.TrackingMethod == AugmentedImageTrackingMethod.NotTracking && visualizer != null)
                 {
                     m_Visualizers.Remove(image.DatabaseIndex);
                     GameObject.Destroy(visualizer.gameObject);

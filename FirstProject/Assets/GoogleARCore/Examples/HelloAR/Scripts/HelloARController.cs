@@ -181,7 +181,6 @@ namespace GoogleARCore.Examples.HelloAR
             }
             //Debug.Log("unity test  gesture.TargetObject.transform : " + gesture.TargetObject.transform);
 
-
             else
             {
                 // Choose the Andy model for the Trackable that got hit.
