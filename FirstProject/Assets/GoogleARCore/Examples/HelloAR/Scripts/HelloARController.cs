@@ -105,8 +105,6 @@ namespace GoogleARCore.Examples.HelloAR
 
         protected override bool CanStartManipulationForGesture(TapGesture gesture)
         {
-            print(gesture.TargetObject.transform);
-
             if (gesture.TargetObject == null)
             {
                 Debug.Log("CanStartManipulationForGesture");
@@ -124,7 +122,6 @@ namespace GoogleARCore.Examples.HelloAR
             {
                 
             }
-
 
             ObjedtPlaceObjectController(gesture);
             //PiUiController(gesture);
@@ -159,11 +156,7 @@ namespace GoogleARCore.Examples.HelloAR
 
         public void ObjedtPlaceObjectController(TapGesture gesture)
         {
-            if (ObjectPlaceUIManager.instance.CurrentMenu.activeSelf == true)
-            {
-                print("ObjedtPlaceObjectController true");
-                return;
-            }
+            
             print("ObjedtPlaceObjectController run");
 
             ObjectPlaceUIManager.instance.StartPlace(gesture);
@@ -220,6 +213,8 @@ namespace GoogleARCore.Examples.HelloAR
                 placeObject.transform.rotation = target.transform.rotation;
 
                 manipulator.transform.SetParent(target.transform.parent.transform);
+
+                manipulator.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
 
                 // Make manipulator a child of the anchor.
                 //gesture.TargetObject.transform.parent = manipulator.transform;
@@ -354,15 +349,15 @@ namespace GoogleARCore.Examples.HelloAR
         {
             if (gesture.TargetObject.transform.name == "bottom_face")
             {
-                obejct.transform.localPosition = Vector3.forward * 2.5f + Vector3.left * -2.5f + Vector3.up * -height;
+                obejct.transform.localPosition = Vector3.forward * -2.5f + Vector3.left * 2.5f + Vector3.up * height;
             }
             if (gesture.TargetObject.transform.name == "forward_face")
             {
-                obejct.transform.localPosition = Vector3.up * -2.5f + Vector3.left * -2.5f + Vector3.forward * height;
+                obejct.transform.localPosition = Vector3.forward * -2.5f + Vector3.left * 2.5f + Vector3.up * height;
             }
             if (gesture.TargetObject.transform.name == "left_face")
             {
-                obejct.transform.localPosition = Vector3.forward * -2.5f + Vector3.up * 2.5f + Vector3.right * height;
+                obejct.transform.localPosition = Vector3.forward * -2.5f + Vector3.left * 2.5f + Vector3.up * height;
             }
 
             if (gesture.TargetObject.transform.name == "top_face")
@@ -372,11 +367,11 @@ namespace GoogleARCore.Examples.HelloAR
 
             if (gesture.TargetObject.transform.name == "back_face")
             {
-                obejct.transform.localPosition = Vector3.up * 2.5f + Vector3.left * 2.5f + Vector3.forward * -height;
+                obejct.transform.localPosition = Vector3.forward * -2.5f + Vector3.left * 2.5f + Vector3.up * height;
             }
             if (gesture.TargetObject.transform.name == "right_face")
             {
-                obejct.transform.localPosition = Vector3.forward * 2.5f + Vector3.up * 2.5f + Vector3.right * -height;
+                obejct.transform.localPosition = Vector3.forward * -2.5f + Vector3.left * 2.5f + Vector3.up * height;
             }
         }
     }

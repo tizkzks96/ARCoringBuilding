@@ -26,19 +26,27 @@ public class ObjectPlaceUIManager : MonoBehaviour
     public GameObject buildingSlot;
 
     [Header("Menu")]
+    public GameObject placeUI;
     public GameObject mainUI;
     public GameObject evironmentUI;
     public GameObject buildingUI;
 
     [Space(10)]
 
-    private GameObject spotSquare;
 
     public GameObject canvas;
 
     public GameObject temp;
 
+    private AnimationClip scaleUpclip;
+    private AnimationClip scaleDownclip;
+
+
+    private float uiSize = 400;
+
     private GameObject m_currentMenu;
+
+    private GameObject spotSquare;
 
     public GameObject CurrentMenu { get => m_currentMenu;}
 
@@ -71,11 +79,11 @@ public class ObjectPlaceUIManager : MonoBehaviour
             canvas = placePlane.transform.Find("Canvas").gameObject;
 
             //UI Link
-            mainUI = canvas.transform.Find("MainUI").gameObject;
+            mainUI = placeUI.transform.Find("MainUI").gameObject;
 
-            evironmentUI = canvas.transform.Find("EnvironmentUI").gameObject;
+            evironmentUI = placeUI.transform.Find("EnvironmentUI").gameObject;
 
-            buildingUI = canvas.transform.Find("BuildingUI").gameObject;
+            buildingUI = placeUI.transform.Find("BuildingUI").gameObject;
 
             spotSquare = canvas.transform.Find("spotSquare").gameObject;
 
@@ -106,11 +114,14 @@ public class ObjectPlaceUIManager : MonoBehaviour
                 Debug.Log("pe : " + button.GetComponent<SlotInfo>().slotinfo.BuildingPrefab);
 
             }
+
             InstantiateBuildingSlot(0);
             //InstantiateBuildingSlot(1);
             //InstantiateBuildingSlot(2);
-            
-                
+
+            //Animation 초기화
+            InitAnimationClip();
+
             //캡슐화   
             mainUI.SetActive(false);
             evironmentUI.SetActive(false);
@@ -120,23 +131,30 @@ public class ObjectPlaceUIManager : MonoBehaviour
 
     }
 
+    public void InitAnimationClip()
+    {
+        ScaleUpAnimationClip(400, out scaleUpclip);
+        //ScaleDownAnimationClip(400, out scaleDownclip);
+
+        print("scaleUpclip : " + scaleUpclip);
+        print("scaleDownclip : " + scaleDownclip);
+    }
+
     public void StartPlace(TapGesture gesture)
     {
-        if(m_currentMenu.activeSelf == true)
+        if(spotSquare.activeSelf == true)
         {
-            print("StartPlace true");
             return;
         }
 
-        if (m_currentMenu.activeSelf == false)
+        if (spotSquare.activeSelf == false)
         {
-            print("StartPlace false");
             m_currentMenu.SetActive(true);
         }
-        print("StartPlace run");
         placePlane.transform.SetParent(gesture.TargetObject.transform);
         HelloARController.instance.TapGesturePositionCorrection(gesture, placePlane.transform, 0.01f);
-        placePlane.transform.localRotation = gesture.TargetObject.transform.localRotation;
+        placePlane.transform.localRotation = Quaternion.Euler(0,0,0);
+
 
         SetButtonPosition(0.5f);
         ChangeState(UIState.HOME);
@@ -209,22 +227,29 @@ public class ObjectPlaceUIManager : MonoBehaviour
 
     public void ChangeState(UIState uiState)
     {
+
+        print("asdf : " + uiState);
+        print("dsadas : " + m_currentMenu);
         switch (uiState)
         {
             case UIState.NONE:
                 //캡슐화
-                StartCoroutine(Scale(false, 10, m_currentMenu));
+                //StartCoroutine(Scale(false, 10, m_currentMenu));
+                PlayAnimation(m_currentMenu.GetComponent<Animation>(), "ScaleDown");
 
                 spotSquare.SetActive(false);
 
                 m_currentMenu = mainUI;
+                print("qweqwe : " + m_currentMenu);
+
                 break;
             case UIState.HOME:
                 m_currentMenu = mainUI;
 
                 SetButtonPosition(0.5f);
 
-                StartCoroutine(Scale(true, 10, m_currentMenu));
+
+                //StartCoroutine(Scale(true, 10, m_currentMenu));
 
                 spotSquare.SetActive(true);
 
@@ -233,13 +258,17 @@ public class ObjectPlaceUIManager : MonoBehaviour
                 evironmentUI.SetActive(false);
 
                 buildingUI.SetActive(false);
+
+                PlayAnimation(m_currentMenu.GetComponent<Animation>(), "ScaleUp");
+
                 break;
             case UIState.ENVIRONMENT:
                 m_currentMenu = evironmentUI;
 
                 SetButtonPosition(0.5f);
 
-                StartCoroutine(Scale(true, 10, m_currentMenu));
+
+                //StartCoroutine(Scale(true, 10, m_currentMenu));
 
                 spotSquare.SetActive(true);
 
@@ -248,13 +277,17 @@ public class ObjectPlaceUIManager : MonoBehaviour
                 evironmentUI.SetActive(true);
 
                 buildingUI.SetActive(false);
+
+                PlayAnimation(m_currentMenu.GetComponent<Animation>(), "ScaleUp");
+
                 break;
             case UIState.BUILDING:
                 m_currentMenu = buildingUI;
 
                 SetButtonPosition(0.5f);
 
-                StartCoroutine(Scale(true, 10, m_currentMenu));
+
+                //StartCoroutine(Scale(true, 10, m_currentMenu));
 
                 spotSquare.SetActive(true);
 
@@ -263,6 +296,9 @@ public class ObjectPlaceUIManager : MonoBehaviour
                 evironmentUI.SetActive(false);
 
                 buildingUI.SetActive(true);
+
+                PlayAnimation(m_currentMenu.GetComponent<Animation>(), "ScaleUp");
+
                 break;
             default:
                 break;
@@ -283,11 +319,11 @@ public class ObjectPlaceUIManager : MonoBehaviour
             if (state == true)
             {
 
-                targetRect.localScale = Vector3.Lerp(targetRect.transform.localScale, Vector3.one, Time.deltaTime * transitionSpeed);
-                print("BB");
-                if (Mathf.Abs((Vector2.one).sqrMagnitude - targetRect.transform.localScale.sqrMagnitude) < .5f)
+                targetRect.localScale = Vector3.Lerp(targetRect.transform.localScale, Vector3.one * uiSize, Time.deltaTime * transitionSpeed);
+
+                if (Mathf.Abs((Vector2.one).sqrMagnitude - targetRect.transform.localScale.sqrMagnitude) < 5f)
                 {
-                    targetRect.localScale = Vector3.one;
+                    targetRect.localScale = Vector3.one * uiSize;
                     break;
                 }
             }
@@ -299,7 +335,6 @@ public class ObjectPlaceUIManager : MonoBehaviour
                 if (targetRect.transform.localScale.x < .05f)
                 {
                     targetRect.transform.localScale = Vector3.zero;
-                    target.SetActive(false);
                     break;
                 }
             }
@@ -308,8 +343,80 @@ public class ObjectPlaceUIManager : MonoBehaviour
 
         if(state == false)
         {
-            targetRect.transform.localScale = Vector3.one;
+            targetRect.transform.localScale = Vector3.one * uiSize;
         }
         yield return null;
+    }
+
+    public void ScaleUpAnimationClip(int size, out AnimationClip clip)
+    {
+        AnimationCurve curve;
+
+        // create a new AnimationClip
+        clip = new AnimationClip();
+        clip.legacy = true;
+
+        // create a curve to move the GameObject and assign to the clip
+        Keyframe[] keys;
+
+        keys = new Keyframe[2];
+
+        curve = new AnimationCurve(keys);
+
+        keys[0] = new Keyframe(0.0f, 0);
+        keys[1] = new Keyframe(.5f, size);
+        clip.SetCurve("", typeof(RectTransform), "sizeDelta.x", curve);
+
+        keys[0] = new Keyframe(0.0f, 0);
+        keys[1] = new Keyframe(.5f, size);
+        clip.SetCurve("", typeof(RectTransform), "scale.y", curve);
+
+        keys[0] = new Keyframe(0.0f, 0);
+        keys[1] = new Keyframe(.5f, size);
+        clip.SetCurve("", typeof(RectTransform), "scale.z", curve);
+    }
+
+    public void ScaleDownAnimationClip(int size, out AnimationClip clip)
+    {
+        AnimationCurve curve;
+
+        // create a new AnimationClip
+        clip = new AnimationClip
+        {
+            legacy = true
+        };
+
+        // create a curve to move the GameObject and assign to the clip
+        Keyframe[] keys;
+
+        keys = new Keyframe[2];
+
+        curve = new AnimationCurve(keys);
+
+        keys[0] = new Keyframe(0.0f, size);
+        keys[1] = new Keyframe(.5f, 0);
+        clip.SetCurve("", typeof(RectTransform), "localScale.x", curve);
+
+        keys[0] = new Keyframe(0.0f, size);
+        keys[1] = new Keyframe(.5f, 0);
+        clip.SetCurve("", typeof(RectTransform), "localScale.y", curve);
+
+        keys[0] = new Keyframe(0.0f, size);
+        keys[1] = new Keyframe(.5f, 0);
+        clip.SetCurve("", typeof(RectTransform), "localScale.z", curve);
+    }
+
+    public void PlayAnimation(Animation anim, string clipName)
+    {
+        // update the clip to a change the red color
+        //curve = AnimationCurve.Linear(0.0f, 1.0f, 2.0f, 0.0f);
+        //clip.SetCurve("", typeof(Material), "_Color.r", curve);
+        //clip.wrapMode = WrapMode.Loop;
+        // now animate the GameObject
+        //anim.AddClip(clip, clip.name);
+        print("qweqweqweweqwe : " + m_currentMenu);
+
+        anim.clip = anim.GetClip(clipName);
+        anim.Play();
     }
 }

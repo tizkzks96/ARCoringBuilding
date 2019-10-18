@@ -43,6 +43,8 @@ namespace GoogleARCore.Examples.Common
 
         private List<int> m_MeshIndices = new List<int>();
 
+        private Anchor cubeWorldAnchor;
+
         private Mesh m_Mesh;
 
         private MeshRenderer m_MeshRenderer;
@@ -96,16 +98,19 @@ namespace GoogleARCore.Examples.Common
                     cubeWorld.transform.SetParent(firstPersonCamera.transform);
                     cubeWorld.transform.localPosition = new Vector3(0, -0.2f, 1.5f);
                     cubeWorld.transform.localRotation = Quaternion.Euler(320, 300, 45);
+                    cubeWorld.SetActive(true);
+
                 }
-                 return;
+                return;
             }
             else if(m_DetectedPlane.TrackingState == TrackingState.Tracking)
             {
                 if (cubeWorld != null)
                 {
-                    cubeWorld.transform.SetParent(transform);
+                    cubeWorld.transform.SetParent(cubeWorldAnchor.transform);
                     cubeWorld.transform.localPosition = Vector3.zero;
                     cubeWorld.transform.localRotation = Quaternion.Euler(0, 0, 0);
+                    cubeWorld.SetActive(true);
                 }
             }
 
@@ -331,12 +336,16 @@ namespace GoogleARCore.Examples.Common
 
         public IEnumerator CreateCubeWorld(int size)
         {
+            cubeWorldAnchor = Session.CreateAnchor(new Pose(PlaneCenter, Quaternion.identity));
+
+            cubeWorldAnchor.transform.SetParent(transform);
+
             cubeWorld = new GameObject("CubeWorld");
 
             //anim.clip = Resources.Load("ani1") as AnimationClip;
 
-            cubeWorld.transform.SetParent(transform);
-            cubeWorld.transform.position = PlaneCenter;
+            cubeWorld.transform.SetParent(cubeWorldAnchor.transform);
+            cubeWorld.transform.localPosition = Vector3.zero;
 
             CustomAnimationControll(cubeWorld, size);
 
