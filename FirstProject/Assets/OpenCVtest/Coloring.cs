@@ -20,7 +20,7 @@ public class Coloring : Singleton<Coloring>
     UnityEngine.Rect capRect;//Region of screen shot 
     Texture2D capTexture; //Texture of screenshot image 
     Texture2D colTexture; //Result of image processing(color) 
-    Texture2D binTexture; //Result of image processing(gray)
+    Texture2D binTexture; //Result of image processing(gray)dksl
 
     Mat bgr, bin;
 
@@ -171,9 +171,38 @@ public class Coloring : Singleton<Coloring>
 
         viewL.texture = colTexture;
 
+        
+    }
+
+    public Texture2D LoadFileToTexutre(string filePath)
+    {
+        Texture2D tex = null;
+        byte[] fileData;
+
+        print("load file1 ");
+
+        if (File.Exists(filePath))
+        {
+            print("load file2 ");
+            fileData = File.ReadAllBytes(filePath);
+            print("load file3 :  " + fileData);
+            tex = new Texture2D(2, 2);
+
+            print("load file4 :  " + tex);
+
+            tex.LoadImage(fileData); //..this will auto-resize the texture dimensions.
+
+            print("load file5");
+        }
+
+        return tex;
+    }
+
+    public string SaveTextureToFile()
+    {
         Texture2D tex = colTexture;
         string fileName = "";
-        string filePath = "/";
+        string filePath = Application.persistentDataPath;
         // Encode texture into JPG
         byte[] bytes = tex.EncodeToJPG(60);
         Object.Destroy(tex);
@@ -181,20 +210,27 @@ public class Coloring : Singleton<Coloring>
 
         string dtString = System.DateTime.Now.ToString("MM-dd-yyyy_HHmmssfff");
         fileName = dtString + ".jpg";
-        filePath = "/";
+        filePath = filePath + "/";
 
-        Debug.Log("SaveJPG Executing");
+        Debug.Log("SaveJPG Executing : " + filePath);
 
         File.WriteAllBytes(filePath + fileName, bytes);
+
+        return filePath + fileName;
     }
 
     public void CreatePrefab()
     {
+        string path = SaveTextureToFile();
+        Texture2D texture2D = LoadFileToTexutre(path);
+
+        print("texture2D : " + texture2D);
+             
         BuildingInfo buildingInfo = BuildingDatabase.Instance.GetByName("Building_ApartmentLarge_Brown");
 
         Material mat = new Material(Shader.Find("Specular"));
 
-        mat.mainTexture = colTexture;
+        mat.mainTexture = texture2D;
 
         mat.color = Color.white;
 
