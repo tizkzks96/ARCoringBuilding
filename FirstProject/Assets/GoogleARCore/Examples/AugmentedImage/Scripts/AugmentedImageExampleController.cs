@@ -109,6 +109,7 @@ namespace GoogleARCore.Examples.AugmentedImage
                 Screen.sleepTimeout = SleepTimeout.NeverSleep;
             }
 
+            Debug.Log("unity ar run test");
             // Get updated augmented images for this frame.
             Session.GetTrackables<AugmentedImage>(
                 m_TempAugmentedImages, TrackableQueryFilter.Updated);
@@ -121,13 +122,17 @@ namespace GoogleARCore.Examples.AugmentedImage
                 
                 if (image.TrackingMethod == AugmentedImageTrackingMethod.FullTracking && visualizer == null)
                 {
+                    Debug.Log("unity ar run test1");
+
                     Anchor anchor = image.CreateAnchor(image.CenterPose);
                     visualizer = (AugmentedImageVisualizer)Instantiate(
                         AugmentedImageVisualizerPrefab, anchor.transform);
                     visualizer.Image = image;
                     m_Visualizers.Add(image.DatabaseIndex, visualizer);
+                    Debug.Log("unity ar run test2");
 
                     Coloring.Instance.visualizer = visualizer.FrameLowerRight.transform.GetChild(0).gameObject;
+                    Debug.Log("unity ar run test3");
 
                     Coloring.Instance.StartCV();
                 }

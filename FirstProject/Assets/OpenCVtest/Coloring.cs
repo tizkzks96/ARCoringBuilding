@@ -26,10 +26,12 @@ public class Coloring : Singleton<Coloring>
 
     public GameObject fitOverlay;
 
+
+
     public Vector3[] GetVertax(GameObject target)
     {
         var vertices = target.GetComponent<MeshFilter>().mesh.vertices;
-        print(vertices.Length);
+
         return vertices;
     }
 
@@ -49,10 +51,13 @@ public class Coloring : Singleton<Coloring>
         //bgr.Release(); //메모리 해제
         //bin.Release(); // 메모리 해제
         fitOverlay.SetActive(true);
-        //testtest
-        //Destroy(visualizer);
+
+
+        Destroy(visualizer);
 
         CreatePrefab();
+        Debug.Log("unity file test end");
+
         //Scean Home 으로 변경
         SceanContorller.instance.ChangeScean(SceanState.MAIN);
     }
@@ -60,7 +65,7 @@ public class Coloring : Singleton<Coloring>
     void TransformImage(Point[] corners)
     {
         if (corners == null) return;
-        Debug.Log("unity test a corners[0]1 : " + corners[0]);
+
 
         //이미지 정렬
         SortCorners(corners);
@@ -170,8 +175,6 @@ public class Coloring : Singleton<Coloring>
         binTexture = OpenCvSharp.Unity.MatToTexture(bin);
 
         viewL.texture = colTexture;
-
-        
     }
 
     public Texture2D LoadFileToTexutre(string filePath)
@@ -179,66 +182,74 @@ public class Coloring : Singleton<Coloring>
         Texture2D tex = null;
         byte[] fileData;
 
-        print("load file1 ");
+
+        Debug.Log("unity file test load start");
 
         if (File.Exists(filePath))
         {
-            print("load file2 ");
+            Debug.Log("unity file test load 1");
             fileData = File.ReadAllBytes(filePath);
-            print("load file3 :  " + fileData);
-            tex = new Texture2D(2, 2);
+            Debug.Log("unity file test load 2");
 
-            print("load file4 :  " + tex);
+            tex = new Texture2D(2, 2);
+            Debug.Log("unity file test load 3");
 
             tex.LoadImage(fileData); //..this will auto-resize the texture dimensions.
-
-            print("load file5");
         }
 
+        Debug.Log("unity file test load end");
         return tex;
     }
 
-    public string SaveTextureToFile()
+    public string SaveTextureToFile(string fileName)
     {
         Texture2D tex = colTexture;
-        string fileName = "";
         string filePath = Application.persistentDataPath;
         // Encode texture into JPG
         byte[] bytes = tex.EncodeToJPG(60);
         Object.Destroy(tex);
 
+        //string dtString = System.DateTime.Now.ToString("MM-dd-yyyy_HHmmssfff");
 
-        string dtString = System.DateTime.Now.ToString("MM-dd-yyyy_HHmmssfff");
-        fileName = dtString + ".jpg";
-        filePath = filePath + "/";
+        filePath += "/";
 
-        Debug.Log("SaveJPG Executing : " + filePath);
 
-        File.WriteAllBytes(filePath + fileName, bytes);
+        Debug.Log("unity file test save start");
 
-        return filePath + fileName;
+        File.WriteAllBytes(filePath + fileName + ".jpg", bytes);
+
+        Debug.Log("unity file test save end");
+
+
+        return filePath + fileName + ".jpg";
     }
 
     public void CreatePrefab()
     {
-        string path = SaveTextureToFile();
-        Texture2D texture2D = LoadFileToTexutre(path);
-
-        print("texture2D : " + texture2D);
-             
         BuildingInfo buildingInfo = BuildingDatabase.Instance.GetByName("Building_ApartmentLarge_Brown");
 
-        Material mat = new Material(Shader.Find("Specular"));
+        Debug.Log("unity file test start");
+        string path = SaveTextureToFile(buildingInfo.Name);
+        Debug.Log("unity file test path : " + path);
+        Texture2D texture2D = LoadFileToTexutre(path);
+        Debug.Log("unity file test load end : " + texture2D);
+        Material mat = new Material(Shader.Find("Standard"));
+        Debug.Log("unity file test mat end1 : " + mat);
 
         mat.mainTexture = texture2D;
 
+        Debug.Log("unity file test mat end2 : " + mat);
+
+
         mat.color = Color.white;
+        Debug.Log("unity file test mat end3 : " + mat);
 
         //buildingInfo.material = mat;
 
         ObjectPlaceUIManager.instance.InstantiateBuildingSlot(buildingInfo, mat,false);
+        Debug.Log("unity file test mat end4 : " + mat);
 
-        SceanContorller.instance.ChangeScean(SceanState.MAIN);
+        //SceanContorller.instance.ChangeScean(SceanState.MAIN);
     }
 
     public void FindPoint(out Point[] corners)
@@ -284,6 +295,7 @@ public class Coloring : Singleton<Coloring>
 
     public void StartCVbutton()
     {
+
         fitOverlay.SetActive(false);
         StartCoroutine(ImageProcessing()); //Calling coroutine. 
     }

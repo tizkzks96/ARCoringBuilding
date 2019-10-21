@@ -20,10 +20,13 @@ public class ObjectPlaceUIManager : MonoBehaviour
 
     public GameObject PlacePlane;
 
+    public int maxSlotCount = 4;
+
     [HideInInspector]
     public GameObject placePlane;
 
     public GameObject buildingSlot;
+    public GameObject emptyBuildingSlot;
 
     [Header("Menu")]
     public GameObject placeUI;
@@ -38,6 +41,8 @@ public class ObjectPlaceUIManager : MonoBehaviour
 
     public GameObject temp;
 
+    public static int BUILDING_SLOT_COUNT = 0;
+
     private AnimationClip scaleUpclip;
     private AnimationClip scaleDownclip;
 
@@ -49,6 +54,8 @@ public class ObjectPlaceUIManager : MonoBehaviour
     private GameObject spotSquare;
 
     public GameObject CurrentMenu { get => m_currentMenu;}
+
+    public Sprite buildingSprite;
 
     public void Awake()
     {
@@ -99,7 +106,7 @@ public class ObjectPlaceUIManager : MonoBehaviour
             //BuildingPanel 버튼 연결
             buildingUI.transform.Find("Home").GetComponent<Button>().onClick.AddListener(() => { ChangeState(UIState.HOME); });
 
-            buildingUI.transform.Find("Add").GetComponent<Button>().onClick.AddListener(() => { SceanContorller.instance.ChangeScean(SceanState.AUGMENTEDIMAGE); });
+            buildingUI.transform.Find("Add").GetComponent<Button>().onClick.AddListener(() => { InstantiateEmptyBuildingSlot(); });
             #endregion
 
             m_currentMenu = mainUI;
@@ -191,6 +198,35 @@ public class ObjectPlaceUIManager : MonoBehaviour
         }
     }
 
+    public void InstantiateEmptyBuildingSlot()
+    {
+
+        if (BUILDING_SLOT_COUNT >= maxSlotCount)
+        {
+            Destroy(buildingUI.transform.Find("Add").gameObject);
+            SetButtonPosition(0.5f);
+        }
+
+        GameObject slot = Instantiate(emptyBuildingSlot, buildingUI.transform);
+
+        slot.GetComponent<Button>().onClick.AddListener(() => {
+            SetEditingSlotInfo(slot);
+            SceanContorller.instance.ChangeScean(SceanState.AUGMENTEDIMAGE);
+        });
+
+        slot.GetComponent<SlotInfo>().Slotinfo.ID = BUILDING_SLOT_COUNT;
+
+        SetButtonPosition(0.5f);
+
+        BUILDING_SLOT_COUNT++;
+    }
+
+    public void SetEditingSlotInfo(GameObject slot)
+    {
+        SceanContorller.instance.EdtingSlot = slot;
+        print("coloring instant edi : " + slot);
+    }
+
     public void InstantiateBuildingSlot(BuildingInfo buildingInfo, Material mat = null,bool _default = true)
     {
         
@@ -203,9 +239,10 @@ public class ObjectPlaceUIManager : MonoBehaviour
         }
         else
         {
-            slot = Instantiate(buildingSlot, buildingUI.transform);
+            slot = SceanContorller.instance.EdtingSlot;
+            //slot = Instantiate(buildingSlot, buildingUI.transform);
         }
-
+        print("asdfasdf : " + slot);
         //슬롯정보
         BuildingInfo slotInfo = slot.GetComponent<SlotInfo>().Slotinfo;
 
@@ -227,24 +264,28 @@ public class ObjectPlaceUIManager : MonoBehaviour
         //슬롯에 빌딩 할당
         slotInfo.BuildingPrefab = building;
 
+        slot.GetComponent<Image>().sprite = buildingSprite; 
+
         //임시 빌딩 해제
         //Destroy(building);
 
+        //slot.GetComponent<Image>().sprite = building.GetComponent<Renderer>().material.GetTexture;
+        slot.GetComponent<Button>().onClick.RemoveAllListeners();
+            
         slot.GetComponent<Button>().onClick.AddListener(() => {
             HelloARController.instance.PlaceObject(placePlane, slotInfo.BuildingPrefab);
             ChangeState(UIState.NONE);
             });
 
         SetButtonPosition(0.5f);
+
+        //Coloring.Instance.EdtingSlot = null;
         //slot.transform.GetChild(0).GetComponent<Text>().text = "made : " + slotInfo.Name;
     }
 
 
     public void ChangeState(UIState uiState)
     {
-
-        print("asdf : " + uiState);
-        print("dsadas : " + m_currentMenu);
         switch (uiState)
         {
             case UIState.NONE:

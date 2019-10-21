@@ -25,6 +25,9 @@ public class SceanContorller : MonoBehaviour
 
     public GameObject AugmentedImage;
 
+    private GameObject edtingSlot;
+    public GameObject EdtingSlot { get => edtingSlot; set => edtingSlot = value; }
+
     public SceanState SceanState { get; set; }
 
     public void Awake()
