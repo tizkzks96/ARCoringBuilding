@@ -115,7 +115,7 @@ public class ObjectPlaceUIManager : MonoBehaviour
 
             }
 
-            InstantiateBuildingSlot(0);
+            InstantiateBuildingSlot(BuildingDatabase.Instance.GetByID(0));
             //InstantiateBuildingSlot(1);
             //InstantiateBuildingSlot(2);
 
@@ -191,11 +191,12 @@ public class ObjectPlaceUIManager : MonoBehaviour
         }
     }
 
-    public void InstantiateBuildingSlot(int index, Texture2D texture = null, bool _default = true)
+    public void InstantiateBuildingSlot(BuildingInfo buildingInfo, Material mat = null,bool _default = true)
     {
+        
+        //슬롯생성
         GameObject slot;
 
-        //slot 생성
         if (_default)
         {
             slot = Instantiate(buildingSlot, evironmentUI.transform);
@@ -205,15 +206,29 @@ public class ObjectPlaceUIManager : MonoBehaviour
             slot = Instantiate(buildingSlot, buildingUI.transform);
         }
 
-        BuildingInfo slotInfo = BuildingDatabase.Instance.GetByID(index);
-        if (texture != null)
+        //슬롯정보
+        BuildingInfo slotInfo = slot.GetComponent<SlotInfo>().Slotinfo;
+
+        //슬롯에 넣을 빌딩 생성
+        GameObject building = Instantiate(buildingInfo.BuildingPrefab);
+
+        building.transform.localScale = new Vector3(0.006f, 0.006f, 0.006f);
+
+        //building.SetActive(false);
+
+        //슬롯정보에 머티리얼 할당
+        if (mat != null)
         {
-            slotInfo.BuildingPrefab.GetComponent<Renderer>().sharedMaterial.mainTexture = texture;
+            building.GetComponent<Renderer>().material = mat;
+
+            //slotInfo.BuildingPrefab.GetComponent<Renderer>().sharedMaterial.mainTexture = texture;
         }
 
-        slotInfo.BuildingPrefab.transform.localScale = new Vector3(0.006f, 0.006f, 0.006f);
+        //슬롯에 빌딩 할당
+        slotInfo.BuildingPrefab = building;
 
-        slot.GetComponent<SlotInfo>().Slotinfo = slotInfo;
+        //임시 빌딩 해제
+        //Destroy(building);
 
         slot.GetComponent<Button>().onClick.AddListener(() => {
             HelloARController.instance.PlaceObject(placePlane, slotInfo.BuildingPrefab);

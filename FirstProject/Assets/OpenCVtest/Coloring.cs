@@ -3,6 +3,7 @@ using OpenCvSharp;
 using OpenCvSharp.Demo;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -45,10 +46,11 @@ public class Coloring : Singleton<Coloring>
         FindRect(out corners); //사각형 영역 추출
         TransformImage(corners); //사각형 영역 Transform
         ShowImage(); //Image Visualization
-        bgr.Release(); //메모리 해제
-        bin.Release(); // 메모리 해제
+        //bgr.Release(); //메모리 해제
+        //bin.Release(); // 메모리 해제
         fitOverlay.SetActive(true);
-        Destroy(visualizer);
+        //testtest
+        //Destroy(visualizer);
 
         CreatePrefab();
         //Scean Home 으로 변경
@@ -168,13 +170,37 @@ public class Coloring : Singleton<Coloring>
         binTexture = OpenCvSharp.Unity.MatToTexture(bin);
 
         viewL.texture = colTexture;
+
+        Texture2D tex = colTexture;
+        string fileName = "";
+        string filePath = "/";
+        // Encode texture into JPG
+        byte[] bytes = tex.EncodeToJPG(60);
+        Object.Destroy(tex);
+
+
+        string dtString = System.DateTime.Now.ToString("MM-dd-yyyy_HHmmssfff");
+        fileName = dtString + ".jpg";
+        filePath = "/";
+
+        Debug.Log("SaveJPG Executing");
+
+        File.WriteAllBytes(filePath + fileName, bytes);
     }
 
     public void CreatePrefab()
     {
-        BuildingInfo createObject = BuildingDatabase.Instance.GetByName("Building_ApartmentLarge_Brown");
+        BuildingInfo buildingInfo = BuildingDatabase.Instance.GetByName("Building_ApartmentLarge_Brown");
 
-        ObjectPlaceUIManager.instance.InstantiateBuildingSlot(createObject.ID, colTexture, false);
+        Material mat = new Material(Shader.Find("Specular"));
+
+        mat.mainTexture = colTexture;
+
+        mat.color = Color.white;
+
+        //buildingInfo.material = mat;
+
+        ObjectPlaceUIManager.instance.InstantiateBuildingSlot(buildingInfo, mat,false);
 
         SceanContorller.instance.ChangeScean(SceanState.MAIN);
     }

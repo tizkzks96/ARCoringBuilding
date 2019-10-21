@@ -56,9 +56,9 @@ namespace GoogleARCore.Examples.ObjectManipulation
                 {
                     var manipulationSystems = FindObjectsOfType<ManipulationSystem>();
                     if (manipulationSystems.Length > 0)
-                    {
+                    {                                    
                         s_Instance = manipulationSystems[0];
-                    }
+                    }                                                                                                                      
                     else
                     {
                         Debug.LogError("No instance of ManipulationSystem exists in the scene.");
