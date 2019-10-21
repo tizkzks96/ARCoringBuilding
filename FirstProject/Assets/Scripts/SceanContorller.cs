@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using GoogleARCore;
 using System;
+using GoogleARCore.Examples.Common;
 
 public enum SceanState
 {
@@ -58,12 +59,16 @@ public class SceanContorller : MonoBehaviour
 
                 AugmentedImage.SetActive(false);
 
+                DetectedPlaneVisualizer.cubeWorld.SetActive(true);
+
                 arCoreSession.SessionConfig = defaultSessionConfig;
                 break;
             case SceanState.AUGMENTEDIMAGE:
                 Main.SetActive(false);
 
                 AugmentedImage.SetActive(true);
+
+                DetectedPlaneVisualizer.cubeWorld.SetActive(false);
 
                 arCoreSession.SessionConfig = augmentedImagesSessionConfig;
 

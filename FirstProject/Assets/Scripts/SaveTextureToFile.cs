@@ -23,21 +23,10 @@ public class SaveTextureToFile : MonoBehaviour
         this.fileName = fileName;
     }
 
-    public void OnDrawGizmos()
-    {
-        fileLoc = Application.persistentDataPath + "/" + dirName + "/";
-    }
-
-    //  Delete Zone Finish
-
-
     public void SaveTxt2D(Texture2D savedTexture, string dirPath, string fileName)
     {
         if (txtToSave != null)
         {
-            print("1 : " + txtToSave);
-            print("1 : " + dirName);
-            print("1 : " + fileName);
             StartCoroutine(STTF(txtToSave, dirName, fileName));
         }
     }
@@ -56,9 +45,6 @@ public class SaveTextureToFile : MonoBehaviour
 
     IEnumerator STTF(Texture2D savedTexture, string dirPath, string fileName)
     {
-        print("2 : " + txtToSave);
-        print("2 : " + dirName);
-        print("2 : " + fileName);
         if (!Directory.Exists(dirPath))
         {
             Directory.CreateDirectory(dirPath);
@@ -71,9 +57,5 @@ public class SaveTextureToFile : MonoBehaviour
         string fileLocation = Application.persistentDataPath + "/" + dirPath + "/" + fileName;
         File.WriteAllBytes(fileLocation, bytes);
         yield return null;
-
-        print("3 : " + txtToSave);
-        print("3 : " + dirName);
-        print("3 : " + fileName);
     }
 }

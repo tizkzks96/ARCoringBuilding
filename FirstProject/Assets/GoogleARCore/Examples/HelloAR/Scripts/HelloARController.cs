@@ -185,6 +185,7 @@ namespace GoogleARCore.Examples.HelloAR
                 var placeObject =
                     Instantiate(prefab);
 
+                placeObject.SetActive(true);
                 // Create an anchor to allow ARCore to track the hitpoint as understanding of
                 // the physical world evolves.
                 //var anchor = hit.Trackable.CreateAnchor(new Pose(gesture.TargetObject.transform.position, Quaternion.identity));

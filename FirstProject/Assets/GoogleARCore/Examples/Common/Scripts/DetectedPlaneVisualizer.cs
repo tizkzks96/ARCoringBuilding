@@ -52,7 +52,7 @@ namespace GoogleARCore.Examples.Common
 
         public Camera firstPersonCamera;
 
-        private GameObject cubeWorld;
+        public static GameObject cubeWorld;
 
         private bool _endDetect = true;
 

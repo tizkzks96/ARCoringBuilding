@@ -161,11 +161,11 @@ public class ObjectPlaceUIManager : MonoBehaviour
         placePlane.transform.SetParent(gesture.TargetObject.transform);
         HelloARController.instance.TapGesturePositionCorrection(gesture, placePlane.transform, 0.01f);
         placePlane.transform.localRotation = Quaternion.Euler(0,0,0);
+        //spotSquare.transform.GetChild(1).gameObject.SetActive(true);
 
 
         SetButtonPosition(0.5f);
         ChangeState(UIState.HOME);
-        //MakeSlotPosition(20, 5);
     }
 
     public void SetButtonPosition(float radius)
@@ -181,14 +181,12 @@ public class ObjectPlaceUIManager : MonoBehaviour
         {
             GameObject currnetOjbect = CurrentMenu.transform.GetChild(i).gameObject;
             float cornerAngle = 2f * Mathf.PI / (float)amount * i;
-            //currnetOjbect.transform.SetParent(placePlane.transform);
             currnetOjbect.transform.localPosition = new Vector2(Mathf.Cos(cornerAngle) * radius,  Mathf.Sin(cornerAngle) * radius);
         }
     }
 
     public void MakeSlotPosition(float radius, int amount)
     {
-
         for (int i = 0; i < amount; i++)
         {
             float cornerAngle = 2f * Mathf.PI / (float)amount * i;
@@ -200,7 +198,6 @@ public class ObjectPlaceUIManager : MonoBehaviour
 
     public void InstantiateEmptyBuildingSlot()
     {
-
         if (BUILDING_SLOT_COUNT >= maxSlotCount)
         {
             Destroy(buildingUI.transform.Find("Add").gameObject);
@@ -229,7 +226,6 @@ public class ObjectPlaceUIManager : MonoBehaviour
 
     public void InstantiateBuildingSlot(BuildingInfo buildingInfo, Material mat = null,bool _default = true)
     {
-        
         //슬롯생성
         GameObject slot;
 
@@ -279,6 +275,7 @@ public class ObjectPlaceUIManager : MonoBehaviour
 
         SetButtonPosition(0.5f);
 
+        building.SetActive(false);
         //Coloring.Instance.EdtingSlot = null;
         //slot.transform.GetChild(0).GetComponent<Text>().text = "made : " + slotInfo.Name;
     }

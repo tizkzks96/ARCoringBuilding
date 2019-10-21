@@ -209,17 +209,9 @@ public class Coloring : Singleton<Coloring>
         byte[] bytes = tex.EncodeToJPG(60);
         Object.Destroy(tex);
 
-        //string dtString = System.DateTime.Now.ToString("MM-dd-yyyy_HHmmssfff");
-
         filePath += "/";
 
-
-        Debug.Log("unity file test save start");
-
         File.WriteAllBytes(filePath + fileName + ".jpg", bytes);
-
-        Debug.Log("unity file test save end");
-
 
         return filePath + fileName + ".jpg";
     }
@@ -227,29 +219,12 @@ public class Coloring : Singleton<Coloring>
     public void CreatePrefab()
     {
         BuildingInfo buildingInfo = BuildingDatabase.Instance.GetByName("Building_ApartmentLarge_Brown");
-
-        Debug.Log("unity file test start");
-        string path = SaveTextureToFile(buildingInfo.Name);
-        Debug.Log("unity file test path : " + path);
+        string path = SaveTextureToFile(SceanContorller.instance.EdtingSlot.GetComponent<SlotInfo>().Slotinfo.ID.ToString());
         Texture2D texture2D = LoadFileToTexutre(path);
-        Debug.Log("unity file test load end : " + texture2D);
         Material mat = new Material(Shader.Find("Standard"));
-        Debug.Log("unity file test mat end1 : " + mat);
-
         mat.mainTexture = texture2D;
-
-        Debug.Log("unity file test mat end2 : " + mat);
-
-
         mat.color = Color.white;
-        Debug.Log("unity file test mat end3 : " + mat);
-
-        //buildingInfo.material = mat;
-
         ObjectPlaceUIManager.instance.InstantiateBuildingSlot(buildingInfo, mat,false);
-        Debug.Log("unity file test mat end4 : " + mat);
-
-        //SceanContorller.instance.ChangeScean(SceanState.MAIN);
     }
 
     public void FindPoint(out Point[] corners)

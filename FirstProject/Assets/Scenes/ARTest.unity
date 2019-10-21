@@ -4744,7 +4744,7 @@ PrefabInstance:
     - target: {fileID: 79552108003796901, guid: cd145ae9b1928024bba70d9818c135f1,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2994818332806281865, guid: cd145ae9b1928024bba70d9818c135f1,
         type: 3}
@@ -4924,6 +4924,7 @@ MonoBehaviour:
   buildingUI: {fileID: 0}
   canvas: {fileID: 0}
   temp: {fileID: 0}
+  buildingSprite: {fileID: 21300000, guid: fa24a6b84e827dc429855638eee86307, type: 3}
 --- !u!1 &1770080475
 GameObject:
   m_ObjectHideFlags: 0
