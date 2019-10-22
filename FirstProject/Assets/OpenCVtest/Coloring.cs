@@ -225,7 +225,7 @@ public class Coloring : Singleton<Coloring>
         mat.mainTexture = texture2D;
         mat.color = Color.white;
         buildingInfo.Texture2d = texture2D;
-        ObjectPlaceUIManager.instance.InstantiateBuildingSlot(buildingInfo, mat,false);
+        ObjectPlaceUIManager.instance.InstantiateBuildingSlot(buildingInfo, mat);
     }
 
     public void FindPoint(out Point[] corners)

@@ -18,7 +18,7 @@ public class ObjectPlaceUIManager : MonoBehaviour
 {
     public static ObjectPlaceUIManager instance;
 
-    public GameObject PlacePlane;
+    public GameObject placePlanePrefab;
 
     public int maxSlotCount = 4;
 
@@ -42,12 +42,6 @@ public class ObjectPlaceUIManager : MonoBehaviour
     public GameObject temp;
 
     public static int BUILDING_SLOT_COUNT = 0;
-
-    private AnimationClip scaleUpclip;
-    private AnimationClip scaleDownclip;
-
-
-    private float uiSize = 400;
 
     private GameObject m_currentMenu;
 
@@ -81,7 +75,7 @@ public class ObjectPlaceUIManager : MonoBehaviour
         if (placePlane == null)
         {
             //data class
-            placePlane = Instantiate(PlacePlane);
+            placePlane = Instantiate(placePlanePrefab);
 
             canvas = placePlane.transform.Find("Canvas").gameObject;
 
@@ -118,16 +112,14 @@ public class ObjectPlaceUIManager : MonoBehaviour
                     HelloARController.instance.PlaceObject(placePlane, button.GetComponent<SlotInfo>().slotinfo.BuildingPrefab);
                     ChangeState(UIState.NONE);
                 });
-                Debug.Log("pe : " + button.GetComponent<SlotInfo>().slotinfo.BuildingPrefab);
-
             }
 
-            InstantiateBuildingSlot(BuildingDatabase.Instance.GetByID(0));
+            //InstantiateBuildingSlot(BuildingDatabase.Instance.GetByID(0));
             //InstantiateBuildingSlot(1);
             //InstantiateBuildingSlot(2);
 
             //Animation 초기화
-            InitAnimationClip();
+            //InitAnimationClip();
 
             //캡슐화   
             mainUI.SetActive(false);
@@ -140,11 +132,8 @@ public class ObjectPlaceUIManager : MonoBehaviour
 
     public void InitAnimationClip()
     {
-        ScaleUpAnimationClip(400, out scaleUpclip);
+        //ScaleUpAnimationClip(400, out scaleUpclip);
         //ScaleDownAnimationClip(400, out scaleDownclip);
-
-        print("scaleUpclip : " + scaleUpclip);
-        print("scaleDownclip : " + scaleDownclip);
     }
 
     public void StartPlace(TapGesture gesture)
@@ -161,8 +150,6 @@ public class ObjectPlaceUIManager : MonoBehaviour
         placePlane.transform.SetParent(gesture.TargetObject.transform);
         HelloARController.instance.TapGesturePositionCorrection(gesture, placePlane.transform, 0.01f);
         placePlane.transform.localRotation = Quaternion.Euler(0,0,0);
-        //spotSquare.transform.GetChild(1).gameObject.SetActive(true);
-
 
         SetButtonPosition(0.5f);
         ChangeState(UIState.HOME);
@@ -207,7 +194,7 @@ public class ObjectPlaceUIManager : MonoBehaviour
         GameObject slot = Instantiate(emptyBuildingSlot, buildingUI.transform);
 
         slot.GetComponent<Button>().onClick.AddListener(() => {
-            SetEditingSlotInfo(slot);
+            SceanContorller.instance.Editing = slot;
             SceanContorller.instance.ChangeScean(SceanState.AUGMENTEDIMAGE);
         });
 
@@ -218,33 +205,23 @@ public class ObjectPlaceUIManager : MonoBehaviour
         BUILDING_SLOT_COUNT++;
     }
 
-    public void SetEditingSlotInfo(GameObject slot)
-    {
-        SceanContorller.instance.Editing = slot;
-        print("coloring instant edi : " + slot);
-    }
-
-    public void InstantiateBuildingSlot(BuildingInfo buildingInfo, Material mat = null,bool _default = true)
+    /// <summary>
+    /// 빌딩 슬롯 생성
+    /// </summary>
+    /// <param name="buildingInfo"></param>
+    /// <param name="mat">빌딩에 할당할 머티리얼</param>
+    public void InstantiateBuildingSlot(BuildingInfo buildingInfo, Material mat)
     {
         //슬롯생성
-        GameObject slot;
+        GameObject slot = SceanContorller.instance.Editing;
 
-        if (_default)
-        {
-            slot = Instantiate(buildingSlot, evironmentUI.transform);
-        }
-        else
-        {
-            slot = SceanContorller.instance.Editing;
-            //slot = Instantiate(buildingSlot, buildingUI.transform);
-        }
-        print("asdfasdf : " + slot);
         //슬롯정보
         BuildingInfo slotInfo = slot.GetComponent<SlotInfo>().Slotinfo;
 
         //슬롯에 넣을 빌딩 생성
         GameObject building = Instantiate(buildingInfo.BuildingPrefab);
 
+        //빌딩 리사이즈
         building.transform.localScale = new Vector3(0.006f, 0.006f, 0.006f);
 
         //building.SetActive(false);
@@ -260,31 +237,48 @@ public class ObjectPlaceUIManager : MonoBehaviour
         //슬롯에 빌딩 할당
         slotInfo.BuildingPrefab = building;
 
+        //슬롯에 이미지 할당
         if(buildingInfo.Texture2d != null)
         {
             Sprite slotSprite = slot.transform.GetChild(0).GetComponent<Image>().sprite;
             slot.transform.GetChild(0).GetComponent<Image>().sprite = Sprite.Create(buildingInfo.Texture2d, new Rect(0, 0, buildingInfo.Texture2d.width, buildingInfo.Texture2d.height), Vector2.zero);
-            print("★★★★★★★★");
         }
 
-        //임시 빌딩 해제
-        //Destroy(building);
-
-        //slot.GetComponent<Image>().sprite = building.GetComponent<Renderer>().material.GetTexture;
+        //버튼 이벤트 삭제
         slot.GetComponent<Button>().onClick.RemoveAllListeners();
             
+        //버튼 이벤트 할당
         slot.GetComponent<Button>().onClick.AddListener(() => {
             HelloARController.instance.PlaceObject(placePlane, slotInfo.BuildingPrefab);
             ChangeState(UIState.NONE);
         });
-        print("aaaa132");
+
+        //버튼 재배치
         SetButtonPosition(0.5f);
 
+        //빌딩 오브젝트를 삭제하면 레퍼런스를 잃음
+        //프리펩을 파일로 저장하고 리소스로 링크하여 해결하도록함
         building.SetActive(false);
-        //Coloring.Instance.EdtingSlot = null;
-        //slot.transform.GetChild(0).GetComponent<Text>().text = "made : " + slotInfo.Name;
     }
 
+
+   
+
+    
+
+    public void PlayAnimation(Animation anim, string clipName)
+    {
+        // update the clip to a change the red color
+        //curve = AnimationCurve.Linear(0.0f, 1.0f, 2.0f, 0.0f);
+        //clip.SetCurve("", typeof(Material), "_Color.r", curve);
+        //clip.wrapMode = WrapMode.Loop;
+        // now animate the GameObject
+        //anim.AddClip(clip, clip.name);
+        print("qweqweqweweqwe : " + m_currentMenu);
+
+        anim.clip = anim.GetClip(clipName);
+        anim.Play();
+    }
 
     public void ChangeState(UIState uiState)
     {
@@ -305,9 +299,6 @@ public class ObjectPlaceUIManager : MonoBehaviour
                 m_currentMenu = mainUI;
 
                 SetButtonPosition(0.5f);
-
-
-                //StartCoroutine(Scale(true, 10, m_currentMenu));
 
                 spotSquare.SetActive(true);
 
@@ -344,9 +335,6 @@ public class ObjectPlaceUIManager : MonoBehaviour
 
                 SetButtonPosition(0.5f);
 
-
-                //StartCoroutine(Scale(true, 10, m_currentMenu));
-
                 spotSquare.SetActive(true);
 
                 mainUI.SetActive(false);
@@ -361,120 +349,5 @@ public class ObjectPlaceUIManager : MonoBehaviour
             default:
                 break;
         }
-    }
-
-    private IEnumerator Scale(bool state, float transitionSpeed, GameObject target)
-    {
-        RectTransform targetRect = target.GetComponent<RectTransform>();
-        if(state == true)
-        {
-            targetRect.localScale = Vector3.zero;
-        }
-
-        while (true)
-        {
-            //true is open
-            if (state == true)
-            {
-
-                targetRect.localScale = Vector3.Lerp(targetRect.transform.localScale, Vector3.one * uiSize, Time.deltaTime * transitionSpeed);
-
-                if (Mathf.Abs((Vector2.one).sqrMagnitude - targetRect.transform.localScale.sqrMagnitude) < 5f)
-                {
-                    targetRect.localScale = Vector3.one * uiSize;
-                    break;
-                }
-            }
-
-            //false is close
-            else if (state == false)
-            {
-                targetRect.localScale = Vector3.Lerp(targetRect.transform.localScale, Vector2.zero, Time.deltaTime * transitionSpeed);
-                if (targetRect.transform.localScale.x < .05f)
-                {
-                    targetRect.transform.localScale = Vector3.zero;
-                    break;
-                }
-            }
-            yield return null;
-        }
-
-        if(state == false)
-        {
-            targetRect.transform.localScale = Vector3.one * uiSize;
-        }
-        yield return null;
-    }
-
-    public void ScaleUpAnimationClip(int size, out AnimationClip clip)
-    {
-        AnimationCurve curve;
-
-        // create a new AnimationClip
-        clip = new AnimationClip();
-        clip.legacy = true;
-
-        // create a curve to move the GameObject and assign to the clip
-        Keyframe[] keys;
-
-        keys = new Keyframe[2];
-
-        curve = new AnimationCurve(keys);
-
-        keys[0] = new Keyframe(0.0f, 0);
-        keys[1] = new Keyframe(.5f, size);
-        clip.SetCurve("", typeof(RectTransform), "sizeDelta.x", curve);
-
-        keys[0] = new Keyframe(0.0f, 0);
-        keys[1] = new Keyframe(.5f, size);
-        clip.SetCurve("", typeof(RectTransform), "scale.y", curve);
-
-        keys[0] = new Keyframe(0.0f, 0);
-        keys[1] = new Keyframe(.5f, size);
-        clip.SetCurve("", typeof(RectTransform), "scale.z", curve);
-    }
-
-    public void ScaleDownAnimationClip(int size, out AnimationClip clip)
-    {
-        AnimationCurve curve;
-
-        // create a new AnimationClip
-        clip = new AnimationClip
-        {
-            legacy = true
-        };
-
-        // create a curve to move the GameObject and assign to the clip
-        Keyframe[] keys;
-
-        keys = new Keyframe[2];
-
-        curve = new AnimationCurve(keys);
-
-        keys[0] = new Keyframe(0.0f, size);
-        keys[1] = new Keyframe(.5f, 0);
-        clip.SetCurve("", typeof(RectTransform), "localScale.x", curve);
-
-        keys[0] = new Keyframe(0.0f, size);
-        keys[1] = new Keyframe(.5f, 0);
-        clip.SetCurve("", typeof(RectTransform), "localScale.y", curve);
-
-        keys[0] = new Keyframe(0.0f, size);
-        keys[1] = new Keyframe(.5f, 0);
-        clip.SetCurve("", typeof(RectTransform), "localScale.z", curve);
-    }
-
-    public void PlayAnimation(Animation anim, string clipName)
-    {
-        // update the clip to a change the red color
-        //curve = AnimationCurve.Linear(0.0f, 1.0f, 2.0f, 0.0f);
-        //clip.SetCurve("", typeof(Material), "_Color.r", curve);
-        //clip.wrapMode = WrapMode.Loop;
-        // now animate the GameObject
-        //anim.AddClip(clip, clip.name);
-        print("qweqweqweweqwe : " + m_currentMenu);
-
-        anim.clip = anim.GetClip(clipName);
-        anim.Play();
     }
 }

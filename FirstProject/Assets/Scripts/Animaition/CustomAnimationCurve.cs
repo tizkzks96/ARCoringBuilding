@@ -3,19 +3,106 @@ using UnityEngine;
 
 public class CustomAnimationCurve : Singleton<CustomAnimationCurve>
 {
-    //public AnimationCurve ac;
+    private float uiSize = 400;
 
-    //[Range(0.0f, 1.0f)]
-    //public float t;
+    private IEnumerator Scale(bool state, float transitionSpeed, GameObject target)
+    {
+        RectTransform targetRect = target.GetComponent<RectTransform>();
+        if (state == true)
+        {
+            targetRect.localScale = Vector3.zero;
+        }
 
-    //public IEnumerator TempAnimation(GameObject animationObject)
-    //{
-    //    float y = ac.Evaluate(t);
-    //    while (1 >= t)
-    //    {
-    //        y = ac.Evaluate(t);
-    //        animationObject.transform.position = new Vector3(0, animationObject.transform.position.y + y*2f, 0);
-    //    }
-    //    yield return null;
-    //}
+        while (true)
+        {
+            //true is open
+            if (state == true)
+            {
+
+                targetRect.localScale = Vector3.Lerp(targetRect.transform.localScale, Vector3.one * uiSize, Time.deltaTime * transitionSpeed);
+
+                if (Mathf.Abs((Vector2.one).sqrMagnitude - targetRect.transform.localScale.sqrMagnitude) < 5f)
+                {
+                    targetRect.localScale = Vector3.one * uiSize;
+                    break;
+                }
+            }
+
+            //false is close
+            else if (state == false)
+            {
+                targetRect.localScale = Vector3.Lerp(targetRect.transform.localScale, Vector2.zero, Time.deltaTime * transitionSpeed);
+                if (targetRect.transform.localScale.x < .05f)
+                {
+                    targetRect.transform.localScale = Vector3.zero;
+                    break;
+                }
+            }
+            yield return null;
+        }
+
+        if (state == false)
+        {
+            targetRect.transform.localScale = Vector3.one * uiSize;
+        }
+        yield return null;
+    }
+
+    public void ScaleUpAnimationClip(int size, out AnimationClip clip)
+    {
+        AnimationCurve curve;
+
+        // create a new AnimationClip
+        clip = new AnimationClip();
+        clip.legacy = true;
+
+        // create a curve to move the GameObject and assign to the clip
+        Keyframe[] keys;
+
+        keys = new Keyframe[2];
+
+        curve = new AnimationCurve(keys);
+
+        keys[0] = new Keyframe(0.0f, 0);
+        keys[1] = new Keyframe(.5f, size);
+        clip.SetCurve("", typeof(RectTransform), "sizeDelta.x", curve);
+
+        keys[0] = new Keyframe(0.0f, 0);
+        keys[1] = new Keyframe(.5f, size);
+        clip.SetCurve("", typeof(RectTransform), "scale.y", curve);
+
+        keys[0] = new Keyframe(0.0f, 0);
+        keys[1] = new Keyframe(.5f, size);
+        clip.SetCurve("", typeof(RectTransform), "scale.z", curve);
+    }
+
+    public void ScaleDownAnimationClip(int size, out AnimationClip clip)
+    {
+        AnimationCurve curve;
+
+        // create a new AnimationClip
+        clip = new AnimationClip
+        {
+            legacy = true
+        };
+
+        // create a curve to move the GameObject and assign to the clip
+        Keyframe[] keys;
+
+        keys = new Keyframe[2];
+
+        curve = new AnimationCurve(keys);
+
+        keys[0] = new Keyframe(0.0f, size);
+        keys[1] = new Keyframe(.5f, 0);
+        clip.SetCurve("", typeof(RectTransform), "localScale.x", curve);
+
+        keys[0] = new Keyframe(0.0f, size);
+        keys[1] = new Keyframe(.5f, 0);
+        clip.SetCurve("", typeof(RectTransform), "localScale.y", curve);
+
+        keys[0] = new Keyframe(0.0f, size);
+        keys[1] = new Keyframe(.5f, 0);
+        clip.SetCurve("", typeof(RectTransform), "localScale.z", curve);
+    }
 }
