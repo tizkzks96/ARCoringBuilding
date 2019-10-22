@@ -12,4 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7bade50f0f7afee448bdfdb2d424d059, type: 3}
   m_Name: RoadDatabase
   m_EditorClassIdentifier: 
-  road: []
+  road:
+  - Name: 
+    ID: 0
+    BuildingPrefab: {fileID: 100000, guid: d72f5439cf0e6834fb189727bbb614dd, type: 3}

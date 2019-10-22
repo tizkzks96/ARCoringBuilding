@@ -241,9 +241,12 @@ namespace GoogleARCore.Examples.HelloAR
                 //TapGesturePositionCorrection(target, manipulator.transform, 5);
 
                 HorizontalPlanePrefab = null;
+
+                
+                StartCoroutine(EconomySystem.Instance.IncreseGage(placeObject, 5, 5));
             }
 
-            return false;
+            return true;
         }
 
         protected override void OnStartManipulation(TapGesture gesture)
