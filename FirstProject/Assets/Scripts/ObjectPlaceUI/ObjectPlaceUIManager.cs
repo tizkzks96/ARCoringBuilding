@@ -230,8 +230,6 @@ public class ObjectPlaceUIManager : MonoBehaviour
         if (mat != null)
         {
             building.GetComponent<Renderer>().material = mat;
-
-            //slotInfo.BuildingPrefab.GetComponent<Renderer>().sharedMaterial.mainTexture = texture;
         }
 
         //슬롯에 빌딩 할당
