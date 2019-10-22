@@ -121,7 +121,6 @@ namespace GoogleARCore.Examples.AugmentedImage
                 Debug.Log("testest");
                 if (image.TrackingMethod == AugmentedImageTrackingMethod.FullTracking && visualizer == null)
                 {
-
                     Anchor anchor = image.CreateAnchor(image.CenterPose);
                     visualizer = (AugmentedImageVisualizer)Instantiate(
                         AugmentedImageVisualizerPrefab, anchor.transform);

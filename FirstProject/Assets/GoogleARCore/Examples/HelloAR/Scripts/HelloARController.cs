@@ -120,10 +120,9 @@ namespace GoogleARCore.Examples.HelloAR
             }
             else
             {
-                
+                ObjedtPlaceObjectController(gesture);
             }
 
-            ObjedtPlaceObjectController(gesture);
             //PiUiController(gesture);
 
             //PlaceObject(gesture);
@@ -207,15 +206,15 @@ namespace GoogleARCore.Examples.HelloAR
 
                 manipulator.transform.SetParent(target.transform);
 
-                manipulator.transform.transform.localPosition = new Vector3(0, 0, 0);
+                manipulator.transform.transform.localPosition = Vector3.zero;
 
-                placeObject.transform.localPosition = new Vector3(0, 0, 0);
+                placeObject.transform.localPosition = Vector3.zero;
 
                 placeObject.transform.rotation = target.transform.rotation;
 
                 manipulator.transform.SetParent(target.transform.parent.transform);
 
-                manipulator.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
+                manipulator.transform.localScale = Vector3.one * 0.5f;
 
                 // Make manipulator a child of the anchor.
                 //gesture.TargetObject.transform.parent = manipulator.transform;

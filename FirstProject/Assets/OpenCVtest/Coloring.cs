@@ -219,11 +219,12 @@ public class Coloring : Singleton<Coloring>
     public void CreatePrefab()
     {
         BuildingInfo buildingInfo = BuildingDatabase.Instance.GetByName("Building_ApartmentLarge_Brown");
-        string path = SaveTextureToFile(SceanContorller.instance.EdtingSlot.GetComponent<SlotInfo>().Slotinfo.ID.ToString());
+        string path = SaveTextureToFile(SceanContorller.instance.Editing.GetComponent<SlotInfo>().Slotinfo.ID.ToString());
         Texture2D texture2D = LoadFileToTexutre(path);
         Material mat = new Material(Shader.Find("Standard"));
         mat.mainTexture = texture2D;
         mat.color = Color.white;
+        buildingInfo.Texture2d = texture2D;
         ObjectPlaceUIManager.instance.InstantiateBuildingSlot(buildingInfo, mat,false);
     }
 

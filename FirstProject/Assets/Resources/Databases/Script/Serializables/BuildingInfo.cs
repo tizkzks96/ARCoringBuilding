@@ -7,7 +7,7 @@ namespace UnityEngine
     {
         public string Name;
         public int ID;
-        public Material material;
+        public Texture2D Texture2d;
         public GameObject BuildingPrefab;
 
 

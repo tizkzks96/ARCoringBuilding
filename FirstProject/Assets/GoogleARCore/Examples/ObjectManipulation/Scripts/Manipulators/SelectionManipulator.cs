@@ -121,7 +121,8 @@ namespace GoogleARCore.Examples.ObjectManipulation
         /// </summary>
         protected override void OnSelected()
         {
-            SelectionVisualization.SetActive(true);
+            transform.GetChild(1).gameObject.transform.GetComponent<Outline>().enabled = true;
+            SelectionVisualization.SetActive(false);
         }
 
         /// <summary>
@@ -129,6 +130,7 @@ namespace GoogleARCore.Examples.ObjectManipulation
         /// </summary>
         protected override void OnDeselected()
         {
+            transform.GetChild(1).gameObject.transform.GetComponent<Outline>().enabled = false;
             SelectionVisualization.SetActive(false);
         }
     }

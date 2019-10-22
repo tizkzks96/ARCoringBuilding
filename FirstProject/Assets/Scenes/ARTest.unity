@@ -594,7 +594,7 @@ MonoBehaviour:
   slotinfo:
     Name: 
     ID: 0
-    material: {fileID: 0}
+    Texture2d: {fileID: 0}
     BuildingPrefab: {fileID: 0}
 --- !u!114 &410045596
 MonoBehaviour:
@@ -809,7 +809,7 @@ MonoBehaviour:
   slotinfo:
     Name: 
     ID: 0
-    material: {fileID: 0}
+    Texture2d: {fileID: 0}
     BuildingPrefab: {fileID: 0}
 --- !u!114 &428146354
 MonoBehaviour:
@@ -1662,7 +1662,7 @@ MonoBehaviour:
   slotinfo:
     Name: 
     ID: 0
-    material: {fileID: 0}
+    Texture2d: {fileID: 0}
     BuildingPrefab: {fileID: 0}
 --- !u!114 &761161193
 MonoBehaviour:
@@ -4648,7 +4648,7 @@ MonoBehaviour:
   slotinfo:
     Name: 
     ID: 0
-    material: {fileID: 0}
+    Texture2d: {fileID: 0}
     BuildingPrefab: {fileID: 0}
 --- !u!114 &1650860876
 MonoBehaviour:
@@ -4744,7 +4744,7 @@ PrefabInstance:
     - target: {fileID: 79552108003796901, guid: cd145ae9b1928024bba70d9818c135f1,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2994818332806281865, guid: cd145ae9b1928024bba70d9818c135f1,
         type: 3}
@@ -5179,7 +5179,7 @@ MonoBehaviour:
   slotinfo:
     Name: 
     ID: 0
-    material: {fileID: 0}
+    Texture2d: {fileID: 0}
     BuildingPrefab: {fileID: 0}
 --- !u!114 &1810244806
 MonoBehaviour:
@@ -6157,7 +6157,7 @@ MonoBehaviour:
   slotinfo:
     Name: 
     ID: 0
-    material: {fileID: 0}
+    Texture2d: {fileID: 0}
     BuildingPrefab: {fileID: 0}
 --- !u!114 &2100203630
 MonoBehaviour:
@@ -6299,7 +6299,7 @@ MonoBehaviour:
   slotinfo:
     Name: 
     ID: 0
-    material: {fileID: 0}
+    Texture2d: {fileID: 0}
     BuildingPrefab: {fileID: 0}
 --- !u!114 &2135866060
 MonoBehaviour:

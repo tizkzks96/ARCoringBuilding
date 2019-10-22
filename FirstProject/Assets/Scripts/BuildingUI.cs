@@ -143,6 +143,6 @@ public class BuildingUI : MonoBehaviour
 
         slot.GetComponent<SlotInfo>().Slotinfo = slotInfo;
 
-        slot.transform.GetChild(0).GetComponent<Text>().text = "made : " + slotInfo.Name ;
+        //slot.transform.GetChild(0).GetComponent<Text>().text = "made : " + slotInfo.Name ;
     }
 }

@@ -220,7 +220,7 @@ public class ObjectPlaceUIManager : MonoBehaviour
 
     public void SetEditingSlotInfo(GameObject slot)
     {
-        SceanContorller.instance.EdtingSlot = slot;
+        SceanContorller.instance.Editing = slot;
         print("coloring instant edi : " + slot);
     }
 
@@ -235,7 +235,7 @@ public class ObjectPlaceUIManager : MonoBehaviour
         }
         else
         {
-            slot = SceanContorller.instance.EdtingSlot;
+            slot = SceanContorller.instance.Editing;
             //slot = Instantiate(buildingSlot, buildingUI.transform);
         }
         print("asdfasdf : " + slot);
@@ -260,7 +260,12 @@ public class ObjectPlaceUIManager : MonoBehaviour
         //슬롯에 빌딩 할당
         slotInfo.BuildingPrefab = building;
 
-        slot.GetComponent<Image>().sprite = buildingSprite; 
+        if(buildingInfo.Texture2d != null)
+        {
+            Sprite slotSprite = slot.transform.GetChild(0).GetComponent<Image>().sprite;
+            slot.transform.GetChild(0).GetComponent<Image>().sprite = Sprite.Create(buildingInfo.Texture2d, new Rect(0, 0, buildingInfo.Texture2d.width, buildingInfo.Texture2d.height), Vector2.zero);
+            print("★★★★★★★★");
+        }
 
         //임시 빌딩 해제
         //Destroy(building);
@@ -271,8 +276,8 @@ public class ObjectPlaceUIManager : MonoBehaviour
         slot.GetComponent<Button>().onClick.AddListener(() => {
             HelloARController.instance.PlaceObject(placePlane, slotInfo.BuildingPrefab);
             ChangeState(UIState.NONE);
-            });
-
+        });
+        print("aaaa132");
         SetButtonPosition(0.5f);
 
         building.SetActive(false);
