@@ -105,4 +105,22 @@ public class CustomAnimationCurve : Singleton<CustomAnimationCurve>
         keys[1] = new Keyframe(.5f, 0);
         clip.SetCurve("", typeof(RectTransform), "localScale.z", curve);
     }
+
+    public void PlayAnimation(Animation anim, string clipName)
+    {
+        // update the clip to a change the red color
+        //curve = AnimationCurve.Linear(0.0f, 1.0f, 2.0f, 0.0f);
+        //clip.SetCurve("", typeof(Material), "_Color.r", curve);
+        //clip.wrapMode = WrapMode.Loop;
+        // now animate the GameObject
+        //anim.AddClip(clip, clip.name);
+
+        anim.clip = anim.GetClip(clipName);
+        anim.Play();
+    }
+    public void InitAnimationClip()
+    {
+        //ScaleUpAnimationClip(400, out scaleUpclip);
+        //ScaleDownAnimationClip(400, out scaleDownclip);
+    }
 }

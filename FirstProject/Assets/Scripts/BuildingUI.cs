@@ -29,7 +29,7 @@ public class BuildingUI : MonoBehaviour
 
     private Canvas canvas;
 
-    public UIState UIState { get; set; } = UIState.HOME;
+    public PlaceUIState UIState { get; set; } = PlaceUIState.HOME;
 
     public void Awake()
     {
@@ -56,14 +56,14 @@ public class BuildingUI : MonoBehaviour
     {
         #region UIState 이동 버튼
         //HomePanel 버튼 연결
-        HomePanel.transform.Find("EnvironmentBtn").GetComponent<Button>().onClick.AddListener(() => { ChangeState(UIState.ENVIRONMENT); });
-        HomePanel.transform.Find("BuildingsBtn").GetComponent<Button>().onClick.AddListener(() => { ChangeState(UIState.BUILDING); });
+        HomePanel.transform.Find("EnvironmentBtn").GetComponent<Button>().onClick.AddListener(() => { ChangeState(PlaceUIState.ENVIRONMENT); });
+        HomePanel.transform.Find("BuildingsBtn").GetComponent<Button>().onClick.AddListener(() => { ChangeState(PlaceUIState.BUILDING); });
 
         //EnvironmentPanel 버튼 연결
-        EnvironmentPanel.transform.Find("Home").GetComponent<Button>().onClick.AddListener(() => { ChangeState(UIState.HOME); });
+        EnvironmentPanel.transform.Find("Home").GetComponent<Button>().onClick.AddListener(() => { ChangeState(PlaceUIState.HOME); });
 
         //BuildingPanel 버튼 연결
-        BuildingPanel.transform.Find("Home").GetComponent<Button>().onClick.AddListener(() => { ChangeState(UIState.HOME); });
+        BuildingPanel.transform.Find("Home").GetComponent<Button>().onClick.AddListener(() => { ChangeState(PlaceUIState.HOME); });
 
         BuildingPanel.transform.Find("Add").GetComponent<Button>().onClick.AddListener(() => { SceanContorller.instance.ChangeScean(SceanState.AUGMENTEDIMAGE); });
         #endregion
@@ -80,25 +80,25 @@ public class BuildingUI : MonoBehaviour
     /// <summary>
     /// UI Panel 상태를 체인지한다.
     /// </summary>
-    public void ChangeState(UIState uiState)
+    public void ChangeState(PlaceUIState uiState)
     {
         switch (uiState)
         {
-            case UIState.HOME:
+            case PlaceUIState.HOME:
                 HomePanel.SetActive(true);
 
                 EnvironmentPanel.SetActive(false);
 
                 BuildingPanel.SetActive(false);
                 break;
-            case UIState.ENVIRONMENT:
+            case PlaceUIState.ENVIRONMENT:
                 HomePanel.SetActive(false);
 
                 EnvironmentPanel.SetActive(true);
 
                 BuildingPanel.SetActive(false);
                 break;
-            case UIState.BUILDING:
+            case PlaceUIState.BUILDING:
                 HomePanel.SetActive(false);
 
                 EnvironmentPanel.SetActive(false);

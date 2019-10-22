@@ -6,7 +6,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
-public enum UIState
+public enum PlaceUIState
 {
     NONE,
     HOME,
@@ -90,36 +90,37 @@ public class ObjectPlaceUIManager : MonoBehaviour
 
             #region UIState 이동 버튼
             //HomePanel 버튼 연결
-            mainUI.transform.Find("Exit").GetComponent<Button>().onClick.AddListener(() => { ChangeState(UIState.NONE); });
-            mainUI.transform.Find("Building").GetComponent<Button>().onClick.AddListener(() => { ChangeState(UIState.ENVIRONMENT); });
-            mainUI.transform.Find("Enviroment").GetComponent<Button>().onClick.AddListener(() => { ChangeState(UIState.BUILDING); });
+            mainUI.transform.Find("Exit").GetComponent<Button>().onClick.AddListener(() => { ChangeState(PlaceUIState.NONE); });
+            mainUI.transform.Find("Building").GetComponent<Button>().onClick.AddListener(() => { ChangeState(PlaceUIState.ENVIRONMENT); });
+            mainUI.transform.Find("Enviroment").GetComponent<Button>().onClick.AddListener(() => { ChangeState(PlaceUIState.BUILDING); });
 
             //EnvironmentPanel 버튼 연결
-            evironmentUI.transform.Find("Home").GetComponent<Button>().onClick.AddListener(() => { ChangeState(UIState.HOME); });
+            evironmentUI.transform.Find("Home").GetComponent<Button>().onClick.AddListener(() => { ChangeState(PlaceUIState.HOME); });
 
             //BuildingPanel 버튼 연결
-            buildingUI.transform.Find("Home").GetComponent<Button>().onClick.AddListener(() => { ChangeState(UIState.HOME); });
+            buildingUI.transform.Find("Home").GetComponent<Button>().onClick.AddListener(() => { ChangeState(PlaceUIState.HOME); });
 
             buildingUI.transform.Find("Add").GetComponent<Button>().onClick.AddListener(() => { InstantiateEmptyBuildingSlot(); });
             #endregion
 
             m_currentMenu = mainUI;
 
-            for(int i = 1; i< evironmentUI.transform.childCount - 1; i++)
+            for(int i = 1; i< evironmentUI.transform.childCount; i++)
             {
                 Transform button = evironmentUI.transform.GetChild(i);
+                Outline outline = button.gameObject.AddComponent<Outline>();
+                outline.OutlineColor =  new Color(255, 255, 255);
+                outline.OutlineWidth = 2;
                 button.GetComponent<Button>().onClick.AddListener(() => {
-                    HelloARController.instance.PlaceObject(placePlane, button.GetComponent<SlotInfo>().slotinfo.BuildingPrefab);
-                    ChangeState(UIState.NONE);
+                    //button.GetComponent<SlotInfo>().slotinfo.BuildingPrefab.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+                    HelloARController.instance.PlaceObject(placePlane, button.GetComponent<SlotInfo>().slotinfo.BuildingPrefab, true);
+                    ChangeState(PlaceUIState.NONE);
                 });
             }
 
             //InstantiateBuildingSlot(BuildingDatabase.Instance.GetByID(0));
             //InstantiateBuildingSlot(1);
             //InstantiateBuildingSlot(2);
-
-            //Animation 초기화
-            //InitAnimationClip();
 
             //캡슐화   
             mainUI.SetActive(false);
@@ -130,11 +131,7 @@ public class ObjectPlaceUIManager : MonoBehaviour
 
     }
 
-    public void InitAnimationClip()
-    {
-        //ScaleUpAnimationClip(400, out scaleUpclip);
-        //ScaleDownAnimationClip(400, out scaleDownclip);
-    }
+ 
 
     public void StartPlace(TapGesture gesture)
     {
@@ -152,7 +149,7 @@ public class ObjectPlaceUIManager : MonoBehaviour
         placePlane.transform.localRotation = Quaternion.Euler(0,0,0);
 
         SetButtonPosition(0.5f);
-        ChangeState(UIState.HOME);
+        ChangeState(PlaceUIState.HOME);
     }
 
     public void SetButtonPosition(float radius)
@@ -248,7 +245,7 @@ public class ObjectPlaceUIManager : MonoBehaviour
         //버튼 이벤트 할당
         slot.GetComponent<Button>().onClick.AddListener(() => {
             HelloARController.instance.PlaceObject(placePlane, slotInfo.BuildingPrefab);
-            ChangeState(UIState.NONE);
+            ChangeState(PlaceUIState.NONE);
         });
 
         //버튼 재배치
@@ -259,32 +256,18 @@ public class ObjectPlaceUIManager : MonoBehaviour
         building.SetActive(false);
     }
 
-
-   
-
-    
-
     public void PlayAnimation(Animation anim, string clipName)
     {
-        // update the clip to a change the red color
-        //curve = AnimationCurve.Linear(0.0f, 1.0f, 2.0f, 0.0f);
-        //clip.SetCurve("", typeof(Material), "_Color.r", curve);
-        //clip.wrapMode = WrapMode.Loop;
-        // now animate the GameObject
-        //anim.AddClip(clip, clip.name);
-        print("qweqweqweweqwe : " + m_currentMenu);
-
         anim.clip = anim.GetClip(clipName);
         anim.Play();
     }
 
-    public void ChangeState(UIState uiState)
+    public void ChangeState(PlaceUIState uiState)
     {
         switch (uiState)
         {
-            case UIState.NONE:
+            case PlaceUIState.NONE:
                 //캡슐화
-                //StartCoroutine(Scale(false, 10, m_currentMenu));
                 PlayAnimation(m_currentMenu.GetComponent<Animation>(), "ScaleDown");
 
                 spotSquare.SetActive(false);
@@ -293,7 +276,7 @@ public class ObjectPlaceUIManager : MonoBehaviour
                 print("qweqwe : " + m_currentMenu);
 
                 break;
-            case UIState.HOME:
+            case PlaceUIState.HOME:
                 m_currentMenu = mainUI;
 
                 SetButtonPosition(0.5f);
@@ -309,13 +292,10 @@ public class ObjectPlaceUIManager : MonoBehaviour
                 PlayAnimation(m_currentMenu.GetComponent<Animation>(), "ScaleUp");
 
                 break;
-            case UIState.ENVIRONMENT:
+            case PlaceUIState.ENVIRONMENT:
                 m_currentMenu = evironmentUI;
 
                 SetButtonPosition(0.5f);
-
-
-                //StartCoroutine(Scale(true, 10, m_currentMenu));
 
                 spotSquare.SetActive(true);
 
@@ -328,7 +308,7 @@ public class ObjectPlaceUIManager : MonoBehaviour
                 PlayAnimation(m_currentMenu.GetComponent<Animation>(), "ScaleUp");
 
                 break;
-            case UIState.BUILDING:
+            case PlaceUIState.BUILDING:
                 m_currentMenu = buildingUI;
 
                 SetButtonPosition(0.5f);

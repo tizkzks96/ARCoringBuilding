@@ -183,21 +183,16 @@ public class Coloring : Singleton<Coloring>
         byte[] fileData;
 
 
-        Debug.Log("unity file test load start");
 
         if (File.Exists(filePath))
         {
-            Debug.Log("unity file test load 1");
             fileData = File.ReadAllBytes(filePath);
-            Debug.Log("unity file test load 2");
 
             tex = new Texture2D(2, 2);
-            Debug.Log("unity file test load 3");
 
             tex.LoadImage(fileData); //..this will auto-resize the texture dimensions.
         }
 
-        Debug.Log("unity file test load end");
         return tex;
     }
 

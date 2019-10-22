@@ -105,6 +105,9 @@ namespace GoogleARCore.Examples.HelloAR
 
         protected override bool CanStartManipulationForGesture(TapGesture gesture)
         {
+            print("★★★★gesture.TargetObject.transform.tag : " + gesture.TargetObject.transform.tag);
+            print("★★★★gesture.TargetObject.transform.tag : " + gesture.TargetObject.transform);
+
             if (gesture.TargetObject == null)
             {
                 Debug.Log("CanStartManipulationForGesture");
@@ -117,10 +120,14 @@ namespace GoogleARCore.Examples.HelloAR
             {
                 print("gesture.TargetObject.transform.tag : " + gesture.TargetObject.transform.tag);
                 gesture.TargetObject.GetComponent<Manipulator>().Select();
+
+                return true;
             }
             else
             {
                 ObjedtPlaceObjectController(gesture);
+
+                return true;
             }
 
             //PiUiController(gesture);
@@ -162,8 +169,9 @@ namespace GoogleARCore.Examples.HelloAR
 
         }
 
-        public bool PlaceObject(GameObject target, GameObject HorizontalPlanePrefab)
+        public bool PlaceObject(GameObject target, GameObject HorizontalPlanePrefab, bool _EnviromentCheck = false)
         {
+            
 
             Debug.Log("unity test  gesture.TargetObject.transform.position : ");
 
@@ -185,6 +193,8 @@ namespace GoogleARCore.Examples.HelloAR
                     Instantiate(prefab);
 
                 placeObject.SetActive(true);
+
+                
                 // Create an anchor to allow ARCore to track the hitpoint as understanding of
                 // the physical world evolves.
                 //var anchor = hit.Trackable.CreateAnchor(new Pose(gesture.TargetObject.transform.position, Quaternion.identity));
@@ -208,6 +218,8 @@ namespace GoogleARCore.Examples.HelloAR
 
                 manipulator.transform.transform.localPosition = Vector3.zero;
 
+                manipulator.tag = placeObject.tag;
+
                 placeObject.transform.localPosition = Vector3.zero;
 
                 placeObject.transform.rotation = target.transform.rotation;
@@ -219,9 +231,11 @@ namespace GoogleARCore.Examples.HelloAR
                 // Make manipulator a child of the anchor.
                 //gesture.TargetObject.transform.parent = manipulator.transform;
 
-
+                if (_EnviromentCheck == false)
+                {
+                    manipulator.GetComponent<Manipulator>().Select();
+                }
                 // Select the placed object.
-                manipulator.GetComponent<Manipulator>().Select();
 
                 //StartCoroutine(CustomAnimationCurve.Instance.TempAnimation(placeObject));
                 //TapGesturePositionCorrection(target, manipulator.transform, 5);
