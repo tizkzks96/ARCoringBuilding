@@ -128,6 +128,7 @@ namespace GoogleARCore.Examples.AugmentedImage
                     m_Visualizers.Add(image.DatabaseIndex, visualizer);
 
                     Coloring.Instance.visualizer = visualizer.FrameLowerRight.transform.GetChild(0).gameObject;
+                    Coloring.Instance.ctrlImage = image;
 
                     Coloring.Instance.StartCV();
                 }

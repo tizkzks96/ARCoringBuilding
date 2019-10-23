@@ -43,11 +43,11 @@ namespace GoogleARCore.Examples.Common
 
         private List<int> m_MeshIndices = new List<int>();
 
-        private Anchor cubeWorldAnchor;
+        public static Anchor cubeWorldAnchor;
 
         private Mesh m_Mesh;
 
-        private MeshRenderer m_MeshRenderer;
+        public static MeshRenderer m_MeshRenderer;
         public GameObject GroundManipulatorPrefab;
 
         public Camera firstPersonCamera;
@@ -59,6 +59,7 @@ namespace GoogleARCore.Examples.Common
         float minDistance;
 
         private static Vector3 gab;
+
 
         public List<Vector3> MeshVertices { get => m_MeshVertices; set => m_MeshVertices = value; }
         public Vector3 PlaneCenter { get => m_PlaneCenter; set => m_PlaneCenter = value; }
@@ -90,37 +91,16 @@ namespace GoogleARCore.Examples.Common
                 Destroy(gameObject);
                 return;
             }
-            else if (m_DetectedPlane.TrackingState != TrackingState.Tracking)
-            {
-                 m_MeshRenderer.enabled = false;
-                if(cubeWorld != null)
-                {
-                    cubeWorld.transform.SetParent(firstPersonCamera.transform);
-                    cubeWorld.transform.localPosition = new Vector3(0, -0.2f, 1.5f);
-                    cubeWorld.transform.localRotation = Quaternion.Euler(320, 300, 45);
-                    cubeWorld.SetActive(true);
 
-                }
-                return;
-            }
-            else if(m_DetectedPlane.TrackingState == TrackingState.Tracking)
-            {
-                if (cubeWorld != null)
-                {
-                    cubeWorld.transform.SetParent(cubeWorldAnchor.transform);
-                    cubeWorld.transform.localPosition = Vector3.zero;
-                    cubeWorld.transform.localRotation = Quaternion.Euler(0, 0, 0);
-                    cubeWorld.SetActive(true);
-                }
-            }
-
-            m_MeshRenderer.enabled = true;
+            //m_MeshRenderer.enabled = true;
 
             
             _UpdateMeshIfNeeded();
-            SeleteArea();
+            SelectArea();
         }
 
+
+        
         /// <summary>
         /// Initializes the DetectedPlaneVisualizer with a DetectedPlane.
         /// </summary>
@@ -247,7 +227,7 @@ namespace GoogleARCore.Examples.Common
 
             return true;
         }
-        public void SeleteArea()
+        public void SelectArea()
         {
             if (!_endDetect)
             {
@@ -367,7 +347,7 @@ namespace GoogleARCore.Examples.Common
 
                                 GameObject ground = Instantiate(groundInfo.GroundPrefab);
                                 ground.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
-                                ground.transform.position = cubeWorld.transform.position + new Vector3(x * objectSize, y * objectSize, z * objectSize);
+                                ground.transform.position = cubeWorld.transform.position + new Vector3(x * objectSize, y * objectSize, z * objectSize) - Vector3.one * objectSize * 1.5f;// *  ((size) /2);
                                 ground.transform.SetParent(cubeWorld.transform);
 
                                 

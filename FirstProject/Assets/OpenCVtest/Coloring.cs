@@ -1,4 +1,5 @@
-﻿using GoogleARCore.Examples.AugmentedImage;
+﻿using GoogleARCore;
+using GoogleARCore.Examples.AugmentedImage;
 using OpenCvSharp;
 using OpenCvSharp.Demo;
 using System.Collections;
@@ -17,6 +18,7 @@ public class Coloring : Singleton<Coloring>
     public GameObject canvas; //Canvas which involves UI 
     public RawImage viewL, viewR; //Result viewer 
     public GameObject visualizer;
+    public AugmentedImage ctrlImage;
     UnityEngine.Rect capRect;//Region of screen shot 
     Texture2D capTexture; //Texture of screenshot image 
     Texture2D colTexture; //Result of image processing(color) 
@@ -213,7 +215,7 @@ public class Coloring : Singleton<Coloring>
 
     public void CreatePrefab()
     {
-        BuildingInfo buildingInfo = BuildingDatabase.Instance.GetByName("Building_ApartmentLarge_Brown");
+        BuildingInfo buildingInfo = BuildingDatabase.Instance.GetByName(ctrlImage.Name);
         string path = SaveTextureToFile(SceanContorller.instance.Editing.GetComponent<SlotInfo>().Slotinfo.ID.ToString());
         Texture2D texture2D = LoadFileToTexutre(path);
         Material mat = new Material(Shader.Find("Standard"));

@@ -105,8 +105,8 @@ namespace GoogleARCore.Examples.HelloAR
 
         protected override bool CanStartManipulationForGesture(TapGesture gesture)
         {
-            print("★★★★gesture.TargetObject.transform.tag : " + gesture.TargetObject.transform.tag);
-            print("★★★★gesture.TargetObject.transform.tag : " + gesture.TargetObject.transform);
+
+
 
             if (gesture.TargetObject == null)
             {
@@ -192,7 +192,6 @@ namespace GoogleARCore.Examples.HelloAR
                 var placeObject =
                     Instantiate(prefab);
 
-                placeObject.SetActive(true);
 
                 
                 // Create an anchor to allow ARCore to track the hitpoint as understanding of
@@ -242,8 +241,13 @@ namespace GoogleARCore.Examples.HelloAR
 
                 HorizontalPlanePrefab = null;
 
-                
-                StartCoroutine(EconomySystem.Instance.IncreseGage(placeObject, 5, 5));
+                BuildingMoneyCtrl bMC = placeObject.AddComponent<BuildingMoneyCtrl>();
+                bMC.placeObject = placeObject;
+                bMC.time = 5;
+                bMC.increseMoney = 5;
+
+                placeObject.SetActive(true);
+
             }
 
             return true;
