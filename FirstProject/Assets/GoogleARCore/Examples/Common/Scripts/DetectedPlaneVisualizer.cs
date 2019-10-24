@@ -347,7 +347,9 @@ namespace GoogleARCore.Examples.Common
 
                                 GameObject ground = Instantiate(groundInfo.GroundPrefab);
                                 ground.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
-                                ground.transform.position = cubeWorld.transform.position + new Vector3(x * objectSize, y * objectSize, z * objectSize) - Vector3.one * objectSize * 1.5f;// *  ((size) /2);
+                                ground.transform.position = cubeWorld.transform.position
+                                                            + new Vector3(x * objectSize, y * objectSize, z * objectSize)
+                                                            - new Vector3(objectSize * (size/2 - 0.5f), objectSize * (size / 2), objectSize * (size / 2 - 0.5f));
                                 ground.transform.SetParent(cubeWorld.transform);
 
                                 

@@ -8,13 +8,15 @@ public class MainUI : MonoBehaviour
 {
     public GameObject mainUI;
 
-    public Camera camera;
+    public Camera m_camera;
 
+    private GameObject m_anchor;
     private bool CubeWorldViewChangeSwitchBtn = true;
 
     private void Awake()
     {
-        mainUI.transform.Find("");
+        m_anchor = m_camera.transform.Find("Anchor").gameObject;
+        print("★★★★★" + m_anchor);
     }
 
     public void CubeWorldViewChange()
@@ -34,10 +36,13 @@ public class MainUI : MonoBehaviour
 
             meshRenderer.enabled = false;
 
-            cubeWorld.transform.SetParent(camera.transform);
-            cubeWorld.transform.localPosition = new Vector3(0, -0.2f, 1.5f);
-            cubeWorld.transform.localRotation = Quaternion.Euler(320, 300, 45);
+            m_anchor.transform.localPosition = new Vector3(0, -0.2f, 1.5f);
+            m_anchor.transform.localRotation = Quaternion.Euler(320, 300, 45);
             cubeWorld.SetActive(true);
+            cubeWorld.transform.SetParent(m_anchor.transform);
+            cubeWorld.transform.localPosition = Vector3.zero;
+            cubeWorld.transform.localRotation = Quaternion.identity;
+
         }
         else
         {
@@ -50,26 +55,33 @@ public class MainUI : MonoBehaviour
             cubeWorld.transform.localPosition = Vector3.zero;
             cubeWorld.transform.localRotation = Quaternion.Euler(0, 0, 0);
             cubeWorld.SetActive(true);
+
+            
         }
     }
 
     public void CubeRightRotate()
     {
-        DetectedPlaneVisualizer.cubeWorld.transform.eulerAngles += transform.up * 90;
+        Vector3 rotation = DetectedPlaneVisualizer.cubeWorld.transform.localEulerAngles;
+        DetectedPlaneVisualizer.cubeWorld.transform.localRotation = Quaternion.Euler(rotation.x, rotation.y + 90, rotation.z);
     }
 
     public void CubeLeftRotate()
     {
-        DetectedPlaneVisualizer.cubeWorld.transform.eulerAngles += transform.up * -90;
+        Vector3 rotation = DetectedPlaneVisualizer.cubeWorld.transform.localEulerAngles;
+        DetectedPlaneVisualizer.cubeWorld.transform.localRotation = Quaternion.Euler(rotation.x, rotation.y - 90, rotation.z);
     }
 
     public void CubeUpRotate()
     {
-        DetectedPlaneVisualizer.cubeWorld.transform.localEulerAngles += transform.forward * 90;
+        Vector3 rotation = DetectedPlaneVisualizer.cubeWorld.transform.localEulerAngles;
+        DetectedPlaneVisualizer.cubeWorld.transform.localRotation = Quaternion.Euler(rotation.x, rotation.y, rotation.z + 90);
     }
 
     public void CubeDownRotate()
     {
-        DetectedPlaneVisualizer.cubeWorld.transform.localEulerAngles += transform.forward * -90;
+        Vector3 rotation = DetectedPlaneVisualizer.cubeWorld.transform.localEulerAngles;
+        DetectedPlaneVisualizer.cubeWorld.transform.localRotation = Quaternion.Euler(rotation.x, rotation.y, rotation.z - 90);
+        //DetectedPlaneVisualizer.cubeWorld.transform.localEulerAngles += DetectedPlaneVisualizer.cubeWorld.transform.forward * -90;
     }
 }
