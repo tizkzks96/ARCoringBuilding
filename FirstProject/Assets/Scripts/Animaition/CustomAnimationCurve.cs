@@ -106,6 +106,36 @@ public class CustomAnimationCurve : Singleton<CustomAnimationCurve>
         clip.SetCurve("", typeof(RectTransform), "localScale.z", curve);
     }
 
+    public void TransformRotationLeftAnimationClip(Vector3 eulerAngle, out AnimationClip clip)
+    {
+        AnimationCurve curve;
+
+        // create a new AnimationClip
+        clip = new AnimationClip
+        {
+            legacy = true
+        };
+
+        // create a curve to move the GameObject and assign to the clip
+        Keyframe[] keys;
+
+        keys = new Keyframe[2];
+
+        curve = new AnimationCurve(keys);
+
+        keys[0] = new Keyframe(0.0f, eulerAngle.x);
+        keys[1] = new Keyframe(.5f, 0);
+        clip.SetCurve("", typeof(RectTransform), "rotation.x", curve);
+
+        keys[0] = new Keyframe(0.0f, eulerAngle.y);
+        keys[1] = new Keyframe(.5f, 0);
+        clip.SetCurve("", typeof(RectTransform), "rotation.y", curve);
+
+        keys[0] = new Keyframe(0.0f, eulerAngle.z);
+        keys[1] = new Keyframe(.5f, 0);
+        clip.SetCurve("", typeof(RectTransform), "rotation.z", curve);
+    }
+
     public void PlayAnimation(Animation anim, string clipName)
     {
         // update the clip to a change the red color
