@@ -123,6 +123,7 @@ public class MainUI : MonoBehaviour
             rv = Time.deltaTime * speed;
             duration += rv;
 
+            //right left 분기점 만들어야댐
             DetectedPlaneVisualizer.cubeWorld.transform.localRotation = Quaternion.Euler(rotation.x, DetectedPlaneVisualizer.cubeWorld.transform.localEulerAngles.y + rv, DetectedPlaneVisualizer.cubeWorld.transform.localEulerAngles.z);
         }
         DetectedPlaneVisualizer.cubeWorld.transform.localRotation = Quaternion.Euler(rotation.x, rotation.y + right, rotation.z + up);
