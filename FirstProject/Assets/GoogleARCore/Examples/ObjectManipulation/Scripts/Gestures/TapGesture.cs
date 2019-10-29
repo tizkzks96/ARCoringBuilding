@@ -77,7 +77,7 @@ namespace GoogleARCore.Examples.ObjectManipulation
                 var gameObject = hit.transform.gameObject;
                 if (gameObject != null)
                 {
-                    TargetObject = gameObject.GetComponentInParent<Manipulator>().gameObject;
+                        TargetObject = gameObject.GetComponentInParent<Manipulator>().gameObject;
                 }
             }
         }

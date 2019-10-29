@@ -9,7 +9,7 @@ public enum ROTATE_DIRECTION
 {
     RIGHT, LEFT, UP, DOWN
 }
-public class MainUI : MonoBehaviour
+public class MainUI : Singleton<MainUI>
 {
     public GameObject mainUI;
 
@@ -31,6 +31,8 @@ public class MainUI : MonoBehaviour
         m_anchor = m_camera.transform.Find("Anchor").gameObject;
         print("★★★★★" + m_anchor);
 
+        mainUI.SetActive(true);
+
         leftRotationBtn = mainUI.transform.Find("LeftRotateBtn").transform.GetComponent<Button>();
         rightRotationBtn = mainUI.transform.Find("RightRotateBtn").transform.GetComponent<Button>();
         upRotationBtn = mainUI.transform.Find("UpRotateBtn").transform.GetComponent<Button>();
@@ -40,6 +42,13 @@ public class MainUI : MonoBehaviour
         rightRotationBtn.onClick.AddListener(() => RotateCube(ROTATE_DIRECTION.RIGHT));
         upRotationBtn.onClick.AddListener(() => RotateCube(ROTATE_DIRECTION.UP));
         downRotationBtn.onClick.AddListener(() => RotateCube(ROTATE_DIRECTION.DOWN));
+
+        mainUI.SetActive(false);
+    }
+
+    public void OpenUI()
+    {
+        mainUI.SetActive(true);
     }
 
     public void CubeWorldViewChange()

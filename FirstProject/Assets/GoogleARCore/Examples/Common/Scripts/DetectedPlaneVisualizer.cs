@@ -71,6 +71,8 @@ namespace GoogleARCore.Examples.Common
         /// </summary>
         public void Awake()
         {
+            MainUI.Instance.OpenUI();
+
             firstPersonCamera = FindObjectOfType<Camera>();
             m_Mesh = GetComponent<MeshFilter>().mesh;
             m_MeshRenderer = GetComponent<UnityEngine.MeshRenderer>();

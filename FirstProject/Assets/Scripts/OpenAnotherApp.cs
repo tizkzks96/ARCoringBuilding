@@ -3,10 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class OpenAnotherApp : MonoBehaviour
+public class OpenAnotherApp : Singleton<OpenAnotherApp>
 {
     string temp = "com.Yong.Card";
-    public bool openUrl(string packageName)
+    public void OpenUrl(string packageName)
     {
 #if UNITY_ANDROID
         AndroidJavaClass unityPlayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
@@ -18,7 +18,7 @@ public class OpenAnotherApp : MonoBehaviour
         {
             intent = pManager.Call<AndroidJavaObject>("getLaunchIntentForPackage", packageName);
             unityActivity.Call("startActivity", intent);
-            return true;
+            //return true;
         }
         catch (Exception e)
         {
@@ -27,7 +27,7 @@ public class OpenAnotherApp : MonoBehaviour
             string link = "https://play.google.com/store/apps/details?id=" + packageName + "&hl=en";
 
             Application.OpenURL(link);
-            return false;
+            //return false;
         }
 
 #endif

@@ -43,7 +43,7 @@ namespace GoogleARCore.Examples.HelloAR
         [SerializeField]
         private bool menuOpened;
 
-
+        public GameObject popupCanvas;
 
         /// <summary>
         /// The first-person camera being used to render the passthrough camera image (i.e. AR
@@ -115,6 +115,13 @@ namespace GoogleARCore.Examples.HelloAR
 
 
                 return false;
+            }
+            else if(gesture.TargetObject.transform.tag == "AnotherGame")
+            {
+                if (popupCanvas.activeSelf == false)
+                {
+                    popupCanvas.SetActive(true);
+                }
             }
             else if(gesture.TargetObject.transform.tag == "Building")
             {
