@@ -45,7 +45,7 @@ public class ObjectPlaceUIManager : MonoBehaviour
 
     private GameObject m_currentMenu;
 
-    private GameObject spotSquare;
+    public GameObject spotSquare;
 
     public GameObject CurrentMenu { get => m_currentMenu;}
 

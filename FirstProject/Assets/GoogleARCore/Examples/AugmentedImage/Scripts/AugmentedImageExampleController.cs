@@ -108,7 +108,7 @@ namespace GoogleARCore.Examples.AugmentedImage
             {
                 Screen.sleepTimeout = SleepTimeout.NeverSleep;
             }
-            Debug.Log("asdasdasd");
+
             // Get updated augmented images for this frame.
             Session.GetTrackables<AugmentedImage>(
                 m_TempAugmentedImages, TrackableQueryFilter.Updated);

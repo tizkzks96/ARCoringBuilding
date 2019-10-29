@@ -116,7 +116,7 @@ namespace GoogleARCore.Examples.HelloAR
 
                 return false;
             }
-            else if(gesture.TargetObject.transform.tag == "AnotherGame")
+            else if(gesture.TargetObject.transform.tag == "AnotherGame" && ObjectPlaceUIManager.instance.spotSquare.activeSelf == false)
             {
                 if (popupCanvas.activeSelf == false)
                 {
@@ -248,10 +248,11 @@ namespace GoogleARCore.Examples.HelloAR
 
                 HorizontalPlanePrefab = null;
 
-                BuildingMoneyCtrl bMC = placeObject.AddComponent<BuildingMoneyCtrl>();
-                bMC.placeObject = placeObject;
-                bMC.time = 5;
-                bMC.increseMoney = 5;
+                //추후 주석 풀기
+                //BuildingMoneyCtrl bMC = placeObject.AddComponent<BuildingMoneyCtrl>();
+                //bMC.placeObject = placeObject;
+                //bMC.time = 5;
+                //bMC.increseMoney = 5;
 
                 placeObject.SetActive(true);
 
