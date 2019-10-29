@@ -249,7 +249,6 @@ GameObject:
   - component: {fileID: 90851962}
   - component: {fileID: 90851961}
   - component: {fileID: 90851960}
-  - component: {fileID: 90851959}
   m_Layer: 5
   m_Name: DownotateBtn
   m_TagString: Untagged
@@ -277,23 +276,6 @@ RectTransform:
   m_AnchoredPosition: {x: 65, y: -392}
   m_SizeDelta: {x: 1, y: 1}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &90851959
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 90851957}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b4083ab255c8f1049ab13ce9030e2893, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  slotinfo:
-    Name: 
-    ID: 0
-    Texture2d: {fileID: 0}
-    BuildingPrefab: {fileID: 100000, guid: 9cad59b19b7b8be41805dbf9cc7dbd28, type: 3}
 --- !u!114 &90851960
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1057,7 +1039,6 @@ GameObject:
   - component: {fileID: 403900017}
   - component: {fileID: 403900016}
   - component: {fileID: 403900015}
-  - component: {fileID: 403900014}
   m_Layer: 5
   m_Name: UpRotateBtn
   m_TagString: Untagged
@@ -1085,23 +1066,6 @@ RectTransform:
   m_AnchoredPosition: {x: 65, y: -235}
   m_SizeDelta: {x: 1, y: 1}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &403900014
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 403900012}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b4083ab255c8f1049ab13ce9030e2893, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  slotinfo:
-    Name: 
-    ID: 0
-    Texture2d: {fileID: 0}
-    BuildingPrefab: {fileID: 100000, guid: 9cad59b19b7b8be41805dbf9cc7dbd28, type: 3}
 --- !u!114 &403900015
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3496,7 +3460,6 @@ GameObject:
   - component: {fileID: 998686507}
   - component: {fileID: 998686506}
   - component: {fileID: 998686505}
-  - component: {fileID: 998686504}
   m_Layer: 5
   m_Name: RightRotateBtn
   m_TagString: Untagged
@@ -3524,23 +3487,6 @@ RectTransform:
   m_AnchoredPosition: {x: 146, y: -315}
   m_SizeDelta: {x: 1, y: 1}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &998686504
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 998686502}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b4083ab255c8f1049ab13ce9030e2893, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  slotinfo:
-    Name: 
-    ID: 0
-    Texture2d: {fileID: 0}
-    BuildingPrefab: {fileID: 100000, guid: 9cad59b19b7b8be41805dbf9cc7dbd28, type: 3}
 --- !u!114 &998686505
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5305,7 +5251,6 @@ GameObject:
   - component: {fileID: 1322222031}
   - component: {fileID: 1322222030}
   - component: {fileID: 1322222029}
-  - component: {fileID: 1322222028}
   m_Layer: 5
   m_Name: LeftRotateBtn
   m_TagString: Untagged
@@ -5333,23 +5278,6 @@ RectTransform:
   m_AnchoredPosition: {x: -16, y: -316}
   m_SizeDelta: {x: 1, y: 1}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1322222028
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1322222026}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b4083ab255c8f1049ab13ce9030e2893, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  slotinfo:
-    Name: 
-    ID: 0
-    Texture2d: {fileID: 0}
-    BuildingPrefab: {fileID: 100000, guid: 9cad59b19b7b8be41805dbf9cc7dbd28, type: 3}
 --- !u!114 &1322222029
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -15,11 +15,11 @@ MonoBehaviour:
   ground:
   - Name: 
     ID: 0
-    GroundPrefab: {fileID: 1781065274991804, guid: 5fdb40cb9020baf4a8ac08950bc011fb,
+    GroundPrefab: {fileID: 4220205635177685607, guid: c280e2b511c69a146a787e4430e6294d,
       type: 3}
     groundType: 0
   - Name: 
     ID: 0
-    GroundPrefab: {fileID: 1994254046939066, guid: 0e73af8010d048146926a3aa7b01af6a,
+    GroundPrefab: {fileID: 1781065274991804, guid: 5fdb40cb9020baf4a8ac08950bc011fb,
       type: 3}
-    groundType: 1
+    groundType: 0

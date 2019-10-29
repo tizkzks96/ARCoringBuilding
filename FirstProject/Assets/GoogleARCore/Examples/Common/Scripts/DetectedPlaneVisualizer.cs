@@ -279,7 +279,7 @@ namespace GoogleARCore.Examples.Common
         }
 
 
-        public void CustomAnimationControll(GameObject cubeWorld, int size)
+        public void CustomAnimationControll(GameObject cubeWorld)
         {
             Animation anim = cubeWorld.AddComponent<Animation>();
 
@@ -327,14 +327,24 @@ namespace GoogleARCore.Examples.Common
             cubeWorld.transform.SetParent(cubeWorldAnchor.transform);
             cubeWorld.transform.localPosition = Vector3.zero;
 
-            CustomAnimationControll(cubeWorld, size);
+            CustomAnimationControll(cubeWorld);
 
+            GroundInfo groundInfo = GroundDatabase.Instance.Get(0);
+            GameObject ground = Instantiate(groundInfo.GroundPrefab);
+            ground.transform.SetParent(cubeWorld.transform);
+            //CreateGround(size);
+
+            yield return null;
+        }
+        
+        public void CreateGround(int size)
+        {
             float objectSize = 0.1f;
             for (int z = 0; z < size; z++)
             {
-                for(int y = 0; y < size; y++)
+                for (int y = 0; y < size; y++)
                 {
-                    for (int x = 0; x < size; x ++)
+                    for (int x = 0; x < size; x++)
                     {
                         //3x3 이상 큐브일 때
                         //눈에 보이지 않는 큐브는 생성하지 않음
@@ -343,16 +353,16 @@ namespace GoogleARCore.Examples.Common
                             if ((z == 0 || z == size - 1) || (y == 0 || y == size - 1) || (x == 0 || x == size - 1))
                             {
                                 //get ground info
-                                GroundInfo groundInfo = GroundDatabase.Instance.Get(Random.Range(0, 1));
+                                GroundInfo groundInfo = GroundDatabase.Instance.Get(Random.Range(1, 2));
 
                                 GameObject ground = Instantiate(groundInfo.GroundPrefab);
                                 ground.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
                                 ground.transform.position = cubeWorld.transform.position
                                                             + new Vector3(x * objectSize, y * objectSize, z * objectSize)
-                                                            - new Vector3(objectSize * (size/2 - 0.5f), objectSize * (size / 2), objectSize * (size / 2 - 0.5f));
+                                                            - new Vector3(objectSize * (size / 2 - 0.5f), objectSize * (size / 2), objectSize * (size / 2 - 0.5f));
                                 ground.transform.SetParent(cubeWorld.transform);
 
-                                
+
                                 switch (groundInfo.groundType)
                                 {
                                     case GroundType.EMPTY:
@@ -371,13 +381,12 @@ namespace GoogleARCore.Examples.Common
                                 }
                             }
                         }
-                        
+
                     }//new Vector3(k, j, i)
                 }
             }
-            yield return null;
         }
-        
+
         public IEnumerator FixGridArray(Vector3 leftPoint, Vector3 rightPoint, Vector3 forwardPoint, Vector3 backPoint)
         {
             int m = 0;

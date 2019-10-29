@@ -32,12 +32,12 @@ public class MainUI : MonoBehaviour
         print("★★★★★" + m_anchor);
 
         leftRotationBtn = mainUI.transform.Find("LeftRotateBtn").transform.GetComponent<Button>();
-        rightRotationBtn = mainUI.transform.Find("LeftRotateBtn").transform.GetComponent<Button>();
-        upRotationBtn = mainUI.transform.Find("LeftRotateBtn").transform.GetComponent<Button>();
-        downRotationBtn = mainUI.transform.Find("LeftRotateBtn").transform.GetComponent<Button>();
+        rightRotationBtn = mainUI.transform.Find("RightRotateBtn").transform.GetComponent<Button>();
+        upRotationBtn = mainUI.transform.Find("UpRotateBtn").transform.GetComponent<Button>();
+        downRotationBtn = mainUI.transform.Find("DownotateBtn").transform.GetComponent<Button>();
 
-        leftRotationBtn.onClick.AddListener(() => RotateCube(ROTATE_DIRECTION.RIGHT));
-        rightRotationBtn.onClick.AddListener(() => RotateCube(ROTATE_DIRECTION.LEFT));
+        leftRotationBtn.onClick.AddListener(() => RotateCube(ROTATE_DIRECTION.LEFT));
+        rightRotationBtn.onClick.AddListener(() => RotateCube(ROTATE_DIRECTION.RIGHT));
         upRotationBtn.onClick.AddListener(() => RotateCube(ROTATE_DIRECTION.UP));
         downRotationBtn.onClick.AddListener(() => RotateCube(ROTATE_DIRECTION.DOWN));
     }
@@ -45,7 +45,7 @@ public class MainUI : MonoBehaviour
     public void CubeWorldViewChange()
     {
         //GameObject cubeWorld = ;
-        MeshRenderer meshRenderer = GoogleARCore.Examples.Common.DetectedPlaneVisualizer.m_MeshRenderer;
+        MeshRenderer meshRenderer = DetectedPlaneVisualizer.m_MeshRenderer;
         GameObject cubeWorld = DetectedPlaneVisualizer.cubeWorld;
         Anchor cubeWorldAnchor = DetectedPlaneVisualizer.cubeWorldAnchor;
 
@@ -82,7 +82,7 @@ public class MainUI : MonoBehaviour
 
     public void RotateCube(ROTATE_DIRECTION rotate)
     {
-        float speed = 90;
+        float speed = 180;
         if (isPlaying == true)
             return;
 
@@ -91,19 +91,23 @@ public class MainUI : MonoBehaviour
         switch (rotate)
         {
             case ROTATE_DIRECTION.RIGHT:
+                print("right");
                 StartCoroutine(CubeRotate(90, 0, speed));
 
                 break;
             case ROTATE_DIRECTION.LEFT:
-                StartCoroutine(CubeRotate(-90, 0, speed));
+                print("LEFT");
+                StartCoroutine(CubeRotate(-90, 0, -speed));
 
                 break;
             case ROTATE_DIRECTION.UP:
+                print("UP");
                 StartCoroutine(CubeRotate(0, 90, speed));
 
                 break;
             case ROTATE_DIRECTION.DOWN:
-                StartCoroutine(CubeRotate(0, -90, speed));
+                print("DOWN");
+                StartCoroutine(CubeRotate(0, -90, -speed));
 
                 break;
             default:
@@ -113,7 +117,7 @@ public class MainUI : MonoBehaviour
     public IEnumerator CubeRotate(float right, float up, float speed)
     {
         Vector3 rotation = DetectedPlaneVisualizer.cubeWorld.transform.localEulerAngles;
-        float rv = 0;
+        float rv;
         float duration = 0;
 
         while (duration <= 89.9999f)
@@ -121,31 +125,21 @@ public class MainUI : MonoBehaviour
             yield return null;
 
             rv = Time.deltaTime * speed;
-            duration += rv;
+            duration += Mathf.Abs(rv);
 
-            //right left 분기점 만들어야댐
-            DetectedPlaneVisualizer.cubeWorld.transform.localRotation = Quaternion.Euler(rotation.x, DetectedPlaneVisualizer.cubeWorld.transform.localEulerAngles.y + rv, DetectedPlaneVisualizer.cubeWorld.transform.localEulerAngles.z);
+            Vector3 localEulerAngles = DetectedPlaneVisualizer.cubeWorld.transform.localEulerAngles;
+            if (up == 0)
+            {
+                DetectedPlaneVisualizer.cubeWorld.transform.localRotation = 
+                    Quaternion.Euler(rotation.x, localEulerAngles.y + rv, localEulerAngles.z);
+            }
+            if (right == 0)
+            {
+                DetectedPlaneVisualizer.cubeWorld.transform.localRotation = 
+                    Quaternion.Euler(localEulerAngles.x , localEulerAngles.y, localEulerAngles.z + rv);
+            }
         }
         DetectedPlaneVisualizer.cubeWorld.transform.localRotation = Quaternion.Euler(rotation.x, rotation.y + right, rotation.z + up);
         isPlaying = false;
-    }
-
-    public void CubeLeftRotate()
-    {
-        Vector3 rotation = DetectedPlaneVisualizer.cubeWorld.transform.localEulerAngles;
-        DetectedPlaneVisualizer.cubeWorld.transform.localRotation = Quaternion.Euler(rotation.x, rotation.y - 90, rotation.z);
-    }
-
-    public void CubeUpRotate()
-    {
-        Vector3 rotation = DetectedPlaneVisualizer.cubeWorld.transform.localEulerAngles;
-        DetectedPlaneVisualizer.cubeWorld.transform.localRotation = Quaternion.Euler(rotation.x, rotation.y, rotation.z + 90);
-    }
-
-    public void CubeDownRotate()
-    {
-        Vector3 rotation = DetectedPlaneVisualizer.cubeWorld.transform.localEulerAngles;
-        DetectedPlaneVisualizer.cubeWorld.transform.localRotation = Quaternion.Euler(rotation.x, rotation.y, rotation.z - 90);
-        //DetectedPlaneVisualizer.cubeWorld.transform.localEulerAngles += DetectedPlaneVisualizer.cubeWorld.transform.forward * -90;
     }
 }
