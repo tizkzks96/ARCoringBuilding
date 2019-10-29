@@ -2619,7 +2619,8 @@ MonoBehaviour:
     Name: 
     ID: 0
     Texture2d: {fileID: 0}
-    BuildingPrefab: {fileID: 100000, guid: 9cad59b19b7b8be41805dbf9cc7dbd28, type: 3}
+    BuildingPrefab: {fileID: 1317306537682800, guid: 72456bba7d08f304ba7b5bfa671206ad,
+      type: 3}
 --- !u!114 &761161193
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6490,7 +6491,8 @@ MonoBehaviour:
     Name: 
     ID: 0
     Texture2d: {fileID: 0}
-    BuildingPrefab: {fileID: 100000, guid: a45c69d78a342dd4b81337a15ddc9e0f, type: 3}
+    BuildingPrefab: {fileID: 1411989406561526, guid: 1e58cb5eb3281344aa0299a046f1192e,
+      type: 3}
 --- !u!114 &1650860876
 MonoBehaviour:
   m_ObjectHideFlags: 0

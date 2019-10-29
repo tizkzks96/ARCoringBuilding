@@ -4,8 +4,9 @@
 Material:
   serializedVersion: 6
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_Name: Rock_Plane_Mat
   m_Shader: {fileID: 4800000, guid: 4578e9fc29f326b43af42d43ea0a245e, type: 3}
   m_ShaderKeywords: 
@@ -20,7 +21,7 @@ Material:
     m_TexEnvs:
     - _Albedo:
         m_Texture: {fileID: 2800000, guid: 8a4834cfe1ebacd48b792b0986f646e2, type: 3}
-        m_Scale: {x: 1, y: 1}
+        m_Scale: {x: -5, y: -5}
         m_Offset: {x: 0, y: 0}
     - _BumpMap:
         m_Texture: {fileID: 0}

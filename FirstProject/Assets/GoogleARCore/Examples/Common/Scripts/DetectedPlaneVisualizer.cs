@@ -331,6 +331,8 @@ namespace GoogleARCore.Examples.Common
 
             GroundInfo groundInfo = GroundDatabase.Instance.Get(0);
             GameObject ground = Instantiate(groundInfo.GroundPrefab);
+            ground.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+            ground.transform.position = cubeWorld.transform.position;
             ground.transform.SetParent(cubeWorld.transform);
             //CreateGround(size);
 
