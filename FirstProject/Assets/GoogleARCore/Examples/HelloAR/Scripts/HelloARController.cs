@@ -44,6 +44,7 @@ namespace GoogleARCore.Examples.HelloAR
         private bool menuOpened;
 
         public GameObject popupCanvas;
+        public GameObject SeletionUI;
 
         /// <summary>
         /// The first-person camera being used to render the passthrough camera image (i.e. AR
@@ -123,14 +124,20 @@ namespace GoogleARCore.Examples.HelloAR
                     popupCanvas.SetActive(true);
                 }
             }
-            else if(gesture.TargetObject.transform.tag == "Building")
+            else if(gesture.TargetObject.transform.tag == "Building" && ObjectPlaceUIManager.instance.spotSquare.activeSelf == false)
             {
                 print("gesture.TargetObject.transform.tag : " + gesture.TargetObject.transform.tag);
                 gesture.TargetObject.GetComponent<Manipulator>().Select();
+                ObjectDestroy.Instance.target = gesture.TargetObject; 
+
+                if(SeletionUI.activeSelf == false)
+                {
+                    SeletionUI.SetActive(true);
+                }
 
                 return true;
             }
-            else
+            else if (ObjectPlaceUIManager.instance.spotSquare.activeSelf == false)
             {
                 ObjedtPlaceObjectController(gesture);
 
