@@ -2,6 +2,7 @@
 using GoogleARCore.Examples.AugmentedImage;
 using OpenCvSharp;
 using OpenCvSharp.Demo;
+
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -215,7 +216,16 @@ public class Coloring : Singleton<Coloring>
 
     public void CreatePrefab()
     {
-        BuildingInfo buildingInfo = BuildingDatabase.Instance.GetByName(ctrlImage.Name);
+        BuildingInfo buildingInfo;
+        try
+        {
+            buildingInfo = BuildingDatabase.Instance.GetByName(ctrlImage.Name);
+        }
+        catch
+        {
+            buildingInfo = BuildingDatabase.Instance.GetByID(0);
+        }
+
         string path = SaveTextureToFile(SceanContorller.instance.Editing.GetComponent<SlotInfo>().Slotinfo.ID.ToString());
         Texture2D texture2D = LoadFileToTexutre(path);
         Material mat = new Material(Shader.Find("Standard"));
