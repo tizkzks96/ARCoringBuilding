@@ -9,9 +9,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6217002880110097051}
+  - component: {fileID: 2035906827350365047}
+  - component: {fileID: 7646942428036522040}
   m_Layer: 0
   m_Name: Straigt Corner
-  m_TagString: Untagged
+  m_TagString: Road
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -36,6 +38,31 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
+--- !u!65 &2035906827350365047
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8487144191560496987}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 0.01, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &7646942428036522040
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8487144191560496987}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb582fbe303bdb5479c8a8a046dc98ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &2055384077609627236
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -53,7 +80,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: bcedf905ea37bbb4e91144395428c9c2, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.0211
+      value: 0.02011
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: bcedf905ea37bbb4e91144395428c9c2, type: 3}
       propertyPath: m_LocalPosition.z
@@ -128,7 +155,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: bcedf905ea37bbb4e91144395428c9c2, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.0211
+      value: 0.02011
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: bcedf905ea37bbb4e91144395428c9c2, type: 3}
       propertyPath: m_LocalPosition.z
@@ -353,7 +380,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: bcedf905ea37bbb4e91144395428c9c2, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.0212
+      value: 0.02012
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: bcedf905ea37bbb4e91144395428c9c2, type: 3}
       propertyPath: m_LocalPosition.z
@@ -428,7 +455,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: bcedf905ea37bbb4e91144395428c9c2, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.0212
+      value: 0.02012
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: bcedf905ea37bbb4e91144395428c9c2, type: 3}
       propertyPath: m_LocalPosition.z

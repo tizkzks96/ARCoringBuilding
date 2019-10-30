@@ -11,9 +11,10 @@ GameObject:
   - component: {fileID: 4402516023365876}
   - component: {fileID: 33519501732995718}
   - component: {fileID: 23631448738772754}
+  - component: {fileID: 6943312709231315614}
   m_Layer: 0
   m_Name: Tree_4
-  m_TagString: Untagged
+  m_TagString: Building
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
@@ -78,6 +79,19 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!65 &6943312709231315614
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1618289638489088}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.9540795, y: 1.180241, z: 0.8401941}
+  m_Center: {x: -0.06043212, y: 0.5901205, z: 0.08696838}
 --- !u!1001 &5616506415397848693
 PrefabInstance:
   m_ObjectHideFlags: 0

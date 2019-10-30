@@ -8027,6 +8027,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mainUI: {fileID: 15985591}
   m_camera: {fileID: 896679035}
+  destroyParticle: {fileID: 7024917727691590065, guid: db70ff348911b954b89cebeffd10ff3d,
+    type: 3}
+  createParticle: {fileID: 7983137314355457590, guid: 1d011ce8f01b2c04ea3ae0e2cc8281d4,
+    type: 3}
+  goodParticle: {fileID: 4012870255395279534, guid: e4faa8061f0eb9f40af4ce374132a0f3,
+    type: 3}
+  SandParticle: {fileID: 5630649950043160877, guid: c502b7bd9016d29429f547c725465c9d,
+    type: 3}
+  GrassParticle: {fileID: 100002, guid: aa3c0b850f82b68488aaba079f47f4c6, type: 3}
+  WarterParticle: {fileID: 6925438223871080389, guid: 323cb6807f3e562408b6ef2999902a81,
+    type: 3}
+  RoadParticle: {fileID: 7024917727691590065, guid: 5197f1c9aeb3c82498c31d9cfe238f06,
+    type: 3}
 --- !u!114 &1741860781
 MonoBehaviour:
   m_ObjectHideFlags: 0

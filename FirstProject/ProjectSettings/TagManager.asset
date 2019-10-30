@@ -8,6 +8,11 @@ TagManager:
   - Building
   - Ground
   - AnotherGame
+  - FxTemporaire
+  - Warter
+  - Road
+  - Grass
+  - Sand
   layers:
   - Default
   - TransparentFX

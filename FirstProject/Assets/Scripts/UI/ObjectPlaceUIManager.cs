@@ -128,8 +128,8 @@ public class ObjectPlaceUIManager : MonoBehaviour
             buildingUI.SetActive(false);
             spotSquare.SetActive(false);
         }
-
     }
+
 
  
 

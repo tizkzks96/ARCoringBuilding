@@ -254,6 +254,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Selection Visualization
       objectReference: {fileID: 0}
+    - target: {fileID: 3431181609201762506, guid: a12be28235d8f6141b63160c872dbe6d,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3425944154123536432, guid: a12be28235d8f6141b63160c872dbe6d,
         type: 3}
       propertyPath: m_LocalPosition.x

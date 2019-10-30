@@ -15,6 +15,14 @@ public class MainUI : Singleton<MainUI>
 
     public Camera m_camera;
 
+    public GameObject destroyParticle;
+    public GameObject createParticle;
+    public GameObject goodParticle;
+    public GameObject SandParticle;
+    public GameObject GrassParticle;
+    public GameObject WarterParticle;
+    public GameObject RoadParticle;
+
     private GameObject m_anchor;
     private bool CubeWorldViewChangeSwitchBtn = true;
 

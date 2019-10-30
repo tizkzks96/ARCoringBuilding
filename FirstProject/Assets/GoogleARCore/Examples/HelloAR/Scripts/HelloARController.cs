@@ -20,6 +20,7 @@
 
 namespace GoogleARCore.Examples.HelloAR
 {
+    using System.Collections;
     using System.Collections.Generic;
     using GoogleARCore;
     using GoogleARCore.Examples.Common;
@@ -106,9 +107,6 @@ namespace GoogleARCore.Examples.HelloAR
 
         protected override bool CanStartManipulationForGesture(TapGesture gesture)
         {
-
-
-
             if (gesture.TargetObject == null)
             {
                 Debug.Log("CanStartManipulationForGesture");
@@ -137,7 +135,31 @@ namespace GoogleARCore.Examples.HelloAR
 
                 return true;
             }
-            else if (ObjectPlaceUIManager.instance.spotSquare.activeSelf == false)
+            else if (gesture.TargetObject.transform.tag == "Warter" && ObjectPlaceUIManager.instance.spotSquare.activeSelf == false)
+            {
+                GameObject temp = Instantiate(MainUI.Instance.WarterParticle, gesture.TargetObject.transform);
+                temp.transform.localPosition = Vector3.up * 1.01f;
+                temp.transform.localScale = Vector3.one * 0.5f;
+            }
+            else if (gesture.TargetObject.transform.tag == "Road" && ObjectPlaceUIManager.instance.spotSquare.activeSelf == false)
+            {
+                GameObject temp = Instantiate(MainUI.Instance.RoadParticle, gesture.TargetObject.transform);
+                temp.transform.localPosition = Vector3.up * 1.01f;
+                temp.transform.localScale = Vector3.one * 0.5f;
+            }
+            else if (gesture.TargetObject.transform.tag == "Grass" && ObjectPlaceUIManager.instance.spotSquare.activeSelf == false)
+            {
+                GameObject temp = Instantiate(MainUI.Instance.GrassParticle, gesture.TargetObject.transform);
+                temp.transform.localPosition = Vector3.up * 26f;
+                temp.transform.localScale = new Vector3(0.5f, 50, 0.5f);
+            }
+            else if (gesture.TargetObject.transform.tag == "Sand" && ObjectPlaceUIManager.instance.spotSquare.activeSelf == false)
+            {
+                GameObject temp = Instantiate(MainUI.Instance.SandParticle, gesture.TargetObject.transform);
+                temp.transform.localPosition = Vector3.up * 26f;
+                temp.transform.localScale = new Vector3(0.5f, 50, 0.5f);
+            }
+            else if (gesture.TargetObject.transform.tag == "Ground" && ObjectPlaceUIManager.instance.spotSquare.activeSelf == false)
             {
                 ObjedtPlaceObjectController(gesture);
 
@@ -206,8 +228,11 @@ namespace GoogleARCore.Examples.HelloAR
                 var placeObject =
                     Instantiate(prefab);
 
+                GameObject tempParticle = Instantiate(MainUI.Instance.createParticle);
+                tempParticle.transform.SetParent(manipulator.transform);
+                tempParticle.transform.localPosition = Vector3.zero;
 
-                
+                placeObject.SetActive(false);
                 // Create an anchor to allow ARCore to track the hitpoint as understanding of
                 // the physical world evolves.
                 //var anchor = hit.Trackable.CreateAnchor(new Pose(gesture.TargetObject.transform.position, Quaternion.identity));
@@ -260,18 +285,64 @@ namespace GoogleARCore.Examples.HelloAR
                 //bMC.placeObject = placeObject;
                 //bMC.time = 5;
                 //bMC.increseMoney = 5;
-
-                placeObject.SetActive(true);
-
+                StartCoroutine(CreateDelay(placeObject));
             }
 
             return true;
         }
 
+        public IEnumerator CreateDelay(GameObject target)
+        {
+            yield return new WaitForSeconds(5.0f);
+            target.SetActive(true);
+            GameObject temp = Instantiate(MainUI.Instance.goodParticle, target.transform);
+            temp.transform.localPosition = Vector3.zero + Vector3.up * 30;
+            temp.transform.localScale = Vector3.one * 10;
+
+            yield return new WaitForSeconds(0.5f);
+            temp = Instantiate(MainUI.Instance.goodParticle, target.transform);
+            temp.transform.localPosition = Vector3.zero + Vector3.up * 30;
+            temp.transform.localScale = Vector3.one * 10;
+
+            yield return new WaitForSeconds(0.2f);
+            temp = Instantiate(MainUI.Instance.goodParticle, target.transform);
+            temp.transform.localPosition = Vector3.zero + Vector3.up * 30;
+            temp.transform.localScale = Vector3.one * 10;
+
+            yield return new WaitForSeconds(0.4f);
+            temp = Instantiate(MainUI.Instance.goodParticle, target.transform);
+            temp.transform.localPosition = Vector3.zero + Vector3.up * 30;
+            temp.transform.localScale = Vector3.one * 10;
+
+            yield return new WaitForSeconds(0.3f);
+            temp = Instantiate(MainUI.Instance.goodParticle, target.transform);
+            temp.transform.localPosition = Vector3.zero + Vector3.up * 30;
+            temp.transform.localScale = Vector3.one * 10;
+
+            yield return new WaitForSeconds(0.1f);
+            temp = Instantiate(MainUI.Instance.goodParticle, target.transform);
+            temp.transform.localPosition = Vector3.zero + Vector3.up * 30;
+            temp.transform.localScale = Vector3.one * 10;
+
+            yield return new WaitForSeconds(0.6f);
+            temp = Instantiate(MainUI.Instance.goodParticle, target.transform);
+            temp.transform.localPosition = Vector3.zero + Vector3.up * 30;
+            temp.transform.localScale = Vector3.one * 10;
+
+            yield return new WaitForSeconds(0.4f);
+            temp = Instantiate(MainUI.Instance.goodParticle, target.transform);
+            temp.transform.localPosition = Vector3.zero + Vector3.up * 30;
+            temp.transform.localScale = Vector3.one * 10;
+
+            yield return new WaitForSeconds(0.2f);
+            temp = Instantiate(MainUI.Instance.goodParticle, target.transform);
+            temp.transform.localPosition = Vector3.zero + Vector3.up * 30;
+            temp.transform.localScale = Vector3.one * 10;
+
+
+        }
         protected override void OnStartManipulation(TapGesture gesture)
         {
-
-
             if (gesture.WasCancelled)
             {
                 Debug.Log("WasCancelled");
