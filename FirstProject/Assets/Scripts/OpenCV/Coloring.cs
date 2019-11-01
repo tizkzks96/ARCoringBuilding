@@ -177,7 +177,7 @@ public class Coloring : Singleton<Coloring>
         colTexture = OpenCvSharp.Unity.MatToTexture(bgr);
         binTexture = OpenCvSharp.Unity.MatToTexture(bin);
 
-        viewL.texture = colTexture;
+        //viewL.texture = colTexture;
     }
 
     public Texture2D LoadFileToTexutre(string filePath)
