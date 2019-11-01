@@ -62,7 +62,7 @@ public class MainUI : Singleton<MainUI>
     public void CubeWorldViewChange()
     {
         //GameObject cubeWorld = ;
-        MeshRenderer meshRenderer = DetectedPlaneVisualizer.m_MeshRenderer;
+        //MeshRenderer meshRenderer = DetectedPlaneVisualizer.m_MeshRenderer;
         GameObject cubeWorld = DetectedPlaneVisualizer.cubeWorld;
         Anchor cubeWorldAnchor = DetectedPlaneVisualizer.cubeWorldAnchor;
 
@@ -74,7 +74,7 @@ public class MainUI : Singleton<MainUI>
         {
             CubeWorldViewChangeSwitchBtn = false;
 
-            meshRenderer.enabled = false;
+            //meshRenderer.enabled = false;
 
             m_anchor.transform.localPosition = new Vector3(0, -0.2f, 1.5f);
             m_anchor.transform.localRotation = Quaternion.Euler(320, 300, 45);
@@ -87,7 +87,7 @@ public class MainUI : Singleton<MainUI>
         {
             CubeWorldViewChangeSwitchBtn = true;
 
-            meshRenderer.enabled = false;
+            //meshRenderer.enabled = false;
 
             cubeWorld.transform.SetParent(cubeWorldAnchor.transform);
             cubeWorld.transform.localPosition = Vector3.zero;

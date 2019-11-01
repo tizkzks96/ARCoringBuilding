@@ -26,12 +26,15 @@ namespace GoogleARCore.Examples.Common
     using GoogleARCore.Examples.ObjectManipulation;
     using UnityEditor;
     using UnityEngine;
+    using UnityEngine.UI;
 
     /// <summary>
     /// Visualizes a single DetectedPlane in the Unity scene.
     /// </summary>
     public class DetectedPlaneVisualizer : MonoBehaviour
     {
+        public Text prograssText;
+
         private DetectedPlane m_DetectedPlane;
 
         // Keep previous frame's mesh polygon to avoid mesh update every frame.
@@ -47,7 +50,7 @@ namespace GoogleARCore.Examples.Common
 
         private Mesh m_Mesh;
 
-        public static MeshRenderer m_MeshRenderer;
+        public MeshRenderer m_MeshRenderer;
         public GameObject GroundManipulatorPrefab;
 
         public Camera firstPersonCamera;
@@ -98,7 +101,10 @@ namespace GoogleARCore.Examples.Common
 
             
             _UpdateMeshIfNeeded();
-            SelectArea();
+            //if(cubeWorld != null)
+            //{
+                SelectArea();
+            //}
         }
 
 
@@ -256,6 +262,28 @@ namespace GoogleARCore.Examples.Common
             Vector3 forwardPoint = PlaneCenter - squreSide / 2 * Vector3.forward;
             Vector3 backPoint = PlaneCenter - squreSide / 2 * Vector3.back;
 
+            float x = Mathf.Round((leftPoint.x - rightPoint.x) * 10);
+            float y = Mathf.Round((backPoint.z - forwardPoint.z) * 10);
+
+            prograssText.text = (x * y) + "%";
+
+            if(x * y > 100)
+            {
+                _endDetect = false;
+
+                prograssText.text = "100%";
+
+                m_MeshRenderer.enabled = false;
+
+                StartCoroutine(CreateCubeWorld());
+            }
+
+            //CreateTemp();
+        }
+
+
+        public void CreateTemp(Vector3 rightPoint, Vector3 leftPoint, Vector3 forwardPoint, Vector3 backPoint)
+        {
             int m = 0;
             int n = 0;
             for (float i = rightPoint.x; i < leftPoint.x; i += 0.1f)
@@ -264,22 +292,22 @@ namespace GoogleARCore.Examples.Common
                 {
                     // 높이 , 수평, 수직
 
-                    if (m > 2 && n > 2 && _endDetect)
+                    if (m > 10 && n > 10 && _endDetect)
                     {
                         _endDetect = false;
-
+                        prograssText.text = "100%";
+                        m_MeshRenderer.enabled = false;
                         //Instantiate(GroundManipulatorPrefab,PlaneCenter, Quaternion.identity, transform);
                         //StartCoroutine(FixGridArray(leftPoint, rightPoint, forwardPoint, backPoint));
-                        StartCoroutine(CreateCubeWorld(4));
+                        StartCoroutine(CreateCubeWorld());
                     }
-                   
+
                     n++;
                 }
                 n = 0;
                 m++;
             }
         }
-
 
         public void CustomAnimationControll(GameObject cubeWorld)
         {
@@ -316,7 +344,7 @@ namespace GoogleARCore.Examples.Common
             anim.Play(clip.name);
         }
 
-        public IEnumerator CreateCubeWorld(int size)
+        public IEnumerator CreateCubeWorld()
         {
             cubeWorldAnchor = Session.CreateAnchor(new Pose(PlaneCenter, Quaternion.identity));
 
@@ -337,6 +365,8 @@ namespace GoogleARCore.Examples.Common
             ground.transform.position = cubeWorld.transform.position;
             ground.transform.SetParent(cubeWorld.transform);
             //CreateGround(size);
+
+            prograssText.gameObject.transform.parent.gameObject.SetActive(false);
 
             yield return null;
         }
