@@ -74,7 +74,6 @@ namespace GoogleARCore.Examples.Common
         /// </summary>
         public void Awake()
         {
-            MainUI.Instance.OpenUI();
 
             firstPersonCamera = FindObjectOfType<Camera>();
             m_Mesh = GetComponent<MeshFilter>().mesh;
@@ -295,7 +294,7 @@ namespace GoogleARCore.Examples.Common
                     if (m > 10 && n > 10 && _endDetect)
                     {
                         _endDetect = false;
-                        prograssText.text = "100%";
+                        prograssText.text = "생성중...";
                         m_MeshRenderer.enabled = false;
                         //Instantiate(GroundManipulatorPrefab,PlaneCenter, Quaternion.identity, transform);
                         //StartCoroutine(FixGridArray(leftPoint, rightPoint, forwardPoint, backPoint));
@@ -367,6 +366,8 @@ namespace GoogleARCore.Examples.Common
             //CreateGround(size);
 
             prograssText.gameObject.transform.parent.gameObject.SetActive(false);
+
+            MainUI.Instance.OpenUI();
 
             yield return null;
         }
