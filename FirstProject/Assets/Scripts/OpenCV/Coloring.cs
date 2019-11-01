@@ -40,7 +40,7 @@ public class Coloring : Singleton<Coloring>
 
     IEnumerator ImageProcessing()
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(1.5f);
         yield return new WaitForEndOfFrame();
         Init(); // 스크린 사이즈 감지
         CreateImageBgr(); //이미지 생성
@@ -51,8 +51,7 @@ public class Coloring : Singleton<Coloring>
         FindRect(out corners); //사각형 영역 추출
         TransformImage(corners); //사각형 영역 Transform
         ShowImage(); //Image Visualization
-        //bgr.Release(); //메모리 해제
-        //bin.Release(); // 메모리 해제
+        
         fitOverlay.SetActive(true);
 
 
@@ -61,6 +60,8 @@ public class Coloring : Singleton<Coloring>
         CreatePrefab();
         Debug.Log("unity file test end");
 
+        bgr.Release(); //메모리 해제
+        bin.Release(); // 메모리 해제
         //Scean Home 으로 변경
         SceanContorller.instance.ChangeScean(SceanState.MAIN);
     }

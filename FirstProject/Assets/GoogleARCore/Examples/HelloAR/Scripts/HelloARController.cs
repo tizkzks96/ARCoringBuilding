@@ -107,7 +107,7 @@ namespace GoogleARCore.Examples.HelloAR
 
         protected override bool CanStartManipulationForGesture(TapGesture gesture)
         {
-            if (gesture.TargetObject == null)
+            if (gesture.TargetObject == null || ObjectPlaceUIManager.instance.placeUIState != PlaceUIState.NONE)
             {
                 Debug.Log("CanStartManipulationForGesture");
                 print("close menu");

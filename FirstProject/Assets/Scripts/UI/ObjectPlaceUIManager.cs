@@ -11,7 +11,8 @@ public enum PlaceUIState
     NONE,
     HOME,
     ENVIRONMENT,
-    BUILDING
+    BUILDING,
+    PREVIEW
 }
 
 public class ObjectPlaceUIManager : MonoBehaviour
@@ -33,6 +34,7 @@ public class ObjectPlaceUIManager : MonoBehaviour
     public GameObject mainUI;
     public GameObject evironmentUI;
     public GameObject buildingUI;
+    public GameObject previewUI;
 
     [Space(10)]
 
@@ -47,6 +49,7 @@ public class ObjectPlaceUIManager : MonoBehaviour
 
     public GameObject spotSquare;
 
+    public PlaceUIState placeUIState;
     public GameObject CurrentMenu { get => m_currentMenu;}
 
     public Sprite buildingSprite;
@@ -86,21 +89,24 @@ public class ObjectPlaceUIManager : MonoBehaviour
 
             buildingUI = placeUI.transform.Find("BuildingUI").gameObject;
 
+            previewUI = placeUI.transform.Find("PreviewUI").gameObject;
+
             spotSquare = canvas.transform.Find("spotSquare").gameObject;
 
             #region UIState 이동 버튼
             //HomePanel 버튼 연결
-            mainUI.transform.Find("Exit").GetComponent<Button>().onClick.AddListener(() => { ChangeState(PlaceUIState.NONE); });
-            mainUI.transform.Find("Building").GetComponent<Button>().onClick.AddListener(() => { ChangeState(PlaceUIState.ENVIRONMENT); });
-            mainUI.transform.Find("Enviroment").GetComponent<Button>().onClick.AddListener(() => { ChangeState(PlaceUIState.BUILDING); });
+            mainUI.transform.Find("Exit").GetComponent<Button>().onClick.AddListener(() => { ChangeUIState(PlaceUIState.NONE); });
+            mainUI.transform.Find("Building").GetComponent<Button>().onClick.AddListener(() => { ChangeUIState(PlaceUIState.ENVIRONMENT); });
+            mainUI.transform.Find("Enviroment").GetComponent<Button>().onClick.AddListener(() => { ChangeUIState(PlaceUIState.BUILDING); });
 
             //EnvironmentPanel 버튼 연결
-            evironmentUI.transform.Find("Home").GetComponent<Button>().onClick.AddListener(() => { ChangeState(PlaceUIState.HOME); });
+            evironmentUI.transform.Find("Home").GetComponent<Button>().onClick.AddListener(() => { ChangeUIState(PlaceUIState.HOME); });
 
             //BuildingPanel 버튼 연결
-            buildingUI.transform.Find("Home").GetComponent<Button>().onClick.AddListener(() => { ChangeState(PlaceUIState.HOME); });
+            buildingUI.transform.Find("Home").GetComponent<Button>().onClick.AddListener(() => { ChangeUIState(PlaceUIState.HOME); });
 
             buildingUI.transform.Find("Add").GetComponent<Button>().onClick.AddListener(() => { InstantiateEmptyBuildingSlot(); });
+
             #endregion
 
             m_currentMenu = mainUI;
@@ -114,7 +120,7 @@ public class ObjectPlaceUIManager : MonoBehaviour
                 button.GetComponent<Button>().onClick.AddListener(() => {
                     //button.GetComponent<SlotInfo>().slotinfo.BuildingPrefab.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
                     HelloARController.instance.PlaceObject(placePlane, button.GetComponent<SlotInfo>().slotinfo.BuildingPrefab, true);
-                    ChangeState(PlaceUIState.NONE);
+                    ChangeUIState(PlaceUIState.NONE);
                 });
             }
 
@@ -126,6 +132,7 @@ public class ObjectPlaceUIManager : MonoBehaviour
             mainUI.SetActive(false);
             evironmentUI.SetActive(false);
             buildingUI.SetActive(false);
+            previewUI.SetActive(false);
             spotSquare.SetActive(false);
         }
     }
@@ -149,7 +156,7 @@ public class ObjectPlaceUIManager : MonoBehaviour
         placePlane.transform.localRotation = Quaternion.Euler(0,0,0);
 
         SetButtonPosition(0.5f);
-        ChangeState(PlaceUIState.HOME);
+        ChangeUIState(PlaceUIState.HOME);
     }
 
     public void SetButtonPosition(float radius)
@@ -245,7 +252,7 @@ public class ObjectPlaceUIManager : MonoBehaviour
         //버튼 이벤트 할당
         slot.GetComponent<Button>().onClick.AddListener(() => {
             HelloARController.instance.PlaceObject(placePlane, slotInfo.BuildingPrefab);
-            ChangeState(PlaceUIState.NONE);
+            ChangeUIState(PlaceUIState.NONE);
         });
 
         //버튼 재배치
@@ -253,8 +260,30 @@ public class ObjectPlaceUIManager : MonoBehaviour
 
         //빌딩 오브젝트를 삭제하면 레퍼런스를 잃음
         //프리펩을 파일로 저장하고 리소스로 링크하여 해결하도록함
-        building.SetActive(false);
+        //building 프리펩을 카메라에 고정하여 회전하도록 함
+        //building.SetActive(false);
+        building.transform.SetParent(FindObjectOfType<Camera>().transform);
+        building.transform.localPosition = new Vector3(0, -0.04f, 0.2f);
+        building.transform.localRotation = Quaternion.Euler(-40, -1, 0);
+        StartCoroutine(CustomAnimationCurve.Instance.RotationTargetAnimation(building, 10));
+        if (building.GetComponent<Outline>() != null)
+            building.GetComponent<Outline>().enabled = false;
+        mainUI.SetActive(false);
+
+        ChangeUIState(PlaceUIState.PREVIEW);
+        previewUI.transform.Find("OK").GetComponent<Button>().onClick.RemoveAllListeners();
+        previewUI.transform.Find("OK").GetComponent<Button>().onClick.AddListener(() => {
+            mainUI.SetActive(true);
+            ChangeUIState(PlaceUIState.BUILDING);
+            building.SetActive(false);
+
+            //PlayAnimation(previewUI.GetComponent<Animation>(), "ScaleDown");
+            //StartCoroutine(CustomAnimationCurve.Instance.ScaleDownTargetAnimation(building, 10, 10));
+        });
+
     }
+
+
 
     public void PlayAnimation(Animation anim, string clipName)
     {
@@ -262,11 +291,13 @@ public class ObjectPlaceUIManager : MonoBehaviour
         anim.Play();
     }
 
-    public void ChangeState(PlaceUIState uiState)
+    public void ChangeUIState(PlaceUIState uiState)
     {
         switch (uiState)
         {
             case PlaceUIState.NONE:
+                placeUIState = PlaceUIState.NONE;
+
                 //캡슐화
                 PlayAnimation(m_currentMenu.GetComponent<Animation>(), "ScaleDown");
 
@@ -277,6 +308,8 @@ public class ObjectPlaceUIManager : MonoBehaviour
 
                 break;
             case PlaceUIState.HOME:
+                placeUIState = PlaceUIState.HOME;
+
                 m_currentMenu = mainUI;
 
                 SetButtonPosition(0.5f);
@@ -289,10 +322,14 @@ public class ObjectPlaceUIManager : MonoBehaviour
 
                 buildingUI.SetActive(false);
 
+                previewUI.SetActive(false);
+
                 PlayAnimation(m_currentMenu.GetComponent<Animation>(), "ScaleUp");
 
                 break;
             case PlaceUIState.ENVIRONMENT:
+                placeUIState = PlaceUIState.ENVIRONMENT;
+
                 m_currentMenu = evironmentUI;
 
                 SetButtonPosition(0.5f);
@@ -305,10 +342,14 @@ public class ObjectPlaceUIManager : MonoBehaviour
 
                 buildingUI.SetActive(false);
 
+                previewUI.SetActive(false);
+
                 PlayAnimation(m_currentMenu.GetComponent<Animation>(), "ScaleUp");
 
                 break;
             case PlaceUIState.BUILDING:
+                placeUIState = PlaceUIState.BUILDING;
+
                 m_currentMenu = buildingUI;
 
                 SetButtonPosition(0.5f);
@@ -321,7 +362,28 @@ public class ObjectPlaceUIManager : MonoBehaviour
 
                 buildingUI.SetActive(true);
 
+                previewUI.SetActive(false);
+
                 PlayAnimation(m_currentMenu.GetComponent<Animation>(), "ScaleUp");
+
+                break;
+            case PlaceUIState.PREVIEW:
+                placeUIState = PlaceUIState.PREVIEW;
+
+                m_currentMenu = previewUI;
+
+                spotSquare.SetActive(false);
+
+                mainUI.SetActive(false);
+
+                evironmentUI.SetActive(false);
+
+                buildingUI.SetActive(false);
+
+                previewUI.SetActive(true);
+
+
+                //PlayAnimation(m_currentMenu.GetComponent<Animation>(), "ScaleUp");
 
                 break;
             default:

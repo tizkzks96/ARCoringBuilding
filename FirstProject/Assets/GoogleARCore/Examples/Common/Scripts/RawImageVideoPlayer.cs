@@ -58,7 +58,7 @@ namespace GoogleARCore.Examples.Common
         /// </summary>
         public void Update()
         {
-            if (!Session.Status.IsValid() || Session.Status.IsError())
+            if (!Session.Status.IsValid() || Session.Status.IsError() || MainUI.Instance.CubeWorldViewChangeSwitchBtn == false)
             {
                 VideoPlayer.Stop();
                 return;

@@ -29,7 +29,6 @@ public class BuildingUI : MonoBehaviour
 
     private Canvas canvas;
 
-    public PlaceUIState UIState { get; set; } = PlaceUIState.HOME;
 
     public void Awake()
     {

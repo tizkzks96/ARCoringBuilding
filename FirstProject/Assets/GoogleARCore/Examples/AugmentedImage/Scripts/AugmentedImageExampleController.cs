@@ -132,7 +132,7 @@ namespace GoogleARCore.Examples.AugmentedImage
 
                     Coloring.Instance.StartCV();
                 }
-                else if (image.TrackingMethod == AugmentedImageTrackingMethod.LastKnownPose || image.TrackingMethod == AugmentedImageTrackingMethod.NotTracking && visualizer != null)
+                else if ((image.TrackingMethod == AugmentedImageTrackingMethod.LastKnownPose || image.TrackingMethod == AugmentedImageTrackingMethod.NotTracking) && visualizer != null)
                 {
                         m_Visualizers.Remove(image.DatabaseIndex);
                         GameObject.Destroy(visualizer.gameObject);

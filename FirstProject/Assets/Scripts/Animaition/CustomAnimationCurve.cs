@@ -76,7 +76,7 @@ public class CustomAnimationCurve : Singleton<CustomAnimationCurve>
         clip.SetCurve("", typeof(RectTransform), "scale.z", curve);
     }
 
-    public void ScaleDownAnimationClip(int size, out AnimationClip clip)
+    public void ScaleDownAnimationClip(float size, out AnimationClip clip)
     {
         AnimationCurve curve;
 
@@ -104,6 +104,42 @@ public class CustomAnimationCurve : Singleton<CustomAnimationCurve>
         keys[0] = new Keyframe(0.0f, size);
         keys[1] = new Keyframe(.5f, 0);
         clip.SetCurve("", typeof(RectTransform), "localScale.z", curve);
+    }
+
+    public IEnumerator RotationTargetAnimation(GameObject target, float speed = 90)
+    {
+        print("start co");
+        float rv = 0;
+        //float duration = 0;
+
+        while (target.activeSelf == true)
+        {
+            yield return null;
+
+            rv += Time.deltaTime * speed;
+            //duration += Mathf.Abs(rv);
+
+            target.transform.localRotation =
+                    Quaternion.Euler(target.transform.localRotation.x, target.transform.localRotation.y + rv, target.transform.localRotation.z);
+        }
+    }
+
+    public IEnumerator ScaleDownTargetAnimation(GameObject target, float speed, float time)
+    {
+        float sv = 0;
+        float duration = 0;
+        float tick = target.transform.localScale.x / time;
+
+        while (target.transform.localScale.sqrMagnitude < 00.00001f)
+        {
+            yield return null;
+            sv += Time.deltaTime * speed;
+            duration += Mathf.Abs(sv);
+
+            target.transform.localScale =
+                    new Vector3(target.transform.localScale.x - tick, target.transform.localScale.y - tick, target.transform.localScale.z - tick);
+        }
+        target.SetActive(false);
     }
 
     public void TransformRotationLeftAnimationClip(Vector3 eulerAngle, out AnimationClip clip)

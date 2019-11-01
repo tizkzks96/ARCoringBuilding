@@ -24,7 +24,7 @@ public class MainUI : Singleton<MainUI>
     public GameObject RoadParticle;
 
     private GameObject m_anchor;
-    private bool CubeWorldViewChangeSwitchBtn = true;
+    public bool CubeWorldViewChangeSwitchBtn = true;
 
     private Button leftRotationBtn;
     private Button rightRotationBtn;
