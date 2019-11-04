@@ -41,8 +41,6 @@ public class Coloring : Singleton<Coloring>
     IEnumerator ImageProcessing()
     {
         yield return new WaitForSeconds(1.5f); // 캡쳐 딜레이
-        //yield return new WaitForEndOfFrame();
-        Init(); // 스크린 사이즈 감지
         CreateImageBgr(); // 이미지 생성
         Point[] corners;
         FindPoint(out corners); // 마커 Vertax Point Find
@@ -53,7 +51,12 @@ public class Coloring : Singleton<Coloring>
         ShowImage(); // Image Visualization
 
         CreatePrefab(); // 캡쳐된 이미지로 프리펩 생성
+        
+        Reset();
+    }
 
+    public void Reset()
+    {
         bgr.Release(); // 메모리 해제
         bin.Release(); // 메모리 해제
 
@@ -138,6 +141,12 @@ public class Coloring : Singleton<Coloring>
 
     void CreateImageBgr()
     {
+        int w = Screen.width;
+        int h = Screen.height; //스크린 가로, 세로 영역
+
+        capTexture = new Texture2D(w, h, TextureFormat.RGB24, false);
+        capRect = new UnityEngine.Rect(0, 0, w, h); //CapRect 크기의 텍스처 이미지 생성
+
         capTexture.ReadPixels(capRect, 0, 0);//이미지 캡쳐
         capTexture.Apply();//캡쳐 이미지 적용
 
@@ -214,20 +223,6 @@ public class Coloring : Singleton<Coloring>
 
             corners[i] = new Point2d(sreenPoint[i].x, sreenPoint[i].y); 
         }
-    }
-
-    public void Init()
-    {
-        int w = Screen.width;
-        int h = Screen.height; //스크린 가로, 세로 영역
-
-        int sx = (int)(w * 0);
-        int sy = (int)(h * 0);
-        w = (int)(w * 1);
-        h = (int)(h * 1);
-
-        capTexture = new Texture2D(w, h, TextureFormat.RGB24, false);
-        capRect = new UnityEngine.Rect(0, 0, w, h); //CapRect 크기의 텍스처 이미지 생성
     }
 
     public void StartCV(AugmentedImageVisualizer visualizer = null)

@@ -995,7 +995,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Open CardGame?
+  m_Text: Open CircusAR?
 --- !u!222 &266812075
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -8553,7 +8553,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1808423006
 RectTransform:
   m_ObjectHideFlags: 0
@@ -9908,7 +9908,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1539153524}
-        m_MethodName: CreatePrefab
+        m_MethodName: ChangeScean
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
