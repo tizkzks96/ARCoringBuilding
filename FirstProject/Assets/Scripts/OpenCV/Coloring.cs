@@ -148,6 +148,8 @@ public class Coloring : Singleton<Coloring>
 
     void CreateImageBin()
     {
+        //viewL.texture = OpenCvSharp.Unity.MatToTexture(bgr);
+
         //이미지 생상 그레이 스케일로 변환
         bin = bgr.CvtColor(ColorConversionCodes.BGR2GRAY);
 
@@ -168,7 +170,6 @@ public class Coloring : Singleton<Coloring>
         colTexture = OpenCvSharp.Unity.MatToTexture(bgr);
         binTexture = OpenCvSharp.Unity.MatToTexture(bin);
 
-        //viewL.texture = colTexture;
     }
 
     
@@ -272,5 +273,10 @@ public class Coloring : Singleton<Coloring>
         File.WriteAllBytes(filePath + fileName + ".jpg", bytes);
 
         return filePath + fileName + ".jpg";
+    }
+
+    public void ChangeScean()
+    {
+        SceanContorller.instance.ChangeScean(SceanState.MAIN);
     }
 }
