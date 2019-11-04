@@ -23,7 +23,7 @@ public class Coloring : Singleton<Coloring>
     UnityEngine.Rect capRect;//Region of screen shot 
     Texture2D capTexture; //Texture of screenshot image 
     Texture2D colTexture; //Result of image processing(color) 
-    Texture2D binTexture; //Result of image processing(gray)dksl
+    Texture2D binTexture; //Result of image processing(gray)
 
     Mat bgr, bin;
 
@@ -40,36 +40,33 @@ public class Coloring : Singleton<Coloring>
 
     IEnumerator ImageProcessing()
     {
-        yield return new WaitForSeconds(1.5f);
-        yield return new WaitForEndOfFrame();
+        yield return new WaitForSeconds(1.5f); // 캡쳐 딜레이
+        //yield return new WaitForEndOfFrame();
         Init(); // 스크린 사이즈 감지
-        CreateImageBgr(); //이미지 생성
+        CreateImageBgr(); // 이미지 생성
         Point[] corners;
-        FindPoint(out corners); // 마커 vertax Point Find
-        TransformImage(corners); //사각형 영역 Transform
-        CreateImageBin(); //이미지 생성
-        FindRect(out corners); //사각형 영역 추출
-        TransformImage(corners); //사각형 영역 Transform
-        ShowImage(); //Image Visualization
-        
-        fitOverlay.SetActive(true);
+        FindPoint(out corners); // 마커 Vertax Point Find
+        TransformImage(corners); // 사각형 영역 Transform
+        CreateImageBin(); // 이미지 생성
+        FindRect(out corners); // 사각형 영역 추출
+        TransformImage(corners); // 사각형 영역 Transform
+        ShowImage(); // Image Visualization
 
+        CreatePrefab(); // 캡쳐된 이미지로 프리펩 생성
+
+        bgr.Release(); // 메모리 해제
+        bin.Release(); // 메모리 해제
+
+        fitOverlay.SetActive(true);
 
         Destroy(visualizer);
 
-        CreatePrefab();
-        Debug.Log("unity file test end");
-
-        bgr.Release(); //메모리 해제
-        bin.Release(); // 메모리 해제
-        //Scean Home 으로 변경
-        SceanContorller.instance.ChangeScean(SceanState.MAIN);
+        SceanContorller.instance.ChangeScean(SceanState.MAIN); // Scean Home 으로 변경
     }
 
     void TransformImage(Point[] corners)
     {
         if (corners == null) return;
-
 
         //이미지 정렬
         SortCorners(corners);
@@ -86,13 +83,6 @@ public class Coloring : Singleton<Coloring>
 
         //4개의 점을 이용하여 원근제거
         Cv2.WarpPerspective(bgr, bgr, transform, new Size(256, 256));
-        int s = (int)(256 * 0.05f);
-        int w = (int)(256 * 0.9f);
-
-        //외각 라인 제거
-        //x, y, width, height
-        //OpenCvSharp.Rect innerRect = new OpenCvSharp.Rect(s, s, w, w);
-        //bgr = bgr[innerRect];
     }
 
     //이미지 정렬
@@ -181,39 +171,7 @@ public class Coloring : Singleton<Coloring>
         //viewL.texture = colTexture;
     }
 
-    public Texture2D LoadFileToTexutre(string filePath)
-    {
-        Texture2D tex = null;
-        byte[] fileData;
-
-
-
-        if (File.Exists(filePath))
-        {
-            fileData = File.ReadAllBytes(filePath);
-
-            tex = new Texture2D(2, 2);
-
-            tex.LoadImage(fileData); //..this will auto-resize the texture dimensions.
-        }
-
-        return tex;
-    }
-
-    public string SaveTextureToFile(string fileName)
-    {
-        Texture2D tex = colTexture;
-        string filePath = Application.persistentDataPath;
-        // Encode texture into JPG
-        byte[] bytes = tex.EncodeToJPG(60);
-        Object.Destroy(tex);
-
-        filePath += "/";
-
-        File.WriteAllBytes(filePath + fileName + ".jpg", bytes);
-
-        return filePath + fileName + ".jpg";
-    }
+    
 
     public void CreatePrefab()
     {
@@ -282,5 +240,37 @@ public class Coloring : Singleton<Coloring>
 
         fitOverlay.SetActive(false);
         StartCoroutine(ImageProcessing()); //Calling coroutine. 
+    }
+
+    public Texture2D LoadFileToTexutre(string filePath)
+    {
+        Texture2D tex = null;
+        byte[] fileData;
+
+        if (File.Exists(filePath))
+        {
+            fileData = File.ReadAllBytes(filePath);
+
+            tex = new Texture2D(2, 2);
+
+            tex.LoadImage(fileData); //..this will auto-resize the texture dimensions.
+        }
+
+        return tex;
+    }
+
+    public string SaveTextureToFile(string fileName)
+    {
+        Texture2D tex = colTexture;
+        string filePath = Application.persistentDataPath;
+        // Encode texture into JPG
+        byte[] bytes = tex.EncodeToJPG(60);
+        Object.Destroy(tex);
+
+        filePath += "/";
+
+        File.WriteAllBytes(filePath + fileName + ".jpg", bytes);
+
+        return filePath + fileName + ".jpg";
     }
 }
