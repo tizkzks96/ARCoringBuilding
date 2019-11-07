@@ -83,12 +83,17 @@ namespace GoogleARCore.Examples.Common
 
                 planeObject.GetComponent<DetectedPlaneVisualizer>().prograssText = prograssText;
 
-                planeObject.GetComponent<DetectedPlaneVisualizer>().Initialize(NewPlanes[0]);
+                planeObject.GetComponent<DetectedPlaneVisualizer>().Initialize(NewPlanes[i]);
 
 
 
                 transform.GetComponent<DetectedPlaneGenerator>().enabled = false;
             }
+        }
+
+        public void EnableCtrl(bool isEnabled)
+        {
+            GetComponent<DetectedPlaneGenerator>().enabled = isEnabled;
         }
     }
 }

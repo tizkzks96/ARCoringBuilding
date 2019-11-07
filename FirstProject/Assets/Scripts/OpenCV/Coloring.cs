@@ -41,17 +41,19 @@ public class Coloring : Singleton<Coloring>
     IEnumerator ImageProcessing()
     {
         yield return new WaitForSeconds(1.5f); // 캡쳐 딜레이
-        CreateImageBgr(); // 이미지 생성
+        yield return new WaitForEndOfFrame();
         Point[] corners;
+
+        CreateImageBgr(); // 이미지 생성
         FindPoint(out corners); // 마커 Vertax Point Find
         TransformImage(corners); // 사각형 영역 Transform
+
         CreateImageBin(); // 이미지 생성
         FindRect(out corners); // 사각형 영역 추출
         TransformImage(corners); // 사각형 영역 Transform
-        ShowImage(); // Image Visualization
 
+        ShowImage(); // Image Visualization
         CreatePrefab(); // 캡쳐된 이미지로 프리펩 생성
-        
         Reset();
     }
 
@@ -72,7 +74,7 @@ public class Coloring : Singleton<Coloring>
         if (corners == null) return;
 
         //이미지 정렬
-        SortCorners(corners);
+        corners = SortCorners(corners);
 
         Point2f[] input = { corners[0], corners[1],
                          corners[2], corners[3] };
@@ -89,7 +91,7 @@ public class Coloring : Singleton<Coloring>
     }
 
     //이미지 정렬
-    void SortCorners(Point[] corners)
+    Point[] SortCorners(Point[] corners)
     {
         System.Array.Sort(corners, (a, b) => a.X.CompareTo(b.X));
         if (corners[0].Y > corners[1].Y)
@@ -100,6 +102,7 @@ public class Coloring : Singleton<Coloring>
         {
             corners.Swap(2, 3);
         }
+        return corners;
     }
 
     //참고 : https://vovkos.github.io/doxyrest-showcase/opencv/sphinx_rtd_theme/enum_cv_ContourApproximationModes.html
@@ -109,14 +112,14 @@ public class Coloring : Singleton<Coloring>
 
         Point[][] contours;
         HierarchyIndex[] h;
-
+        int temp = -1;
         //연결 컴포넌트의 외곽선 탐지
         //외곽선 벡터, hierarchy, 
         //윤곽 검색 모드 설정(external) : 외곽선 
-        //윤곽 근사방법(simple) : 수평, 수직 및 대각선 세그먼트를 압축하고 끝점만 남음. 예를 들어, 직각 직사각형 형상은 4 포인트로 인코딩됨.
+        //윤곽 근사방법(simple) : 수평, 수직 및 대각선 세그먼트를 압축하고 끝점만 남음.
+        //예를 들어, 직각 직사각형 형상은 4 포인트로 인코딩됨.
         bin.FindContours(out contours, out h, RetrievalModes.External,
                              ContourApproximationModes.ApproxSimple);
-
 
         //참고 : https://datascienceschool.net/view-notebook/f9f8983941254a34bf0fee42c66c5539/
         // 가장 큰 사각형 추출
@@ -130,13 +133,19 @@ public class Coloring : Singleton<Coloring>
             //Douglas-Peucker 알고리즘을 이용해 컨투어 포인트의 수를 줄여 실제 컨투어 라인과 근사한 라인을 그릴 때 사용
             Point[] tmp = Cv2.ApproxPolyDP(contours[i], length * 0.1f, true);
 
+            //if(tmp.Length ==4)
+                //Cv2.DrawContours(bgr, contours, i, Scalar.Red, 20);
+
             double area = Cv2.ContourArea(contours[i]);
             if (tmp.Length == 4 && area > maxArea)
             {
+
+                temp = i;
                 maxArea = area;
                 corners = tmp;
             }
         }
+        //Cv2.DrawContours(bgr, contours, temp, Scalar.RoyalBlue, 20);
     }
 
     void CreateImageBgr()
@@ -157,7 +166,6 @@ public class Coloring : Singleton<Coloring>
 
     void CreateImageBin()
     {
-        //viewL.texture = OpenCvSharp.Unity.MatToTexture(bgr);
 
         //이미지 생상 그레이 스케일로 변환
         bin = bgr.CvtColor(ColorConversionCodes.BGR2GRAY);
@@ -179,9 +187,11 @@ public class Coloring : Singleton<Coloring>
         colTexture = OpenCvSharp.Unity.MatToTexture(bgr);
         binTexture = OpenCvSharp.Unity.MatToTexture(bin);
 
+        //viewL.texture = OpenCvSharp.Unity.MatToTexture(bgr);
+
     }
 
-    
+
 
     public void CreatePrefab()
     {

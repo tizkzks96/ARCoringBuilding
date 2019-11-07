@@ -134,8 +134,8 @@ namespace GoogleARCore.Examples.AugmentedImage
                 }
                 else if ((image.TrackingMethod == AugmentedImageTrackingMethod.LastKnownPose || image.TrackingMethod == AugmentedImageTrackingMethod.NotTracking) && visualizer != null)
                 {
-                        m_Visualizers.Remove(image.DatabaseIndex);
-                        GameObject.Destroy(visualizer.gameObject);
+                    m_Visualizers.Remove(image.DatabaseIndex);
+                    GameObject.Destroy(visualizer.gameObject);
                 }
             }
         }

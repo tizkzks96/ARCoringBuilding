@@ -69,6 +69,8 @@ namespace GoogleARCore.Examples.Common
         public static Vector3[,] MapArray { get; set; } = new Vector3[50, 50];
         public static Vector3 Gab { get => MapArray[0, 0]; set => gab = value; }
 
+
+        
         /// <summary>
         /// The Unity Awake() method.
         /// </summary>
@@ -85,8 +87,17 @@ namespace GoogleARCore.Examples.Common
         /// </summary>
         public void Update()
         {
+            if (cubeWorld != null)
+            {
+                if (SceanContorller.instance.SceanState == SceanState.MAIN && m_DetectedPlane.TrackingState == TrackingState.Tracking)
+                    cubeWorld.SetActive(true);
 
-            if (m_DetectedPlane == null)
+                m_MeshRenderer.enabled = false;
+                return;
+            }
+
+
+                if (m_DetectedPlane == null)
             {
                 return;
             }
@@ -95,19 +106,31 @@ namespace GoogleARCore.Examples.Common
                 Destroy(gameObject);
                 return;
             }
+            else if (m_DetectedPlane.TrackingState != TrackingState.Tracking)
+            {
+                m_MeshRenderer.enabled = false;
+                if (cubeWorld == null)
+                {
+                    DetectedPlaneGenerator.Instance.EnableCtrl(true);
+                    Destroy(gameObject);
+                    print("AA");
+                }
+                return;
+            }
 
             //m_MeshRenderer.enabled = true;
 
-            
+
             _UpdateMeshIfNeeded();
             //if(cubeWorld != null)
             //{
-                SelectArea();
+            SelectArea();
+            //print("polyfonArea : " + polygonArea());
             //}
         }
 
 
-        
+
         /// <summary>
         /// Initializes the DetectedPlaneVisualizer with a DetectedPlane.
         /// </summary>
@@ -264,9 +287,9 @@ namespace GoogleARCore.Examples.Common
             float x = Mathf.Round((leftPoint.x - rightPoint.x) * 10);
             float y = Mathf.Round((backPoint.z - forwardPoint.z) * 10);
 
-            prograssText.text = (x * y) + "%";
+            prograssText.text = (x * y * 2) + "%";
 
-            if(x * y > 100)
+            if (x * y > 50 && cubeWorld == null)
             {
                 _endDetect = false;
 
@@ -279,7 +302,6 @@ namespace GoogleARCore.Examples.Common
 
             //CreateTemp();
         }
-
 
         public void CreateTemp(Vector3 rightPoint, Vector3 leftPoint, Vector3 forwardPoint, Vector3 backPoint)
         {
@@ -306,6 +328,28 @@ namespace GoogleARCore.Examples.Common
                 n = 0;
                 m++;
             }
+        }
+
+        double polygonArea()
+        {
+            int vertaxNum = m_PreviousFrameMeshVertices.Count;
+
+            print("vertaxNum : " + vertaxNum);
+            // Initialze area 
+            float area = 0;
+            print("vertaxNum : " + m_PreviousFrameMeshVertices[0].x);
+
+            // Calculate value of shoelace formula 
+            int j = vertaxNum - 1;
+            for (int i = 0; i < vertaxNum; i++)
+            {
+                area += (m_PreviousFrameMeshVertices[j].x + m_PreviousFrameMeshVertices[i].x) * (m_PreviousFrameMeshVertices[j].y - m_PreviousFrameMeshVertices[i].y);
+                print("area : " + (m_PreviousFrameMeshVertices[j].y));
+                j = i;  // j is previous vertex to i 
+            }
+
+            // Return absolute value 
+            return Mathf.Abs(area / 2f);
         }
 
         public void CustomAnimationControll(GameObject cubeWorld)
@@ -348,6 +392,8 @@ namespace GoogleARCore.Examples.Common
             cubeWorldAnchor = Session.CreateAnchor(new Pose(PlaneCenter, Quaternion.identity));
 
             cubeWorldAnchor.transform.SetParent(transform);
+
+            //cubeWorldAnchor.transform.SetParent(null);
 
             cubeWorld = new GameObject("CubeWorld");
 
