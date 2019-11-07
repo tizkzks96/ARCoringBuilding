@@ -89,8 +89,17 @@ namespace GoogleARCore.Examples.Common
         {
             if (cubeWorld != null)
             {
+                if(m_DetectedPlane.TrackingState == TrackingState.Stopped)
+                {
+                    cubeWorldAnchor.transform.SetParent(null);
+                    cubeWorld.SetActive(false);
+                    DetectedPlaneGenerator.Instance.EnableCtrl(true);
+                }
                 if (SceanContorller.instance.SceanState == SceanState.MAIN && m_DetectedPlane.TrackingState == TrackingState.Tracking)
+                {
                     cubeWorld.SetActive(true);
+                    cubeWorldAnchor.transform.SetParent(transform);
+                }
 
                 m_MeshRenderer.enabled = false;
                 return;
@@ -112,8 +121,8 @@ namespace GoogleARCore.Examples.Common
                 if (cubeWorld == null)
                 {
                     DetectedPlaneGenerator.Instance.EnableCtrl(true);
+                    prograssText.text = "카메라를 바닥을 향해 천천히 움직여 보세요";
                     Destroy(gameObject);
-                    print("AA");
                 }
                 return;
             }

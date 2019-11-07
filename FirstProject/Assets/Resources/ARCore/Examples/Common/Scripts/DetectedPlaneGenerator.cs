@@ -87,7 +87,7 @@ namespace GoogleARCore.Examples.Common
 
 
 
-                transform.GetComponent<DetectedPlaneGenerator>().enabled = false;
+                //transform.GetComponent<DetectedPlaneGenerator>().enabled = false;
             }
         }
 

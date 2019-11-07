@@ -21,8 +21,10 @@
 namespace GoogleARCore
 {
     using GoogleARCoreInternal;
+    using System.Collections;
     using UnityEngine;
     using UnityEngine.Rendering;
+    using GoogleARCore.Examples.Common;
 
     /// <summary>
     /// A component that automatically adjusts lighting settings for the scene
@@ -41,7 +43,30 @@ namespace GoogleARCore
         /// </summary>
         public Light DirectionalLight;
 
+        public GameObject[] lights;
+
         private long m_LightEstimateTimestamp = -1;
+
+
+        private void Start()
+        {
+            StartCoroutine(SetLights());
+        }
+
+        public IEnumerator SetLights()
+        {
+            bool isDone = false;
+            while (isDone == false)
+            {
+                if (DetectedPlaneVisualizer.cubeWorld != null)
+                {
+                    lights = GameObject.FindGameObjectsWithTag("light");
+                    isDone = true;
+                }
+
+                yield return null;
+            }
+        }
 
         /// <summary>
         /// Unity update method that sets global light estimation shader constant and
@@ -60,7 +85,7 @@ namespace GoogleARCore
                 Shader.SetGlobalColor("_GlobalColorCorrection", Color.white);
 
                 // Set _GlobalLightEstimation for backward compatibility.
-                Shader.SetGlobalFloat("_GlobalLightEstimation", 1f);
+                //Shader.SetGlobalFloat("_GlobalLightEstimation", 1f);
                 return;
             }
 
@@ -77,6 +102,20 @@ namespace GoogleARCore
                 const float middleGray = 0.466f;
                 float normalizedIntensity = estimate.PixelIntensity / middleGray;
 
+                if(normalizedIntensity < 0.5f)
+                {
+                    foreach (GameObject light in lights)
+                    {
+                        light.SetActive(true);
+                    }
+                }
+                else
+                {
+                    foreach (GameObject light in lights)
+                    {
+                        light.SetActive(false);
+                    }
+                }
                 // Apply color correction along with normalized pixel intensity in gamma space.
                 Shader.SetGlobalColor(
                     "_GlobalColorCorrection",

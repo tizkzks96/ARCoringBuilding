@@ -14,6 +14,7 @@ public enum SceanState
 
 public class SceanContorller : MonoBehaviour
 {
+    
 
     public ARCoreSession arCoreSession;
 
@@ -55,6 +56,8 @@ public class SceanContorller : MonoBehaviour
         switch (sceanState)
         {
             case SceanState.MAIN:
+                SceanState = SceanState.MAIN;
+
                 Main.SetActive(true);
 
                 AugmentedImage.SetActive(false);
@@ -64,6 +67,8 @@ public class SceanContorller : MonoBehaviour
                 arCoreSession.SessionConfig = defaultSessionConfig;
                 break;
             case SceanState.AUGMENTEDIMAGE:
+                SceanState = SceanState.AUGMENTEDIMAGE;
+
                 Main.SetActive(false);
 
                 AugmentedImage.SetActive(true);
